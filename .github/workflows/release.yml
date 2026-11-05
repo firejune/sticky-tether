@@ -9,8 +9,6 @@ on:
         description: 'Existing tag to re-publish after a publish-side failure (e.g. v0.1.0). Leave empty normally.'
         required: false
         default: ''
-  schedule:
-    - cron: '23 3 * * *'
 
 permissions: {}
 
@@ -26,7 +24,6 @@ jobs:
       contents: write
       pull-requests: write
       issues: write
-      actions: write
       id-token: write
     steps:
       - uses: googleapis/release-please-action@v4
@@ -35,67 +32,6 @@ jobs:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
-
-      - name: Drive the release PR to a tested merge
-        if: ${{ steps.release.outputs.release_created != 'true' && inputs.republish == '' }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-        run: |
-          set -euo pipefail
-          pr_json=$(gh pr list --state open --label 'autorelease: pending' \
-            --json number,headRefName,headRefOid --jq '.[0] // empty')
-          if [ -z "$pr_json" ]; then
-            echo 'No open release PR — nothing to drive.'
-            exit 0
-          fi
-          pr=$(jq -r .number <<<"$pr_json")
-          branch=$(jq -r .headRefName <<<"$pr_json")
-          head=$(jq -r .headRefOid <<<"$pr_json")
-          echo "Release PR #$pr ($branch @ $head)"
-
-          green_tests() {
-            gh api "repos/$GH_REPO/commits/$1/check-runs" --jq \
-              '[.check_runs[] | select(.name == "test" and .conclusion == "success")] | length'
-          }
-
-          if [ "$(green_tests "$head")" -eq 0 ]; then
-            since=$(date -u -d '30 seconds ago' +%Y-%m-%dT%H:%M:%SZ)
-            gh workflow run ci.yml --ref "$branch"
-            echo 'Dispatched ci onto the release branch; waiting for its run…'
-            run_id=''
-            for _ in $(seq 1 18); do
-              sleep 10
-              run_id=$(gh run list --workflow ci.yml --branch "$branch" \
-                --event workflow_dispatch --limit 5 \
-                --json databaseId,headSha,createdAt |
-                jq -r --arg sha "$head" --arg t "$since" \
-                  '[.[] | select(.headSha == $sha and .createdAt >= $t)][0].databaseId // empty')
-              [ -n "$run_id" ] && break
-            done
-            if [ -z "$run_id" ]; then
-              echo '::error::The dispatched ci run never appeared.'
-              exit 1
-            fi
-            state=''
-            for _ in $(seq 1 40); do
-              sleep 15
-              state=$(gh run view "$run_id" --json status,conclusion \
-                --jq '.status + "/" + (.conclusion // "")')
-              echo "ci run $run_id: $state"
-              [ "${state%%/*}" = completed ] && break
-            done
-            if [ "$state" != completed/success ]; then
-              echo "::error::ci did not pass on the release branch (run $run_id: $state)."
-              exit 1
-            fi
-          fi
-
-          echo "test is green on $head — merging release PR #$pr"
-          gh pr merge "$pr" --squash
-
-          echo 'Handing tag-and-publish to a fresh run of this workflow.'
-          gh workflow run release.yml --ref main
 
       - uses: actions/checkout@v4
         if: ${{ steps.release.outputs.release_created == 'true' || inputs.republish != '' }}
