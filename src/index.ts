@@ -9,4 +9,3 @@ export {
   useStickyTether,
   useTether
 } from './react'
-export { useStickyTether as default } from './react'
