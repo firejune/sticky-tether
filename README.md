@@ -1,3 +1,5 @@
+![sticky-tether — Make rigid position: sticky flexible with bi-directional scroll tethering and active-item viewport guard.](https://raw.githubusercontent.com/firejune/sticky-tether/main/.github/assets/banner.png)
+
 [![sticky-tether npm version](https://img.shields.io/npm/v/sticky-tether)](https://www.npmjs.com/package/sticky-tether)
 [![sticky-tether npm downloads](https://img.shields.io/npm/dm/sticky-tether)](https://www.npmjs.com/package/sticky-tether)
 [![sticky-tether license](https://img.shields.io/npm/l/sticky-tether)](LICENSE)
