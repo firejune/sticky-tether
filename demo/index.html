@@ -3,65 +3,55 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sticky-tether — 3-Sidebar Scroll UX Comparison Playground</title>
+    <title>sticky-tether — Documentation & UX Comparison</title>
     <style>
       :root {
         color-scheme: dark light;
-        --header-height: 54px;
-        --deck-height: 132px;
-        --top-padding: 24px;
-        --bottom-padding: 28px;
+        --nav-height: 48px;
+        --col-bar-height: 42px;
+        --header-height: 90px; /* nav-height (48) + col-bar-height (42) — strictly fixed */
+        --top-padding: 20px;
+        --bottom-padding: 24px;
         --offset-top: 0px;
-        --toc-item-pad-y: 8px;
+        --toc-item-pad-y: 7px;
 
-        --bg: #090b10;
-        --bg-elevated: #11151f;
-        --surface: #151a26;
-        --surface-hover: #1c2333;
-        --surface-glass: rgba(15, 19, 29, 0.9);
-        --border: rgba(148, 163, 184, 0.14);
-        --border-strong: rgba(148, 163, 184, 0.28);
+        --bg: #0b0d12;
+        --bg-subtle: #10141d;
+        --bg-glass: rgba(11, 13, 18, 0.92);
+        --border: rgba(255, 255, 255, 0.08);
+        --border-strong: rgba(255, 255, 255, 0.16);
         --text: #f1f5f9;
-        --text-secondary: #cbd5e1;
+        --text-secondary: #94a3b8;
         --muted: #64748b;
 
         --brand-color: #38bdf8;
         --accent: #38bdf8;
-        --accent-soft: rgba(56, 189, 248, 0.14);
-        --accent-border: rgba(56, 189, 248, 0.45);
-
+        --accent-soft: rgba(56, 189, 248, 0.1);
         --danger: #f43f5e;
-        --danger-soft: rgba(244, 63, 94, 0.14);
         --warning: #f59e0b;
-        --warning-soft: rgba(245, 158, 11, 0.15);
         --success: #10b981;
-        --success-soft: rgba(16, 185, 129, 0.15);
         --purple: #a855f7;
-        --purple-soft: rgba(168, 85, 247, 0.16);
 
-        --color-neutral-70: #475569;
-        --color-neutral-90: #0f172a;
+        --color-neutral-70: #334155;
+        --color-neutral-90: #0b0d12;
       }
 
       html[data-theme='light'] {
-        --bg: #f8fafc;
-        --bg-elevated: #ffffff;
-        --surface: #ffffff;
-        --surface-hover: #f1f5f9;
-        --surface-glass: rgba(255, 255, 255, 0.92);
-        --border: rgba(15, 23, 42, 0.1);
-        --border-strong: rgba(15, 23, 42, 0.22);
+        --bg: #ffffff;
+        --bg-subtle: #f8fafc;
+        --bg-glass: rgba(255, 255, 255, 0.94);
+        --border: rgba(15, 23, 42, 0.08);
+        --border-strong: rgba(15, 23, 42, 0.18);
         --text: #0f172a;
-        --text-secondary: #334155;
-        --muted: #64748b;
+        --text-secondary: #475569;
+        --muted: #94a3b8;
 
         --brand-color: #0284c7;
         --accent: #0284c7;
-        --accent-soft: rgba(2, 132, 199, 0.1);
-        --accent-border: rgba(2, 132, 199, 0.4);
+        --accent-soft: rgba(2, 132, 199, 0.08);
 
-        --color-neutral-70: #94a3b8;
-        --color-neutral-90: #e2e8f0;
+        --color-neutral-70: #cbd5e1;
+        --color-neutral-90: #f8fafc;
       }
 
       * {
@@ -71,250 +61,189 @@
       body {
         margin: 0;
         font-family:
-          -apple-system, BlinkMacSystemFont, 'Pretendard', 'Segoe UI', Roboto,
-          sans-serif;
+          -apple-system, BlinkMacSystemFont, 'Pretendard', 'Inter', 'Segoe UI',
+          Roboto, sans-serif;
         background: var(--bg);
         color: var(--text);
-        line-height: 1.55;
+        line-height: 1.6;
         accent-color: var(--brand-color);
+        -webkit-font-smoothing: antialiased;
       }
 
-      /* Top App Header */
-      .site-header {
+      /* Strictly Fixed Top Chrome (Never changes height) */
+      .top-chrome {
         position: sticky;
         top: 0;
         z-index: 200;
         height: var(--header-height);
+        background: var(--bg-glass);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+      }
+
+      /* Row 1: Site Top Bar (48px fixed) */
+      .site-nav {
+        max-width: 1600px;
+        height: var(--nav-height);
+        margin: 0 auto;
+        padding: 0 24px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 16px;
-        padding: 0 24px;
-        background: var(--surface-glass);
-        backdrop-filter: blur(14px);
         border-bottom: 1px solid var(--border);
+        white-space: nowrap;
       }
 
-      .brand-group {
+      .brand {
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 10px;
         min-width: 0;
       }
 
-      .brand-logo {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        font-weight: 800;
-        font-size: 16px;
+      .brand-title {
+        font-weight: 700;
+        font-size: 15px;
         letter-spacing: -0.02em;
         color: var(--text);
         text-decoration: none;
       }
 
-      .brand-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #38bdf8, #818cf8);
-        box-shadow: 0 0 12px rgba(56, 189, 248, 0.7);
-      }
-
-      .overflow-pill {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 11.5px;
-        font-weight: 600;
-        padding: 4px 10px;
-        border-radius: 999px;
-        background: var(--success-soft);
-        color: var(--success);
-        border: 1px solid rgba(16, 185, 129, 0.3);
-        white-space: nowrap;
-      }
-
-      .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        padding: 6px 12px;
-        border-radius: 8px;
+      .meta-note {
         font-size: 12px;
-        font-weight: 600;
-        border: 1px solid var(--border-strong);
-        background: var(--surface);
-        color: var(--text);
-        cursor: pointer;
-        transition:
-          background 140ms ease,
-          border-color 140ms ease;
-        white-space: nowrap;
-      }
-
-      .btn:hover {
-        background: var(--surface-hover);
-        border-color: var(--accent);
-      }
-
-      .btn-primary {
-        background: var(--accent-soft);
-        border-color: var(--accent-border);
-        color: var(--accent);
-      }
-
-      .btn-primary[data-active='true'] {
-        background: var(--accent);
-        color: #090b10;
-        border-color: var(--accent);
-      }
-
-      /* Interactive Control Deck (Sticky right below header) */
-      .control-deck {
-        position: sticky;
-        top: var(--header-height);
-        z-index: 190;
-        background: var(--surface-glass);
-        backdrop-filter: blur(14px);
-        border-bottom: 1px solid var(--border);
-        padding: 10px 20px;
-        box-shadow: 0 10px 30px -15px rgba(0, 0, 0, 0.5);
-      }
-
-      .deck-inner {
-        max-width: 1680px;
-        margin: 0 auto;
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .deck-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-
-      .preset-group {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 6px;
-      }
-
-      .deck-label {
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
         color: var(--muted);
-        margin-right: 4px;
+        font-variant-numeric: tabular-nums;
       }
 
-      .preset-btn {
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 11.5px;
-        font-weight: 600;
-        border: 1px solid var(--border);
-        background: var(--bg-elevated);
-        color: var(--text-secondary);
-        cursor: pointer;
-        transition: all 130ms ease;
-      }
-
-      .preset-btn:hover {
-        border-color: var(--accent-border);
-        color: var(--text);
-      }
-
-      .preset-btn[aria-pressed='true'] {
-        background: var(--accent-soft);
-        border-color: var(--accent);
-        color: var(--accent);
-      }
-
-      .sliders-group {
+      .nav-controls {
         display: flex;
         align-items: center;
-        flex-wrap: wrap;
-        gap: 10px;
+        gap: 6px;
+        position: relative;
       }
 
-      .control-item {
+      .seg-group {
         display: inline-flex;
         align-items: center;
-        gap: 6px;
-        font-size: 11.5px;
-        color: var(--text-secondary);
-        background: var(--bg-elevated);
-        padding: 3px 9px;
-        border-radius: 7px;
+        background: var(--bg-subtle);
         border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 2px;
+        gap: 2px;
       }
 
-      .control-item code {
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 11px;
-        color: var(--accent);
-      }
-
-      .control-item input[type='range'] {
-        width: 68px;
+      .seg-btn {
+        border: none;
+        background: transparent;
+        color: var(--text-secondary);
+        font-size: 11.5px;
+        font-weight: 500;
+        padding: 3px 8px;
+        border-radius: 4px;
         cursor: pointer;
+        white-space: nowrap;
       }
 
-      .val-badge {
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 11px;
-        font-weight: 700;
-        min-width: 32px;
-        text-align: right;
+      .seg-btn:hover {
         color: var(--text);
       }
 
-      /* Live 3-Sidebar Telemetry Strip inside sticky deck */
-      .live-hud-strip {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-        padding-top: 4px;
-        border-top: 1px solid var(--border);
+      .seg-btn[aria-pressed='true'] {
+        background: var(--bg);
+        color: var(--accent);
+        font-weight: 600;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
       }
 
-      .hud-pill {
+      .flat-btn {
+        height: 28px;
+        padding: 0 10px;
+        border-radius: 6px;
+        border: 1px solid var(--border);
+        background: var(--bg-subtle);
+        color: var(--text-secondary);
+        font-size: 11.5px;
+        font-weight: 500;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+      }
+
+      .flat-btn:hover {
+        border-color: var(--border-strong);
+        color: var(--text);
+      }
+
+      .flat-btn[aria-pressed='true'],
+      .flat-btn[data-active='true'] {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: var(--accent-soft);
+      }
+
+      /* Floating Popover for Fine-Grained Tether Options (Zero Layout Shift) */
+      .options-popover {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        width: 310px;
+        background: var(--bg-subtle);
+        border: 1px solid var(--border-strong);
+        border-radius: 8px;
+        padding: 14px;
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 300;
+        white-space: normal;
+      }
+
+      .options-popover[data-open='true'] {
+        display: flex;
+      }
+
+      .opt-row {
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 8px;
-        padding: 4px 10px;
-        border-radius: 7px;
-        background: var(--bg-elevated);
-        border: 1px solid var(--border);
-        font-size: 11px;
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+        color: var(--text-secondary);
       }
 
-      .hud-pill-title {
-        font-family:
-          -apple-system, BlinkMacSystemFont, 'Pretendard', 'Segoe UI', sans-serif;
-        font-weight: 700;
+      .opt-row code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11.5px;
         color: var(--text);
-        white-space: nowrap;
+      }
+
+      .opt-right {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .opt-right input[type='range'] {
+        width: 96px;
+        cursor: pointer;
+      }
+
+      .opt-val {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        font-variant-numeric: tabular-nums;
+        min-width: 36px;
+        text-align: right;
+        color: var(--accent);
       }
 
       /* Fallback for older browsers without accent-color */
       @supports not (accent-color: var(--brand-color)) {
-        .control-deck input[type='checkbox'].visually-hidden {
+        .options-popover input[type='checkbox'].visually-hidden {
           position: absolute !important;
           clip-path: inset(50%) !important;
           overflow: hidden !important;
@@ -326,15 +255,15 @@
           white-space: nowrap !important;
         }
 
-        .control-deck label.checkbox-label {
+        .options-popover label.checkbox-label {
           position: relative;
-          padding-left: 1.6rem;
+          padding-left: 1.5rem;
           cursor: pointer;
           display: inline-flex;
           align-items: center;
         }
 
-        .control-deck input[type='checkbox'] + span::before {
+        .options-popover input[type='checkbox'] + span::before {
           content: '';
           position: absolute;
           left: 0;
@@ -342,341 +271,311 @@
           transform: translateY(-50%);
           width: 1rem;
           height: 1rem;
-          border: 2px solid var(--border-strong);
-          background: var(--surface);
-          border-radius: 4px;
-          box-sizing: border-box;
+          border: 1px solid var(--border-strong);
+          background: var(--bg);
+          border-radius: 3px;
         }
 
-        .control-deck input[type='checkbox']:focus-visible + span::before {
-          outline: 2px solid var(--accent);
-          outline-offset: 2px;
-        }
-
-        .control-deck input[type='checkbox']:checked + span::before {
+        .options-popover input[type='checkbox']:checked + span::before {
           background-color: var(--brand-color);
           border-color: var(--brand-color);
         }
 
-        .control-deck input[type='checkbox']:checked + span::after {
+        .options-popover input[type='checkbox']:checked + span::after {
           content: '✓';
           position: absolute;
           left: 0.2rem;
           top: 50%;
           transform: translateY(-50%);
           color: #fff;
-          font-weight: bold;
           font-size: 0.75rem;
         }
 
-        .control-deck input[type='range'] {
+        .options-popover input[type='range'] {
           -webkit-appearance: none;
           appearance: none;
           background: transparent;
         }
 
-        .control-deck input[type='range']::-webkit-slider-runnable-track {
-          width: 100%;
-          height: 6px;
+        .options-popover input[type='range']::-webkit-slider-runnable-track {
+          height: 5px;
           background: linear-gradient(
             to right,
             var(--brand-color) var(--progress, 30%),
             var(--border-strong) var(--progress, 30%)
           );
-          border-radius: 4px;
+          border-radius: 3px;
         }
 
-        .control-deck input[type='range']::-webkit-slider-thumb {
+        .options-popover input[type='range']::-webkit-slider-thumb {
           -webkit-appearance: none;
           appearance: none;
-          height: 14px;
-          width: 14px;
+          height: 13px;
+          width: 13px;
           border-radius: 50%;
           background: var(--brand-color);
-          cursor: pointer;
           margin-top: -4px;
         }
       }
 
-      /* Visual X-Ray Guard Lines on Viewport */
+      /* Row 2: Fixed 4:2:2:2 Column Title & Single-Line Status Bar (42px fixed) */
+      .col-header-bar {
+        max-width: 1600px;
+        height: var(--col-bar-height);
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 4fr 2fr 2fr 2fr;
+        align-items: stretch;
+      }
+
+      .col-header-cell {
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        border-left: 1px solid var(--border);
+      }
+
+      .col-header-cell:first-child {
+        padding-left: 24px;
+        border-left: none;
+      }
+
+      .col-title {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--text);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
+      }
+
+      .col-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      .col-status {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        font-variant-numeric: tabular-nums;
+        color: var(--muted);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .inline-link-btn {
+        border: none;
+        background: none;
+        color: var(--text-secondary);
+        font-size: 11px;
+        padding: 2px 5px;
+        border-radius: 4px;
+        cursor: pointer;
+        border: 1px solid var(--border);
+        flex-shrink: 0;
+      }
+
+      .inline-link-btn:hover {
+        color: var(--text);
+        border-color: var(--border-strong);
+      }
+
+      /* Subtle X-Ray Guard Lines */
       .xray-line {
         position: fixed;
         left: 0;
         right: 0;
         height: 0;
-        z-index: 180;
+        z-index: 150;
         pointer-events: none;
-        transition: opacity 180ms ease;
+        opacity: 0;
+        transition: opacity 150ms ease;
       }
 
-      .xray-line[data-hidden='true'] {
-        opacity: 0;
+      .xray-line[data-visible='true'] {
+        opacity: 1;
       }
 
       .xray-line-top {
-        border-top: 1px dashed rgba(56, 189, 248, 0.75);
+        border-top: 1px dashed rgba(56, 189, 248, 0.55);
       }
 
       .xray-line-bottom {
-        border-top: 1px dashed rgba(168, 85, 247, 0.75);
+        border-top: 1px dashed rgba(168, 85, 247, 0.55);
       }
 
       .xray-tag {
         position: absolute;
-        right: 20px;
+        right: 16px;
         transform: translateY(-50%);
         font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 10.5px;
-        font-weight: 700;
-        padding: 2px 8px;
-        border-radius: 999px;
-        background: var(--bg-elevated);
+        font-size: 10px;
+        padding: 1px 6px;
+        border-radius: 4px;
+        background: var(--bg-subtle);
+        color: var(--text-secondary);
+        border: 1px solid var(--border);
       }
 
-      .xray-line-top .xray-tag {
-        color: var(--accent);
-        border: 1px solid var(--accent-border);
-      }
-
-      .xray-line-bottom .xray-tag {
-        color: var(--purple);
-        border: 1px solid rgba(168, 85, 247, 0.45);
-      }
-
-      /* Main 4-Column Arena: Article + 3 Simultaneous Sidebars */
+      /* Main 4:2:2:2 Layout Grid */
       .arena {
-        max-width: 1680px;
+        max-width: 1600px;
         margin: 0 auto;
-        padding: 24px 20px 140px;
         display: grid;
-        grid-template-columns: minmax(280px, 1fr) repeat(3, minmax(240px, 295px));
-        gap: 16px;
+        grid-template-columns: 4fr 2fr 2fr 2fr;
         align-items: start;
       }
 
-      @media (max-width: 1120px) {
-        .arena {
-          grid-template-columns: minmax(220px, 1fr) repeat(3, minmax(205px, 250px));
-          gap: 10px;
-          padding: 16px 12px 120px;
-        }
-      }
-
-      /* Main Article Stream */
+      /* Column 1 (4fr): Flat Documentation Article */
       main#article {
         min-width: 0;
+        padding: 32px 36px 160px 24px;
       }
 
-      .hero-banner {
-        padding: 20px 22px;
-        margin-bottom: 20px;
-        border-radius: 14px;
-        background: linear-gradient(
-          145deg,
-          rgba(56, 189, 248, 0.12),
-          rgba(168, 85, 247, 0.08)
-        );
-        border: 1px solid var(--accent-border);
+      .doc-intro {
+        padding-bottom: 28px;
+        margin-bottom: 28px;
+        border-bottom: 1px solid var(--border);
       }
 
-      .hero-banner h1 {
-        margin: 0 0 8px;
-        font-size: 20px;
-        letter-spacing: -0.02em;
+      .doc-intro h1 {
+        margin: 0 0 10px;
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: -0.025em;
       }
 
-      .hero-banner p {
+      .doc-intro p {
         margin: 0;
-        font-size: 13px;
+        font-size: 14.5px;
         color: var(--text-secondary);
-      }
-
-      .comparison-summary {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
-        margin-top: 14px;
-      }
-
-      .summary-chip {
-        padding: 8px 10px;
-        border-radius: 8px;
-        background: var(--bg-elevated);
-        border: 1px solid var(--border);
-        font-size: 11.5px;
-      }
-
-      .summary-chip strong {
-        display: block;
-        margin-bottom: 2px;
+        max-width: 68ch;
       }
 
       section.doc-section {
-        padding: 22px 24px;
-        margin-bottom: 20px;
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        min-height: 310px;
-        scroll-margin-top: 210px;
-        transition:
-          border-color 180ms ease,
-          box-shadow 180ms ease,
-          min-height 240ms ease;
-      }
-
-      section.doc-section[data-active-section='true'] {
-        border-color: var(--accent-border);
-        box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.2);
+        padding: 28px 0;
+        border-bottom: 1px solid var(--border);
+        min-height: 290px;
+        scroll-margin-top: 120px;
       }
 
       section.doc-section[data-long='true'] {
-        min-height: 2100px;
-        background: linear-gradient(
-          180deg,
-          var(--surface) 0%,
-          rgba(56, 189, 248, 0.06) 50%,
-          var(--surface) 100%
-        );
+        min-height: 2000px;
       }
 
-      .section-meta {
+      .sec-eyebrow {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 8px;
-        margin-bottom: 8px;
+        margin-bottom: 6px;
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--muted);
       }
 
-      .section-phase {
-        font-size: 11px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
+      section.doc-section[data-active-section='true'] .sec-eyebrow-label {
         color: var(--accent);
-      }
-
-      .section-actions {
-        display: flex;
-        gap: 6px;
-      }
-
-      .mini-btn {
-        font-size: 11px;
-        padding: 3px 8px;
-        border-radius: 6px;
-        border: 1px solid var(--border);
-        background: var(--bg-elevated);
-        color: var(--text-secondary);
-        cursor: pointer;
-      }
-
-      .mini-btn:hover {
-        border-color: var(--accent);
-        color: var(--text);
       }
 
       section.doc-section h2 {
         margin: 0 0 10px;
-        font-size: 17.5px;
-        letter-spacing: -0.01em;
+        font-size: 19px;
+        font-weight: 700;
+        letter-spacing: -0.015em;
       }
 
       section.doc-section p {
         margin: 0 0 12px;
-        font-size: 13.5px;
+        font-size: 14px;
         color: var(--text-secondary);
+        max-width: 66ch;
       }
 
-      .long-section-callout {
+      .long-guide {
         display: none;
-        margin-top: 20px;
-        padding: 15px;
-        border-radius: 10px;
-        border: 1px dashed var(--accent-border);
-        background: var(--accent-soft);
-        font-size: 12.5px;
-      }
-
-      section.doc-section[data-long='true'] .long-section-callout {
-        display: block;
-      }
-
-      .long-ruler {
-        display: none;
-        margin-top: 28px;
-        flex-direction: column;
-        gap: 180px;
-        border-left: 2px dashed var(--accent-border);
+        margin-top: 24px;
         padding-left: 14px;
-        color: var(--muted);
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 12px;
-      }
-
-      section.doc-section[data-long='true'] .long-ruler {
-        display: flex;
-      }
-
-      /* Sidebar Column Track Wrapper */
-      .sidebar-track {
-        position: relative;
-        min-width: 0;
-        min-height: 100%;
-      }
-
-      .sidebar-card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 14px;
-        padding: 14px;
-        transition: border-color 160ms ease;
-      }
-
-      .sidebar-card-unapplied {
-        border-top: 3px solid var(--danger);
-      }
-
-      .sidebar-card-unapplied[data-submode='pure-sticky'] {
-        position: sticky;
-        top: calc(var(--header-height) + var(--deck-height) + var(--top-padding));
-      }
-
-      /* Ghost HUD shown when Column 1 scrolls off-screen */
-      .offscreen-ghost {
-        position: sticky;
-        top: calc(var(--header-height) + var(--deck-height) + var(--top-padding));
-        margin-top: 16px;
-        padding: 16px;
-        border-radius: 12px;
-        border: 1px dashed rgba(244, 63, 94, 0.45);
-        background: var(--danger-soft);
-        color: var(--text);
-        font-size: 12.5px;
-        display: none;
-      }
-
-      .offscreen-ghost[data-visible='true'] {
-        display: block;
-      }
-
-      .offscreen-ghost strong {
-        color: var(--danger);
-        display: block;
-        margin-bottom: 6px;
+        border-left: 2px solid var(--accent);
+        color: var(--text-secondary);
         font-size: 13px;
       }
 
-      /* Column 2: Standard Sticky + Inner Scroll */
-      .sidebar-card-inner {
+      section.doc-section[data-long='true'] .long-guide {
+        display: block;
+      }
+
+      .long-markers {
+        display: none;
+        margin-top: 40px;
+        flex-direction: column;
+        gap: 220px;
+        padding-left: 14px;
+        border-left: 1px dashed var(--border-strong);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      section.doc-section[data-long='true'] .long-markers {
+        display: flex;
+      }
+
+      /* Sidebar Columns (2fr each) — Flat Docs Style */
+      .sidebar-col {
+        min-width: 0;
+        min-height: 100%;
+        border-left: 1px solid var(--border);
+        padding: 0 16px;
+        position: relative;
+      }
+
+      .sidebar-pane {
+        padding: 0;
+      }
+
+      /* Apply A: Unapplied (Static Flow by default) */
+      .sidebar-pane-unapplied {
+        margin-top: var(--top-padding);
+        margin-bottom: var(--bottom-padding);
+      }
+
+      .sidebar-pane-unapplied[data-submode='pure-sticky'] {
         position: sticky;
-        top: calc(var(--header-height) + var(--deck-height) + var(--top-padding));
+        top: calc(var(--header-height) + var(--top-padding));
+      }
+
+      .offscreen-indicator {
+        position: sticky;
+        top: calc(var(--header-height) + 20px);
+        padding: 12px 0;
+        color: var(--muted);
+        font-size: 12px;
+        display: none;
+      }
+
+      .offscreen-indicator[data-visible='true'] {
+        display: block;
+      }
+
+      /* Apply B: Standard Sticky + Inner Scroll */
+      .sidebar-pane-inner {
+        position: sticky;
+        top: calc(var(--header-height) + var(--top-padding));
         max-height: calc(
-          100vh - var(--header-height) - var(--deck-height) - var(--top-padding) -
-            var(--bottom-padding)
+          100vh - var(--header-height) - var(--top-padding) - var(--bottom-padding)
         );
         overflow-y: auto;
-        border-top: 3px solid var(--warning);
+        padding-top: 0;
+        padding-bottom: 0;
 
         /* MANDATORY: scrollbar-color and scrollbar-width with CSS variables */
         --scrollbar-thumb: var(--color-neutral-70);
@@ -687,120 +586,44 @@
 
       /* Legacy fallback for WebKit/Blink browsers */
       @supports not (scrollbar-color: auto) {
-        .sidebar-card-inner::-webkit-scrollbar {
-          width: 10px;
-          height: 10px;
+        .sidebar-pane-inner::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
         }
 
-        .sidebar-card-inner::-webkit-scrollbar-thumb {
+        .sidebar-pane-inner::-webkit-scrollbar-thumb {
           background: var(--scrollbar-thumb);
         }
 
-        .sidebar-card-inner::-webkit-scrollbar-track {
+        .sidebar-pane-inner::-webkit-scrollbar-track {
           background: var(--scrollbar-track);
         }
       }
 
-      /* Column 3: Sticky Tether */
-      .sidebar-card-tether {
+      /* Apply C: Sticky Tether */
+      .sidebar-pane-tether {
         position: sticky;
-        top: calc(var(--header-height) + var(--deck-height) + var(--top-padding));
-        border-top: 3px solid var(--accent);
-        box-shadow: 0 12px 32px -12px rgba(56, 189, 248, 0.18);
+        top: calc(var(--header-height) + var(--top-padding));
+        padding-top: 0;
+        padding-bottom: 0;
       }
 
-      .sidebar-card-tether[data-clamped='true'] {
-        border-color: var(--accent);
-        box-shadow:
-          0 0 0 1px var(--accent),
-          0 12px 34px -10px rgba(56, 189, 248, 0.28);
-      }
-
-      /* Sidebar Header inside each sidebar */
-      .col-header {
-        padding-bottom: 10px;
-        margin-bottom: 10px;
-        border-bottom: 1px solid var(--border);
-      }
-
-      /* Only Column 2 (inner scroll) keeps its header sticky inside its scroll box */
-      .sidebar-card-inner .col-header {
-        position: sticky;
-        top: -14px;
-        z-index: 5;
-        background: var(--surface);
-        padding-top: 4px;
-      }
-
-      .col-title-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 6px;
-        margin-bottom: 4px;
-      }
-
-      .col-badge {
-        font-size: 10px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        padding: 2px 7px;
-        border-radius: 999px;
-      }
-
-      .badge-danger {
-        background: var(--danger-soft);
-        color: var(--danger);
-      }
-
-      .badge-warning {
-        background: var(--warning-soft);
-        color: var(--warning);
-      }
-
-      .badge-accent {
-        background: var(--accent-soft);
-        color: var(--accent);
-      }
-
-      .col-name {
-        font-size: 13.5px;
-        font-weight: 700;
-        margin: 0;
-      }
-
-      .col-desc {
-        font-size: 11.5px;
-        color: var(--muted);
-        margin: 0;
-      }
-
-      .col-subtoggle {
-        margin-top: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 11px;
-        color: var(--text-secondary);
-        padding-top: 6px;
-        border-top: 1px dashed var(--border);
-      }
-
-      /* Navigation / TOC Items */
+      /* Flat TOC List */
       nav.toc-nav {
         /* Enables automatic tracking of fragment links where supported */
         scroll-target-group: auto;
       }
 
-      .toc-group-label {
-        font-size: 10.5px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-        color: var(--muted);
-        margin: 12px 0 6px;
-        padding-left: 8px;
+      .toc-group-title {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text);
+        margin: 14px 0 4px;
+        padding-left: 10px;
+      }
+
+      .toc-group:first-child .toc-group-title {
+        margin-top: 0;
       }
 
       .toc-list {
@@ -814,364 +637,294 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 6px;
+        gap: 8px;
         padding: var(--toc-item-pad-y) 10px;
         margin-left: -1px;
         border-left: 2px solid transparent;
-        border-radius: 0 6px 6px 0;
         color: var(--text-secondary);
         text-decoration: none;
         font-size: 12.5px;
         line-height: 1.35;
-        transition:
-          color 120ms ease,
-          background-color 120ms ease,
-          border-color 120ms ease;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: color 100ms ease, border-color 100ms ease;
+      }
+
+      .toc-item span:first-child {
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .toc-item:hover {
         color: var(--text);
-        background: var(--surface-hover);
       }
 
       /* Combine native :target-current, fallback class, and aria-current */
       nav.toc-nav a:is(:target-current, .target-current),
       .toc-item[aria-current='location'] {
         color: var(--accent);
-        background: var(--accent-soft);
         border-left-color: var(--accent);
-        font-weight: 700;
+        font-weight: 600;
       }
 
-      .toc-item-badge {
+      .toc-num {
         font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 10px;
-        padding: 1px 5px;
-        border-radius: 4px;
-        background: rgba(148, 163, 184, 0.12);
+        font-size: 10.5px;
         color: var(--muted);
         flex-shrink: 0;
       }
 
-      .toc-item[aria-current='location'] .toc-item-badge {
-        background: var(--accent);
-        color: #090b10;
-        font-weight: 800;
+      .toc-item[aria-current='location'] .toc-num {
+        color: var(--accent);
       }
     </style>
   </head>
   <body>
-    <!-- Top Header -->
-    <header class="site-header" id="site-header">
-      <div class="brand-group">
-        <a href="#top" class="brand-logo">
-          <span class="brand-dot"></span>
-          <span>sticky-tether</span>
-        </a>
-        <span class="overflow-pill" id="overflow-guarantee-badge">
-          📏 Sidebar: --px vs Viewport: --px (Overflow Guaranteed)
-        </span>
-      </div>
+    <!-- Strictly Fixed 90px Top Chrome: Site Bar (48px) + 4:2:2:2 Column Title Bar (42px) -->
+    <header class="top-chrome" id="top-chrome">
+      <div class="site-nav">
+        <div class="brand">
+          <a href="#top" class="brand-title">sticky-tether</a>
+          <span class="meta-note" id="overflow-info">
+            사이드바 --px / 뷰포트 --px
+          </span>
+        </div>
 
-      <div class="header-actions">
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="btn-autotour"
-          data-active="false"
-        >
-          ▶ 자동 스크롤 시연 (Auto-Scroll)
-        </button>
-        <button type="button" class="btn" id="btn-xray" aria-pressed="true">
-          🎯 가드 라인 X-Ray: ON
-        </button>
-        <button type="button" class="btn" id="btn-theme">
-          🌗 테마 전환
-        </button>
-      </div>
-    </header>
-
-    <!-- Sticky Interactive Option Playground Deck + Real-time 3-Sidebar HUD -->
-    <div class="control-deck" id="control-deck">
-      <div class="deck-inner">
-        <div class="deck-row">
-          <div class="preset-group" role="group" aria-label="Tether Option Presets">
-            <span class="deck-label">⚡ Tether 옵션 비교 프리셋:</span>
+        <div class="nav-controls">
+          <div class="seg-group" role="group" aria-label="Tether Presets">
             <button
               type="button"
-              class="preset-btn"
+              class="seg-btn"
               data-preset="default"
               aria-pressed="true"
             >
-              ✨ 기본 최적값 (Bi-directional + Active Guard)
+              기본 (Guard ON)
             </button>
             <button
               type="button"
-              class="preset-btn"
+              class="seg-btn"
               data-preset="no-guard"
               aria-pressed="false"
             >
-              🔓 Guard OFF (activeSelector: false)
+              Guard OFF
             </button>
             <button
               type="button"
-              class="preset-btn"
+              class="seg-btn"
               data-preset="spacious"
               aria-pressed="false"
             >
-              🛡️ 넓은 상하단 가드 (top: 64px / bottom: 72px)
+              넓은 여백
             </button>
             <button
               type="button"
-              class="preset-btn"
+              class="seg-btn"
               data-preset="offset"
               aria-pressed="false"
             >
-              📐 초기 오프셋 (offsetTop: 48px)
-            </button>
-            <button
-              type="button"
-              class="preset-btn"
-              id="btn-long-section"
-              aria-pressed="false"
-            >
-              🐋 현재 섹션 2100px 확장 (Guard 극한 테스트)
+              오프셋 +48px
             </button>
           </div>
-        </div>
 
-        <div class="deck-row">
-          <div class="sliders-group">
-            <label class="control-item checkbox-label" for="opt-guard">
-              <input
-                type="checkbox"
-                id="opt-guard"
-                class="visually-hidden"
-                checked
-              />
-              <span><code>activeSelector</code> (Active Guard)</span>
-            </label>
+          <button type="button" class="flat-btn" id="btn-long-sec" aria-pressed="true">
+            긴 섹션 (#10)
+          </button>
 
-            <div class="control-item">
+          <button type="button" class="flat-btn" id="btn-xray" aria-pressed="false">
+            가드선 표시
+          </button>
+
+          <button type="button" class="flat-btn" id="btn-options" aria-expanded="false">
+            세부 옵션 ▾
+          </button>
+
+          <button type="button" class="flat-btn" id="btn-autotour" data-active="false">
+            ▶ 자동 스크롤
+          </button>
+
+          <button type="button" class="flat-btn" id="btn-theme">
+            테마
+          </button>
+
+          <!-- Floating Popover for sliders (Zero layout shift) -->
+          <div class="options-popover" id="options-popover" data-open="false">
+            <div class="opt-row">
+              <label class="checkbox-label" for="opt-guard">
+                <input
+                  type="checkbox"
+                  id="opt-guard"
+                  class="visually-hidden"
+                  checked
+                />
+                <span><code>activeSelector</code> Guard</span>
+              </label>
+            </div>
+
+            <div class="opt-row">
               <label for="opt-top-padding"><code>topPadding</code></label>
-              <input
-                type="range"
-                id="opt-top-padding"
-                min="0"
-                max="96"
-                step="4"
-                value="24"
-              />
-              <span class="val-badge" id="val-top-padding">24px</span>
+              <div class="opt-right">
+                <input
+                  type="range"
+                  id="opt-top-padding"
+                  min="0"
+                  max="96"
+                  step="4"
+                  value="20"
+                />
+                <span class="opt-val" id="val-top-padding">20px</span>
+              </div>
             </div>
 
-            <div class="control-item">
+            <div class="opt-row">
               <label for="opt-bottom-padding"><code>bottomPadding</code></label>
-              <input
-                type="range"
-                id="opt-bottom-padding"
-                min="0"
-                max="96"
-                step="4"
-                value="28"
-              />
-              <span class="val-badge" id="val-bottom-padding">28px</span>
+              <div class="opt-right">
+                <input
+                  type="range"
+                  id="opt-bottom-padding"
+                  min="0"
+                  max="96"
+                  step="4"
+                  value="24"
+                />
+                <span class="opt-val" id="val-bottom-padding">24px</span>
+              </div>
             </div>
 
-            <div class="control-item">
+            <div class="opt-row">
               <label for="opt-offset-top"><code>offsetTop</code></label>
-              <input
-                type="range"
-                id="opt-offset-top"
-                min="0"
-                max="72"
-                step="4"
-                value="0"
-              />
-              <span class="val-badge" id="val-offset-top">0px</span>
+              <div class="opt-right">
+                <input
+                  type="range"
+                  id="opt-offset-top"
+                  min="0"
+                  max="72"
+                  step="4"
+                  value="0"
+                />
+                <span class="opt-val" id="val-offset-top">0px</span>
+              </div>
             </div>
 
-            <div class="control-item">
-              <label for="opt-density">사이드바 높이 배율</label>
-              <input
-                type="range"
-                id="opt-density"
-                min="160"
-                max="260"
-                step="10"
-                value="185"
-              />
-              <span class="val-badge" id="val-density">≥185%</span>
+            <div class="opt-row">
+              <label for="opt-density">최소 높이 배율</label>
+              <div class="opt-right">
+                <input
+                  type="range"
+                  id="opt-density"
+                  min="160"
+                  max="250"
+                  step="10"
+                  value="180"
+                />
+                <span class="opt-val" id="val-density">180%</span>
+              </div>
             </div>
-          </div>
-        </div>
-
-        <!-- Always-Visible 3-Sidebar Live Telemetry Strip -->
-        <div class="live-hud-strip">
-          <div class="hud-pill">
-            <span class="hud-pill-title">① 무적용 (Static):</span>
-            <span id="tel-unapplied-status" style="color: var(--success)">
-              ● 화면 내 표시 중
-            </span>
-            <span id="tel-unapplied-active" style="color: var(--success)">
-              활성항목 보임
-            </span>
-          </div>
-
-          <div class="hud-pill">
-            <span class="hud-pill-title">② 일반 스티키(이너스크롤):</span>
-            <span style="color: var(--warning)">
-              scrollTop: <strong id="tel-inner-scroll">0px</strong>
-            </span>
-            <span id="tel-inner-active" style="color: var(--success)">
-              활성항목 보임
-            </span>
-          </div>
-
-          <div class="hud-pill">
-            <span class="hud-pill-title">③ Sticky Tether:</span>
-            <span id="tel-tether-state" style="color: var(--accent)">
-              🟢 1:1 트래킹
-            </span>
-            <span id="tel-tether-top" style="color: var(--text-secondary)">
-              top: --px (Δ 0px)
-            </span>
-            <span id="tel-tether-active" style="color: var(--success)">
-              🛡️ 화면 내 유지
-            </span>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- X-Ray Visual Guard Lines -->
-    <div class="xray-line xray-line-top" id="xray-top">
-      <span class="xray-tag" id="xray-top-label">
-        TOP GUARD (stickyTop)
-      </span>
-    </div>
-    <div class="xray-line xray-line-bottom" id="xray-bottom">
-      <span class="xray-tag" id="xray-bottom-label">
-        BOTTOM GUARD (100vh - bottomPadding)
-      </span>
-    </div>
+      <!-- Fixed 4:2:2:2 Column Titles & Single-line Status -->
+      <div class="col-header-bar">
+        <div class="col-header-cell">
+          <span class="col-title">컨텐츠</span>
+          <span class="col-status" id="status-content">#01 Overview</span>
+        </div>
 
-    <!-- 4-Column Comparison Arena: Main Article + 3 Identical Sidebars -->
-    <div class="arena" id="top">
-      <main id="article">
-        <div class="hero-banner">
-          <h1>3-Sidebar Scroll UX 실시간 비교 아레나</h1>
-          <p>
-            브라우저 창 크기를 어떻게 조절하든 오른쪽 3개의 사이드바는 항상 화면 높이(<code>100vh</code>)를 초과하도록 보장됩니다.
-            위아래로 스크롤하면서 <strong>① 무적용</strong>, <strong>② 일반 스티키(이너 스크롤)</strong>, <strong>③ Sticky Tether</strong>의 스크롤 UX 차이를 직접 비교해 보세요!
-          </p>
-          <div class="comparison-summary">
-            <div class="summary-chip">
-              <strong style="color: var(--danger)">① 무적용 (Static Flow)</strong>
-              스크롤하면 본문과 함께 위로 사라져 현재 목차를 잃어버림
-            </div>
-            <div class="summary-chip">
-              <strong style="color: var(--warning)">② 일반 스티키 + 이너 스크롤</strong>
-              내부 중첩 스크롤바 발생, 스크롤 영역 분리 및 덜컥거리는 점프
-            </div>
-            <div class="summary-chip">
-              <strong style="color: var(--accent)">③ Sticky Tether 적용</strong>
-              내부 스크롤바 없이 양방향 1:1 반응 + 활성 항목 화면 이탈 완벽 방지
-            </div>
+        <div class="col-header-cell">
+          <span class="col-title">
+            <span class="col-dot" style="background: var(--danger)"></span>
+            무적용
+          </span>
+          <span class="col-status" id="status-unapplied">화면 내</span>
+        </div>
+
+        <div class="col-header-cell">
+          <span class="col-title">
+            <span class="col-dot" style="background: var(--warning)"></span>
+            일반 스티키
+          </span>
+          <div style="display: flex; align-items: center; gap: 6px; min-width: 0">
+            <span class="col-status" id="status-inner">보임</span>
+            <button
+              type="button"
+              class="inline-link-btn"
+              id="btn-inner-autoscroll"
+              title="섹션 변경 시 내부 scrollIntoView 강제 실행 여부"
+            >
+              Auto: OFF
+            </button>
           </div>
+        </div>
+
+        <div class="col-header-cell">
+          <span class="col-title">
+            <span class="col-dot" style="background: var(--accent)"></span>
+            Sticky Tether
+          </span>
+          <span class="col-status" id="status-tether" style="color: var(--accent)">
+            1:1 · Δ 0px
+          </span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Optional Visual Guard Lines -->
+    <div class="xray-line xray-line-top" id="xray-top" data-visible="false">
+      <span class="xray-tag" id="xray-top-label">topGuard</span>
+    </div>
+    <div class="xray-line xray-line-bottom" id="xray-bottom" data-visible="false">
+      <span class="xray-tag" id="xray-bottom-label">bottomGuard</span>
+    </div>
+
+    <!-- Main 4:2:2:2 Arena -->
+    <div class="arena" id="top">
+      <!-- Column 1 (4fr): Documentation Content -->
+      <main id="article">
+        <div class="doc-intro">
+          <h1>Bi-Directional Sticky Scroll Tethering</h1>
+          <p>
+            뷰포트보다 긴 사이드바를 다룰 때 발생하는 스크롤 문제를 세 가지 컬럼(<strong>무적용</strong> · <strong>일반 스티키 이너스크롤</strong> · <strong>Sticky Tether</strong>)으로 동시에 비교합니다. 페이지를 위아래로 스크롤하거나 상단의 프리셋을 전환해 동작 차이를 확인해 보세요.
+          </p>
         </div>
         <div id="sections-container"></div>
       </main>
 
-      <!-- Sidebar 1: Unapplied (Scrolls away) -->
-      <div class="sidebar-track" id="track-unapplied">
+      <!-- Column 2 (2fr): Unapplied (Scrolls away) -->
+      <div class="sidebar-col">
         <aside
-          class="sidebar-card sidebar-card-unapplied"
+          class="sidebar-pane sidebar-pane-unapplied"
           id="sidebar-unapplied"
           data-submode="static"
         >
-          <div class="col-header">
-            <div class="col-title-row">
-              <h2 class="col-name">① 무적용 (Unapplied)</h2>
-              <span class="col-badge badge-danger">Static / No JS</span>
-            </div>
-            <p class="col-desc">스크롤을 내리면 화면 위로 사라집니다.</p>
-            <div class="col-subtoggle">
-              <span>비교 모드:</span>
-              <button type="button" class="mini-btn" id="btn-unapplied-submode">
-                현재: Static (위로 사라짐)
-              </button>
-            </div>
-          </div>
-          <nav class="toc-nav" aria-label="Unapplied Sidebar TOC">
+          <nav class="toc-nav" aria-label="Unapplied Sidebar">
             <div id="toc-unapplied"></div>
           </nav>
         </aside>
 
-        <!-- Appears when Sidebar 1 scrolls completely out of view -->
-        <div class="offscreen-ghost" id="unapplied-ghost" data-visible="false">
-          <strong>👻 ① 무적용 사이드바가 화면 위로 사라졌습니다!</strong>
-          <p style="margin: 0 0 10px; color: var(--text-secondary)">
-            일반 문서 흐름(<code>position: static</code>)이라 스크롤을 내리자마자 화면 위쪽(<code id="ghost-offset-val">-0px</code>)으로 떠나버렸습니다. 현재 읽고 있는 <strong id="ghost-active-label" style="display: inline; color: var(--text)">#1</strong> 목차를 확인할 수 없습니다.
-          </p>
-          <div style="display: flex; gap: 6px; flex-wrap: wrap">
-            <button type="button" class="mini-btn" id="btn-scroll-top">
-              ↑ 맨 위로 가서 확인
-            </button>
-            <button type="button" class="mini-btn" id="btn-ghost-switch-sticky">
-              단순 CSS Sticky(하단 잘림)로 전환해보기
-            </button>
+        <div class="offscreen-indicator" id="unapplied-ghost" data-visible="false">
+          <div style="margin-bottom: 8px; color: var(--text-secondary)">
+            스크롤되어 위로 사라짐 (<code id="ghost-offset">-0px</code>)
           </div>
+          <button type="button" class="inline-link-btn" id="btn-scroll-top">
+            ↑ 맨 위로 이동
+          </button>
         </div>
       </div>
 
-      <!-- Sidebar 2: Standard Sticky + Inner Scroll -->
-      <div class="sidebar-track" id="track-inner">
-        <aside class="sidebar-card sidebar-card-inner" id="sidebar-inner">
-          <div class="col-header">
-            <div class="col-title-row">
-              <h2 class="col-name">② 일반 스티키 이너스크롤</h2>
-              <span class="col-badge badge-warning">overflow-y: auto</span>
-            </div>
-            <p class="col-desc">중첩 스크롤바가 생기고 본문과 따로 놉니다.</p>
-            <div class="col-subtoggle">
-              <span>자동 <code>scrollIntoView</code>:</span>
-              <button
-                type="button"
-                class="mini-btn"
-                id="btn-inner-autoscroll"
-                data-enabled="false"
-              >
-                OFF (활성 항목 가려짐)
-              </button>
-            </div>
-          </div>
-          <nav class="toc-nav" aria-label="Inner Scroll Sidebar TOC">
+      <!-- Column 3 (2fr): Standard Sticky + Inner Scroll -->
+      <div class="sidebar-col">
+        <aside class="sidebar-pane sidebar-pane-inner" id="sidebar-inner">
+          <nav class="toc-nav" aria-label="Inner Scroll Sidebar">
             <div id="toc-inner"></div>
           </nav>
         </aside>
       </div>
 
-      <!-- Sidebar 3: Sticky Tether -->
-      <div class="sidebar-track" id="track-tether">
-        <aside class="sidebar-card sidebar-card-tether" id="sidebar-tether">
-          <div class="col-header">
-            <div class="col-title-row">
-              <h2 class="col-name">③ Sticky Tether 적용</h2>
-              <span class="col-badge badge-accent">Bi-Directional + Guard</span>
-            </div>
-            <p class="col-desc">내부 스크롤바 없이 1:1 반응 + 활성 항목 보호!</p>
-            <div class="col-subtoggle">
-              <span>현재 활성 옵션:</span>
-              <code
-                id="tel-tether-options"
-                style="font-size: 10.5px; color: var(--accent)"
-              >
-                guard: ON · pad: 24/28
-              </code>
-            </div>
-          </div>
-          <nav class="toc-nav" aria-label="Sticky Tether Sidebar TOC">
+      <!-- Column 4 (2fr): Sticky Tether -->
+      <div class="sidebar-col">
+        <aside class="sidebar-pane sidebar-pane-tether" id="sidebar-tether">
+          <nav class="toc-nav" aria-label="Sticky Tether Sidebar">
             <div id="toc-tether"></div>
           </nav>
         </aside>
@@ -1183,62 +936,62 @@
 
       const GROUPS = [
         {
-          phase: 'Phase 1 · Core Mechanics',
+          phase: 'Core Mechanics',
           items: [
-            'Overview & Problem Statement',
-            'Why Native Sticky Clips Tall Menus',
-            'Why Inner Scrollbars Hurt UX',
-            'Bi-Directional Scroll Delta Tracking',
-            'Instant Direction Reversal Re-Anchor',
-            'Zero Scroll Debt Architecture',
-            'Natural Full-Height DOM Layout'
+            'Overview & Problem',
+            'Native Sticky Clipping',
+            'Inner Scrollbar Traps',
+            'Bi-Directional Deltas',
+            'Direction Re-Anchoring',
+            'Zero Scroll Debt',
+            'Natural Full Height'
           ]
         },
         {
-          phase: 'Phase 2 · Active Item Viewport Guard',
+          phase: 'Active Item Guard',
           items: [
-            'Active Selector Detection ([aria-current])',
-            'Top Boundary Guard (maxDeltaLimit)',
-            'Bottom Boundary Guard (minDeltaLimit)',
-            'Long Section Downward Clamping',
-            'Long Section Upward Clamping',
-            'Boundary Anchor Synchronization',
-            'MutationObserver Live Active Sync'
+            'Active Selector Match',
+            'Top Boundary Guard',
+            'Bottom Boundary Guard',
+            'Downward Clamping',
+            'Upward Clamping',
+            'Anchor Sync at Bounds',
+            'MutationObserver Sync'
           ]
         },
         {
-          phase: 'Phase 3 · Options & Customization',
+          phase: 'Options & API',
           items: [
-            'CSS Variable Header Height Resolution',
-            'Dynamic Top & Bottom Padding Guards',
-            'Initial Offset Engagement (offsetTop)',
-            'Custom Scroll Containers (HTMLElement)',
-            'ResizeObserver Responsive Recalculation',
-            'Disabling Guard (activeSelector: false)',
-            'React Hook (useTether) & Component API'
+            'Header Height Variable',
+            'Top & Bottom Padding',
+            'Initial Offset Top',
+            'Custom Scroll Container',
+            'Resize Recalculation',
+            'Guard Disable Mode',
+            'React Hook & Component'
           ]
         },
         {
-          phase: 'Phase 4 · Edge Cases & Verification',
+          phase: 'Verification',
           items: [
-            'Short Sidebar Auto-Bypass to Native CSS',
-            'Accordion Expand & Collapse Transitions',
-            'Ultra-Tall 4K Display Stress Testing',
-            'Rapid Scroll Reversal Jitter Prevention',
-            'SSR & Hydration Safety Guarantees',
-            'Performance Benchmark (Passive Scroll)',
-            'Final UX Verdict & Summary'
+            'Short Sidebar Bypass',
+            'Accordion Transitions',
+            '4K Display Overflow',
+            'Rapid Reversal Stability',
+            'SSR Hydration Safety',
+            'Passive Scroll Perf',
+            'Architecture Summary'
           ]
         }
       ]
 
+      const HEADER_HEIGHT = 90 // Fixed 48px nav + 42px col-header-bar
       const sectionsContainer = document.getElementById('sections-container')
       const tocContainers = {
         unapplied: document.getElementById('toc-unapplied'),
         inner: document.getElementById('toc-inner'),
         tether: document.getElementById('toc-tether')
       }
-
       const sidebars = {
         unapplied: document.getElementById('sidebar-unapplied'),
         inner: document.getElementById('sidebar-inner'),
@@ -1256,12 +1009,13 @@
         }
 
         for (const key of Object.keys(groupEls)) {
-          const label = document.createElement('div')
-          label.className = 'toc-group-label'
-          label.textContent = group.phase
+          groupEls[key].className = 'toc-group'
+          const titleEl = document.createElement('div')
+          titleEl.className = 'toc-group-title'
+          titleEl.textContent = group.phase
           const ol = document.createElement('ol')
           ol.className = 'toc-list'
-          groupEls[key].appendChild(label)
+          groupEls[key].appendChild(titleEl)
           groupEls[key].appendChild(ol)
           tocContainers[key].appendChild(groupEls[key])
         }
@@ -1271,47 +1025,39 @@
           const id = `section-${itemIndex}`
           const numStr = String(itemIndex).padStart(2, '0')
 
-          // Create Article Section
           const sec = document.createElement('section')
           sec.className = 'doc-section'
           sec.id = id
-          sec.dataset.index = String(itemIndex)
           if (itemIndex === 10) {
             sec.dataset.long = 'true'
           }
 
           sec.innerHTML = `
-            <div class="section-meta">
-              <span class="section-phase">${group.phase}</span>
-              <div class="section-actions">
-                <button type="button" class="mini-btn btn-toggle-long" data-target="${id}">
-                  ${itemIndex === 10 ? '🐋 초장문 섹션 ON (클릭해 축소)' : '🐋 이 섹션 길게 늘리기 (2100px)'}
-                </button>
-              </div>
+            <div class="sec-eyebrow">
+              <span class="sec-eyebrow-label">${group.phase} · #${numStr}</span>
+              <button type="button" class="inline-link-btn btn-toggle-long" data-target="${id}">
+                ${itemIndex === 10 ? '긴 섹션 축소' : '섹션 높이 확장'}
+              </button>
             </div>
             <h2>${numStr}. ${title}</h2>
             <p>
-              현재 <strong>#${numStr} ${title}</strong> 섹션을 보고 있습니다. 오른쪽 3개의 사이드바가 동시에 어떻게 반응하는지 비교해 보세요.
-              특히 스크롤 방향을 위·아래로 즉시 바꿀 때 <strong>③ Sticky Tether</strong>는 지연 없이 1:1로 반응하며,
-              상단 컨트롤 바에서 <code>activeSelector</code>나 <code>topPadding</code>, <code>bottomPadding</code>을 조절하면 가드 동작이 실시간으로 달라집니다.
+              우측의 세 가지 사이드바 컬럼이 스크롤에 어떻게 반응하는지 비교해 보세요.
+              <strong>무적용</strong>은 페이지 상단에 머물다 사라지고, <strong>일반 스티키</strong>는 내부 스크롤바에 갇히며,
+              <strong>Sticky Tether</strong>는 페이지 스크롤 방향에 맞춰 1:1로 부드럽게 따라 움직이면서 현재 활성 항목을 화면 안에 유지합니다.
             </p>
-            <div class="long-section-callout">
-              <strong>🧪 Active Item Viewport Guard 집중 체험 구간 (#${numStr})</strong><br />
-              이 섹션은 높이가 <strong>2,100px</strong>로 매우 깁니다! 이 안에서 계속 아래로 스크롤해 보세요:<br />
-              • 상단 프리셋에서 <strong>✨ 기본 최적값 (Guard ON)</strong>일 때는 <code>#${numStr}</code> 활성 항목이 상단 가드 라인(파란 점선)에 정확히 멈춰서 절대 화면 위로 사라지지 않습니다.<br />
-              • 반면 <strong>🔓 Guard OFF (activeSelector: false)</strong>를 누르고 스크롤하면 사이드바 전체가 위로 밀려 올라가며 현재 활성 항목 <code>#${numStr}</code>이 화면 밖으로 사라집니다!
+            <div class="long-guide">
+              <strong>장문 섹션 테스트 구간 (#${numStr})</strong> — 이 섹션 안에서 계속 아래로 스크롤할 때 상단의 <code>기본 (Guard ON)</code>과 <code>Guard OFF</code>를 번갈아 눌러보세요. Guard가 켜져 있으면 <code>#${numStr}</code> 항목이 상단 경계에 멈춰 화면 밖으로 나가지 않습니다.
             </div>
-            <div class="long-ruler">
-              <span>↓ +400px (계속 스크롤하며 ③번 사이드바의 #${numStr} 항목 위치를 확인하세요)</span>
-              <span>↓ +800px (Guard ON이면 #${numStr} 항목이 상단 가드 라인에 고정된 채 유지됩니다)</span>
-              <span>↓ +1200px (중간에 스크롤을 위로 올리면 즉시 반대 방향으로 따라옵니다)</span>
-              <span>↓ +1600px (섹션 하단 부근 — 이제 다음 섹션으로 넘어갑니다)</span>
+            <div class="long-markers">
+              <span>+400px · 아래로 스크롤 중 (우측 Sticky Tether의 #${numStr} 위치를 확인하세요)</span>
+              <span>+800px · Guard ON 상태에서 #${numStr} 항목이 상단 경계에 고정됩니다</span>
+              <span>+1200px · 여기서 위로 살짝 스크롤하면 즉시 반대 방향으로 반응합니다</span>
+              <span>+1600px · 섹션 하단 도달</span>
             </div>
           `
           sectionsContainer.appendChild(sec)
           allSections.push(sec)
 
-          // Create identical TOC items in all 3 sidebars
           for (const key of ['unapplied', 'inner', 'tether']) {
             const ol = groupEls[key].querySelector('.toc-list')
             const li = document.createElement('li')
@@ -1319,9 +1065,10 @@
             a.className = 'toc-item'
             a.href = `#${id}`
             a.dataset.id = id
+            a.dataset.label = `#${numStr} ${title}`
             a.innerHTML = `
-              <span>${numStr}. ${title}</span>
-              <span class="toc-item-badge">#${numStr}</span>
+              <span>${title}</span>
+              <span class="toc-num">${numStr}</span>
             `
             li.appendChild(a)
             ol.appendChild(li)
@@ -1329,60 +1076,44 @@
         }
       }
 
-      // Dynamic Viewport Overflow Guarantee:
-      // Ensures the sidebar ALWAYS exceeds browser height (100vh) regardless of monitor size
+      const state = {
+        activeGuard: true,
+        topPadding: 20,
+        bottomPadding: 24,
+        offsetTop: 0,
+        innerAutoScroll: false,
+        xray: false,
+        lastScrollY: window.scrollY,
+        direction: 'down'
+      }
+
       const densitySlider = document.getElementById('opt-density')
-      const densityVal = document.getElementById('val-density')
-      const overflowBadge = document.getElementById('overflow-guarantee-badge')
+      const overflowInfo = document.getElementById('overflow-info')
 
       function ensureSidebarOverflow() {
         const vh = window.innerHeight
-        const minTargetRatio = Number(densitySlider.value) / 100
-        densityVal.textContent = `≥${densitySlider.value}%`
+        const minRatio = Number(densitySlider.value) / 100
+        document.getElementById('val-density').textContent = `${densitySlider.value}%`
 
-        // Reset to base padding first to measure natural height
-        document.documentElement.style.setProperty('--toc-item-pad-y', '7px')
+        document.documentElement.style.setProperty('--toc-item-pad-y', '6px')
         const baseHeight = sidebars.tether.offsetHeight
-        const targetHeight = Math.max(vh * minTargetRatio, vh + 420)
+        const targetHeight = Math.max(vh * minRatio, vh + 380)
 
         if (baseHeight < targetHeight) {
           const extraNeeded = targetHeight - baseHeight
           const extraPerItem = Math.ceil(extraNeeded / (allSections.length * 2))
-          const newPadY = Math.min(28, 7 + extraPerItem)
+          const newPadY = Math.min(26, 6 + extraPerItem)
           document.documentElement.style.setProperty('--toc-item-pad-y', `${newPadY}px`)
         }
 
         const finalHeight = sidebars.tether.offsetHeight
         const pct = Math.round((finalHeight / Math.max(1, vh)) * 100)
-        overflowBadge.textContent = `📏 사이드바 높이: ${finalHeight.toLocaleString()}px vs 브라우저: ${vh.toLocaleString()}px (${pct}% 초과 보장)`
-      }
-
-      // Live Option State & Sticky Tether Instance
-      const state = {
-        activeGuard: true,
-        topPadding: 24,
-        bottomPadding: 28,
-        offsetTop: 0,
-        innerAutoScroll: false,
-        unappliedSubmode: 'static', // 'static' | 'pure-sticky'
-        xray: true,
-        lastScrollY: window.scrollY,
-        direction: 'down'
+        overflowInfo.textContent = `사이드바 ${finalHeight}px (${pct}% vh)`
       }
 
       let tetherInstance = null
 
-      function getStickyTopOffset() {
-        const headerEl = document.getElementById('site-header')
-        const deckEl = document.getElementById('control-deck')
-        return headerEl.offsetHeight + deckEl.offsetHeight
-      }
-
-      function syncCssVariablesAndXRay() {
-        const headerH = document.getElementById('site-header').offsetHeight
-        const deckH = document.getElementById('control-deck').offsetHeight
-        document.documentElement.style.setProperty('--header-height', `${headerH}px`)
-        document.documentElement.style.setProperty('--deck-height', `${deckH}px`)
+      function syncCssAndXRay() {
         document.documentElement.style.setProperty(
           '--top-padding',
           `${state.topPadding}px`
@@ -1396,49 +1127,41 @@
           `${state.offsetTop}px`
         )
 
-        const stickyTopPx = headerH + deckH + state.topPadding + state.offsetTop
+        const topGuardY = HEADER_HEIGHT + state.topPadding + state.offsetTop
         const xrayTop = document.getElementById('xray-top')
         const xrayBottom = document.getElementById('xray-bottom')
-        xrayTop.style.top = `${stickyTopPx}px`
+        xrayTop.style.top = `${topGuardY}px`
         xrayBottom.style.bottom = `${state.bottomPadding}px`
-
         document.getElementById('xray-top-label').textContent =
-          `TOP GUARD (stickyTop: ${stickyTopPx}px · topPadding: ${state.topPadding}px)`
+          `topGuard: ${topGuardY}px`
         document.getElementById('xray-bottom-label').textContent =
-          `BOTTOM GUARD (bottomPadding: ${state.bottomPadding}px)`
-
-        document.getElementById('tel-tether-options').textContent =
-          `guard: ${state.activeGuard ? 'ON' : 'OFF'} · topPad: ${state.topPadding} · btmPad: ${state.bottomPadding} · offset: ${state.offsetTop}`
+          `bottomGuard: ${state.bottomPadding}px`
       }
 
       function mountOrRecreateTether() {
-        if (tetherInstance) {
-          tetherInstance.destroy()
-        }
-        syncCssVariablesAndXRay()
+        if (tetherInstance) tetherInstance.destroy()
+        syncCssAndXRay()
         ensureSidebarOverflow()
 
         tetherInstance = createStickyTether(sidebars.tether, {
-          headerHeight: getStickyTopOffset(),
+          headerHeight: HEADER_HEIGHT,
           topPadding: state.topPadding,
           bottomPadding: state.bottomPadding,
           offsetTop: state.offsetTop,
           activeSelector: state.activeGuard ? '[aria-current="location"]' : false
         })
 
-        updateTelemetry()
+        updateStatusStrip()
       }
 
-      // Active Section Tracking (Scrollspy + aria-current sync)
       let currentActiveId = allSections[0].id
 
       function updateActiveSection() {
-        const triggerLine = getStickyTopOffset() + state.topPadding + 36
+        const triggerLine = HEADER_HEIGHT + state.topPadding + 32
         let nextActiveId = allSections[0].id
 
         for (const sec of allSections) {
-          const rect = sec.getBoundingClientRect()
-          if (rect.top <= triggerLine) {
+          if (sec.getBoundingClientRect().top <= triggerLine) {
             nextActiveId = sec.id
           }
         }
@@ -1454,6 +1177,7 @@
           }
         }
 
+        let activeLabel = '#01'
         for (const key of ['unapplied', 'inner', 'tether']) {
           const links = tocContainers[key].querySelectorAll('.toc-item')
           for (const link of links) {
@@ -1461,174 +1185,120 @@
             link.classList.toggle('target-current', isActive)
             if (isActive) {
               link.setAttribute('aria-current', 'location')
+              activeLabel = link.dataset.label || currentActiveId
             } else {
               link.removeAttribute('aria-current')
             }
           }
         }
 
-        // Column 2 optional scrollIntoView jump behavior
+        document.getElementById('status-content').textContent = activeLabel
+
         if (changed && state.innerAutoScroll) {
           const activeInnerLink = tocContainers.inner.querySelector(
             '[aria-current="location"]'
           )
-          if (activeInnerLink) {
-            activeInnerLink.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
-          }
+          activeInnerLink?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
         }
       }
 
-      function isElementVisibleInViewport(el, topBound, bottomBound) {
+      function isVisibleInBounds(el, topBound, bottomBound) {
         if (!el) return false
-        const rect = el.getBoundingClientRect()
-        return rect.top >= topBound - 4 && rect.bottom <= bottomBound + 4
+        const r = el.getBoundingClientRect()
+        return r.top >= topBound - 4 && r.bottom <= bottomBound + 4
       }
 
-      function updateTelemetry() {
+      function updateStatusStrip() {
         const scrollY = window.scrollY
         if (scrollY > state.lastScrollY) state.direction = 'down'
         else if (scrollY < state.lastScrollY) state.direction = 'up'
         state.lastScrollY = scrollY
 
-        const topBound = getStickyTopOffset()
-        const bottomBound = window.innerHeight
+        const vh = window.innerHeight
 
-        // 1. Unapplied Sidebar Telemetry
+        // 1. Unapplied status (Strictly concise single-line)
         const unappliedRect = sidebars.unapplied.getBoundingClientRect()
-        const unappliedActive = tocContainers.unapplied.querySelector(
-          '[aria-current="location"]'
-        )
-        const unappliedStatusEl = document.getElementById('tel-unapplied-status')
-        const unappliedActiveEl = document.getElementById('tel-unapplied-active')
+        const statusUnapplied = document.getElementById('status-unapplied')
         const ghostEl = document.getElementById('unapplied-ghost')
 
-        const completelyOffscreen = unappliedRect.bottom < topBound + 20
-        if (completelyOffscreen && state.unappliedSubmode === 'static') {
-          unappliedStatusEl.textContent = '❌ 위로 사라짐'
-          unappliedStatusEl.style.color = 'var(--danger)'
+        if (unappliedRect.bottom < HEADER_HEIGHT + 10) {
+          const offPx = Math.round(unappliedRect.bottom - HEADER_HEIGHT)
+          statusUnapplied.textContent = `사라짐 (${offPx}px)`
+          statusUnapplied.style.color = 'var(--danger)'
           ghostEl.dataset.visible = 'true'
-          document.getElementById('ghost-offset-val').textContent =
-            `${Math.round(unappliedRect.bottom - topBound)}px`
-          document.getElementById('ghost-active-label').textContent =
-            unappliedActive ? unappliedActive.textContent.trim() : currentActiveId
+          document.getElementById('ghost-offset').textContent = `${offPx}px`
         } else {
-          unappliedStatusEl.textContent =
-            state.unappliedSubmode === 'static'
-              ? '● 일부 화면 내'
-              : '⚠️ 하단 잘림'
-          unappliedStatusEl.style.color = 'var(--warning)'
+          const activeEl = tocContainers.unapplied.querySelector(
+            '[aria-current="location"]'
+          )
+          const vis = isVisibleInBounds(activeEl, HEADER_HEIGHT, vh)
+          statusUnapplied.textContent = vis ? '활성 보임' : '하단 잘림'
+          statusUnapplied.style.color = vis ? 'var(--text-secondary)' : 'var(--warning)'
           ghostEl.dataset.visible = 'false'
         }
 
-        const unappliedActiveVisible = isElementVisibleInViewport(
-          unappliedActive,
-          topBound,
-          bottomBound
-        )
-        unappliedActiveEl.textContent = unappliedActiveVisible
-          ? '🟢 활성항목 보임'
-          : '❌ 활성항목 안보임'
-        unappliedActiveEl.style.color = unappliedActiveVisible
-          ? 'var(--success)'
-          : 'var(--danger)'
-
-        // 2. Inner Scroll Sidebar Telemetry
-        document.getElementById('tel-inner-scroll').textContent =
-          `${Math.round(sidebars.inner.scrollTop)}px`
+        // 2. Inner scroll status
         const innerActive = tocContainers.inner.querySelector(
           '[aria-current="location"]'
         )
         const innerRect = sidebars.inner.getBoundingClientRect()
-        const innerActiveRect = innerActive ? innerActive.getBoundingClientRect() : null
-        const innerVisible =
-          innerActiveRect &&
-          innerActiveRect.top >= innerRect.top + 60 &&
-          innerActiveRect.bottom <= innerRect.bottom - 8
-        const innerActiveEl = document.getElementById('tel-inner-active')
-        innerActiveEl.textContent = innerVisible
-          ? '🟢 내부스크롤 내 보임'
-          : '❌ 내부스크롤 밖 가려짐'
-        innerActiveEl.style.color = innerVisible ? 'var(--success)' : 'var(--danger)'
+        const innerVis = isVisibleInBounds(innerActive, innerRect.top, innerRect.bottom)
+        const statusInner = document.getElementById('status-inner')
+        statusInner.textContent = innerVis ? '활성 보임' : '스크롤 밖'
+        statusInner.style.color = innerVis ? 'var(--text-secondary)' : 'var(--warning)'
 
-        // 3. Sticky Tether Telemetry
+        // 3. Sticky Tether status
         const inlineTop = sidebars.tether.style.top
-        const stickyTopBase = getStickyTopOffset() + state.topPadding + state.offsetTop
-        const parsedTop = inlineTop ? Number.parseFloat(inlineTop) : stickyTopBase
-        const currentDelta = Math.round(stickyTopBase - parsedTop)
-        document.getElementById('tel-tether-top').textContent =
-          `top: ${Math.round(parsedTop)}px (Δ ${currentDelta}px)`
-
+        const baseTop = HEADER_HEIGHT + state.topPadding + state.offsetTop
+        const parsedTop = inlineTop ? Number.parseFloat(inlineTop) : baseTop
+        const delta = Math.round(baseTop - parsedTop)
         const tetherActive = tocContainers.tether.querySelector(
           '[aria-current="location"]'
         )
-        const tetherActiveVisible = isElementVisibleInViewport(
-          tetherActive,
-          topBound + state.topPadding - 6,
-          bottomBound - state.bottomPadding + 6
-        )
-
-        const tetherActiveEl = document.getElementById('tel-tether-active')
-        const tetherStateEl = document.getElementById('tel-tether-state')
+        const statusTether = document.getElementById('status-tether')
 
         if (tetherActive) {
           const aRect = tetherActive.getBoundingClientRect()
-          const nearTopGuard =
+          const clampedTop =
+            state.activeGuard && Math.abs(aRect.top - baseTop) <= 5 && delta > 0
+          const clampedBottom =
             state.activeGuard &&
-            Math.abs(aRect.top - (topBound + state.topPadding + state.offsetTop)) <= 6 &&
-            currentDelta > 0
-          const nearBottomGuard =
-            state.activeGuard &&
-            Math.abs(aRect.bottom - (bottomBound - state.bottomPadding)) <= 6
+            Math.abs(aRect.bottom - (vh - state.bottomPadding)) <= 5
 
-          if (nearTopGuard) {
-            tetherStateEl.textContent = '🛡️ 상단 Guard 클램핑!'
-            tetherStateEl.style.color = 'var(--accent)'
-            sidebars.tether.dataset.clamped = 'true'
-          } else if (nearBottomGuard) {
-            tetherStateEl.textContent = '🛡️ 하단 Guard 클램핑!'
-            tetherStateEl.style.color = 'var(--purple)'
-            sidebars.tether.dataset.clamped = 'true'
+          if (clampedTop) {
+            statusTether.textContent = `상단 Guard · Δ${delta}px`
+            statusTether.style.color = 'var(--accent)'
+          } else if (clampedBottom) {
+            statusTether.textContent = `하단 Guard · Δ${delta}px`
+            statusTether.style.color = 'var(--purple)'
           } else {
-            const dirArrow = state.direction === 'down' ? '↓ DOWN' : '↑ UP'
-            tetherStateEl.textContent = `🟢 ${dirArrow} 1:1 트래킹`
-            tetherStateEl.style.color = 'var(--success)'
-            sidebars.tether.dataset.clamped = 'false'
+            const arrow = state.direction === 'down' ? '↓' : '↑'
+            statusTether.textContent = `${arrow} 1:1 · Δ${delta}px`
+            statusTether.style.color = 'var(--success)'
           }
-        }
-
-        if (tetherActiveVisible) {
-          tetherActiveEl.textContent = '🛡️ 화면 내 100% 유지'
-          tetherActiveEl.style.color = 'var(--success)'
-        } else {
-          tetherActiveEl.textContent = '⚠️ 화면 이탈 (Guard OFF)'
-          tetherActiveEl.style.color = 'var(--danger)'
         }
       }
 
-      // Event Listeners
       window.addEventListener(
         'scroll',
         () => {
           updateActiveSection()
           if (tetherInstance) tetherInstance.update()
-          updateTelemetry()
+          updateStatusStrip()
         },
         { passive: true }
       )
 
-      sidebars.inner.addEventListener('scroll', updateTelemetry, { passive: true })
+      sidebars.inner.addEventListener('scroll', updateStatusStrip, { passive: true })
+      window.addEventListener('resize', mountOrRecreateTether)
 
-      window.addEventListener('resize', () => {
-        mountOrRecreateTether()
-      })
-
-      // Option Controls Binding
+      // Controls & Presets
       const optGuard = document.getElementById('opt-guard')
       const optTopPad = document.getElementById('opt-top-padding')
       const optBottomPad = document.getElementById('opt-bottom-padding')
       const optOffsetTop = document.getElementById('opt-offset-top')
 
-      function updateRangeProgressFallback(input) {
+      function updateRangeFill(input) {
         const min = Number(input.min || 0)
         const max = Number(input.max || 100)
         const val = Number(input.value || 0)
@@ -1636,7 +1306,7 @@
         input.style.setProperty('--progress', `${pct}%`)
       }
 
-      function applyControlsFromUI(customPresetName = null) {
+      function applyOptionsFromUI(presetName = null) {
         state.activeGuard = optGuard.checked
         state.topPadding = Number(optTopPad.value)
         state.bottomPadding = Number(optBottomPad.value)
@@ -1648,44 +1318,43 @@
         document.getElementById('val-offset-top').textContent = `${state.offsetTop}px`
 
         for (const r of [optTopPad, optBottomPad, optOffsetTop, densitySlider]) {
-          updateRangeProgressFallback(r)
+          updateRangeFill(r)
         }
 
-        document.querySelectorAll('.preset-btn[data-preset]').forEach((btn) => {
+        document.querySelectorAll('.seg-btn[data-preset]').forEach((btn) => {
           btn.setAttribute(
             'aria-pressed',
-            btn.dataset.preset === customPresetName ? 'true' : 'false'
+            btn.dataset.preset === presetName ? 'true' : 'false'
           )
         })
 
         mountOrRecreateTether()
       }
 
-      optGuard.addEventListener('change', () => applyControlsFromUI())
-      optTopPad.addEventListener('input', () => applyControlsFromUI())
-      optBottomPad.addEventListener('input', () => applyControlsFromUI())
-      optOffsetTop.addEventListener('input', () => applyControlsFromUI())
+      optGuard.addEventListener('change', () => applyOptionsFromUI())
+      optTopPad.addEventListener('input', () => applyOptionsFromUI())
+      optBottomPad.addEventListener('input', () => applyOptionsFromUI())
+      optOffsetTop.addEventListener('input', () => applyOptionsFromUI())
       densitySlider.addEventListener('input', () => {
-        updateRangeProgressFallback(densitySlider)
+        updateRangeFill(densitySlider)
         ensureSidebarOverflow()
         if (tetherInstance) tetherInstance.update()
-        updateTelemetry()
+        updateStatusStrip()
       })
 
-      // Preset Buttons
       const PRESETS = {
-        default: { activeGuard: true, topPadding: 24, bottomPadding: 28, offsetTop: 0 },
+        default: { activeGuard: true, topPadding: 20, bottomPadding: 24, offsetTop: 0 },
         'no-guard': {
           activeGuard: false,
-          topPadding: 24,
-          bottomPadding: 28,
+          topPadding: 20,
+          bottomPadding: 24,
           offsetTop: 0
         },
         spacious: { activeGuard: true, topPadding: 64, bottomPadding: 72, offsetTop: 0 },
-        offset: { activeGuard: true, topPadding: 24, bottomPadding: 28, offsetTop: 48 }
+        offset: { activeGuard: true, topPadding: 20, bottomPadding: 24, offsetTop: 48 }
       }
 
-      document.querySelectorAll('.preset-btn[data-preset]').forEach((btn) => {
+      document.querySelectorAll('.seg-btn[data-preset]').forEach((btn) => {
         btn.addEventListener('click', () => {
           const p = PRESETS[btn.dataset.preset]
           if (!p) return
@@ -1693,25 +1362,34 @@
           optTopPad.value = String(p.topPadding)
           optBottomPad.value = String(p.bottomPadding)
           optOffsetTop.value = String(p.offsetTop)
-          applyControlsFromUI(btn.dataset.preset)
+          applyOptionsFromUI(btn.dataset.preset)
         })
       })
 
-      // Long section toggle button in Deck & inside sections
-      const btnLongSection = document.getElementById('btn-long-section')
-      btnLongSection.addEventListener('click', () => {
-        const activeSec = document.getElementById(currentActiveId) || allSections[9]
-        const isCurrentlyLong = activeSec.dataset.long === 'true'
-        activeSec.dataset.long = isCurrentlyLong ? 'false' : 'true'
-        btnLongSection.setAttribute('aria-pressed', isCurrentlyLong ? 'false' : 'true')
-        const toggleBtn = activeSec.querySelector('.btn-toggle-long')
-        if (toggleBtn) {
-          toggleBtn.textContent =
-            activeSec.dataset.long === 'true'
-              ? '🐋 초장문 섹션 ON (클릭해 축소)'
-              : '🐋 이 섹션 길게 늘리기 (2100px)'
+      // Options Popover toggle
+      const btnOptions = document.getElementById('btn-options')
+      const popover = document.getElementById('options-popover')
+      btnOptions.addEventListener('click', (e) => {
+        e.stopPropagation()
+        const nextOpen = popover.dataset.open !== 'true'
+        popover.dataset.open = String(nextOpen)
+        btnOptions.setAttribute('aria-expanded', String(nextOpen))
+      })
+      document.addEventListener('click', (e) => {
+        if (!popover.contains(e.target) && e.target !== btnOptions) {
+          popover.dataset.open = 'false'
+          btnOptions.setAttribute('aria-expanded', 'false')
         }
-        activeSec.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      })
+
+      // Long Section (#10) Quick Jump / Toggle
+      const btnLongSec = document.getElementById('btn-long-sec')
+      btnLongSec.addEventListener('click', () => {
+        const sec10 = document.getElementById('section-10')
+        if (!sec10) return
+        sec10.dataset.long = 'true'
+        btnLongSec.setAttribute('aria-pressed', 'true')
+        sec10.scrollIntoView({ behavior: 'smooth', block: 'start' })
       })
 
       sectionsContainer.addEventListener('click', (e) => {
@@ -1720,70 +1398,45 @@
         const sec = document.getElementById(btn.dataset.target)
         if (!sec) return
         const nextLong = sec.dataset.long !== 'true'
-        sec.dataset.long = nextLong ? 'true' : 'false'
-        btn.textContent = nextLong
-          ? '🐋 초장문 섹션 ON (클릭해 축소)'
-          : '🐋 이 섹션 길게 늘리기 (2100px)'
+        sec.dataset.long = String(nextLong)
+        btn.textContent = nextLong ? '긴 섹션 축소' : '섹션 높이 확장'
       })
 
-      // Column 1 Submode Toggle (Static vs Pure Sticky Clipped)
-      const btnUnappliedSubmode = document.getElementById('btn-unapplied-submode')
-      function toggleUnappliedSubmode() {
-        state.unappliedSubmode =
-          state.unappliedSubmode === 'static' ? 'pure-sticky' : 'static'
-        sidebars.unapplied.dataset.submode = state.unappliedSubmode
-        btnUnappliedSubmode.textContent =
-          state.unappliedSubmode === 'static'
-            ? '현재: Static (위로 사라짐)'
-            : '현재: 단순 Sticky (하단 잘림)'
-        updateTelemetry()
-      }
-      btnUnappliedSubmode.addEventListener('click', toggleUnappliedSubmode)
-      document
-        .getElementById('btn-ghost-switch-sticky')
-        .addEventListener('click', toggleUnappliedSubmode)
-      document.getElementById('btn-scroll-top').addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-      })
-
-      // Column 2 Auto-Scroll Toggle
-      const btnInnerAutoscroll = document.getElementById('btn-inner-autoscroll')
-      btnInnerAutoscroll.addEventListener('click', () => {
+      // Inner Scroll Auto-scroll toggle
+      const btnInnerAuto = document.getElementById('btn-inner-autoscroll')
+      btnInnerAuto.addEventListener('click', () => {
         state.innerAutoScroll = !state.innerAutoScroll
-        btnInnerAutoscroll.dataset.enabled = String(state.innerAutoScroll)
-        btnInnerAutoscroll.textContent = state.innerAutoScroll
-          ? 'ON (덜컥거리며 강제 점프)'
-          : 'OFF (활성 항목 가려짐)'
+        btnInnerAuto.textContent = `Auto: ${state.innerAutoScroll ? 'ON' : 'OFF'}`
         if (state.innerAutoScroll) {
-          const activeInnerLink = tocContainers.inner.querySelector(
-            '[aria-current="location"]'
-          )
-          activeInnerLink?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+          tocContainers.inner
+            .querySelector('[aria-current="location"]')
+            ?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
         }
       })
 
-      // X-Ray Toggle
+      // X-Ray Guard lines toggle
       const btnXray = document.getElementById('btn-xray')
       btnXray.addEventListener('click', () => {
         state.xray = !state.xray
         btnXray.setAttribute('aria-pressed', String(state.xray))
-        btnXray.textContent = `🎯 가드 라인 X-Ray: ${state.xray ? 'ON' : 'OFF'}`
-        document.getElementById('xray-top').dataset.hidden = String(!state.xray)
-        document.getElementById('xray-bottom').dataset.hidden = String(!state.xray)
+        document.getElementById('xray-top').dataset.visible = String(state.xray)
+        document.getElementById('xray-bottom').dataset.visible = String(state.xray)
       })
 
-      // Theme Toggle
+      document.getElementById('btn-scroll-top').addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      })
+
       document.getElementById('btn-theme').addEventListener('click', () => {
         const html = document.documentElement
-        const next = html.dataset.theme === 'light' ? 'dark' : 'light'
-        html.dataset.theme = next
+        html.dataset.theme = html.dataset.theme === 'light' ? 'dark' : 'light'
       })
 
-      // Auto-Scroll Tour (Bi-directional cruise to showcase down & up tethering)
+      // Auto-Scroll Tour
       const btnAutotour = document.getElementById('btn-autotour')
       let autoTourRaf = null
       let autoTourDir = 1
-      let autoTourPhaseFrames = 0
+      let autoTourFrames = 0
 
       function stopAutoTour() {
         if (autoTourRaf) {
@@ -1791,30 +1444,28 @@
           autoTourRaf = null
         }
         btnAutotour.dataset.active = 'false'
-        btnAutotour.textContent = '▶ 자동 스크롤 시연 (Auto-Scroll)'
+        btnAutotour.textContent = '▶ 자동 스크롤'
       }
 
       function stepAutoTour() {
-        autoTourPhaseFrames += 1
-        // Every ~220 frames (~3.6s), briefly reverse direction to demonstrate bi-directional re-anchoring
-        if (autoTourPhaseFrames === 220) {
-          autoTourDir = -1
-        } else if (autoTourPhaseFrames === 310) {
+        autoTourFrames += 1
+        if (autoTourFrames === 220) autoTourDir = -1
+        else if (autoTourFrames === 310) {
           autoTourDir = 1
-          autoTourPhaseFrames = 0
+          autoTourFrames = 0
         }
 
         const maxScroll =
           document.documentElement.scrollHeight - window.innerHeight - 4
         if (window.scrollY >= maxScroll && autoTourDir > 0) {
           autoTourDir = -1
-          autoTourPhaseFrames = 221
+          autoTourFrames = 221
         } else if (window.scrollY <= 0 && autoTourDir < 0) {
           autoTourDir = 1
-          autoTourPhaseFrames = 0
+          autoTourFrames = 0
         }
 
-        window.scrollBy(0, autoTourDir * 4.5)
+        window.scrollBy(0, autoTourDir * 4)
         autoTourRaf = requestAnimationFrame(stepAutoTour)
       }
 
@@ -1823,8 +1474,8 @@
           stopAutoTour()
         } else {
           btnAutotour.dataset.active = 'true'
-          btnAutotour.textContent = '⏸ 시연 정지 (양방향 주행 중)'
-          autoTourPhaseFrames = 0
+          btnAutotour.textContent = '⏸ 정지'
+          autoTourFrames = 0
           autoTourDir = 1
           autoTourRaf = requestAnimationFrame(stepAutoTour)
         }
@@ -1840,7 +1491,7 @@
 
       // Initial Boot
       updateActiveSection()
-      applyControlsFromUI('default')
+      applyOptionsFromUI('default')
     </script>
   </body>
 </html>
