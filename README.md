@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <strong>English</strong> · <a href="docs/ko/README.md">한국어</a>
+  <strong>English</strong> · <a href="docs/ko/README.md">한국어</a> · <a href="https://labs.firejune.com/sticky-tether/"><strong>Live Demo ↗</strong></a>
 </p>
 
 A zero-dependency bi-directional scroll tethering library for **long sticky sidebars, floating accordion menus, and Table of Contents (`On This Page`) panels** that exceed the viewport height. Built for both **Vanilla JS (`sticky-tether/core`)** and **React (`sticky-tether`)**.
