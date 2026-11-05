@@ -1,58 +1,64 @@
-![sticky-tether — Make rigid position: sticky flexible with bi-directional scroll tethering and active-item viewport guard.](https://raw.githubusercontent.com/firejune/sticky-tether/main/.github/assets/banner.png)
+<p align="center">
+  <img src="assets/banner.svg" alt="Sticky Tether — Bi-directional sticky scroll tethering with active-item viewport guard" width="100%" />
+</p>
 
-[![sticky-tether npm version](https://img.shields.io/npm/v/sticky-tether)](https://www.npmjs.com/package/sticky-tether)
-[![sticky-tether npm downloads](https://img.shields.io/npm/dm/sticky-tether)](https://www.npmjs.com/package/sticky-tether)
-[![sticky-tether license](https://img.shields.io/npm/l/sticky-tether)](LICENSE)
+<p align="center">
+  <a href="https://www.npmjs.com/package/sticky-tether"><img src="https://img.shields.io/npm/v/sticky-tether?style=flat-square&color=38BDF8" alt="npm version" /></a>
+  <img src="https://img.shields.io/badge/dependencies-zero-30D158.svg?style=flat-square" alt="Zero Dependencies" />
+  <img src="https://img.shields.io/badge/targets-core%20%C2%B7%20react-FF6B4A.svg?style=flat-square" alt="Targets: Core &amp; React" />
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-A855F7.svg?style=flat-square" alt="MIT License" /></a>
+</p>
 
-# sticky-tether
+<p align="center">
+  <strong>English</strong> · <a href="docs/ko/README.md">한국어</a>
+</p>
 
-**Make rigid `position: sticky` flexible.** Bi-directional scroll tethering with an active-item viewport guard — eliminating nested scrollbars on long sidebars, floating menus, and Table of Contents (`On This Page`) panels.
+A zero-dependency bi-directional scroll tethering library for **long sticky sidebars, floating accordion menus, and Table of Contents (`On This Page`) panels** that exceed the viewport height. Built for both **Vanilla JS (`sticky-tether/core`)** and **React (`sticky-tether`)**.
 
----
+Instead of trapping sidebars inside nested `overflow-y: auto` scrollbars or toggling `position: relative` spacer nodes that break on layout shifts, **Sticky Tether** keeps pure `position: sticky` and dynamically modulates `top` in response to up/down scroll deltas — while clamping bounds so the currently active item never escapes the visible viewport.
 
-## Why `sticky-tether`?
+## Documentation Map
 
-When a sticky sidebar, accordion menu, or Table of Contents (TOC) grows **taller than the viewport**, native CSS `position: sticky` pins only its top edge — permanently cutting off everything below the screen until the user reaches the bottom of the page.
+| Audience | English | 한국어 |
+| --- | --- | --- |
+| Overview & Quickstart | [README.md](README.md) | [docs/ko/README.md](docs/ko/README.md) |
+| Contributing Guide | [CONTRIBUTING.md](CONTRIBUTING.md) | — |
+| Release & OIDC Pipeline | [RELEASING.md](RELEASING.md) | — |
 
-Existing workarounds force an unpleasant tradeoff:
+## Architecture & Scroll Mechanics
 
-| Approach | How it works | What goes wrong |
-| :--- | :--- | :--- |
-| **Nested Scrollbar (`overflow-y: auto`)** | Locks sidebar height to `calc(100vh - ...)` with an internal scrollbar + `scrollIntoView` | Creates an ugly **double scrollbar**; users must move the cursor over the sidebar to scroll it; jumps abruptly on section changes |
-| **Generic Sticky Box (`react-sticky-box`)** | Toggles between `position: relative` and `sticky` with spacer offsets | **No awareness of the active/focused item** — scrolling down a long first section pushes the active item off the top of the screen; scrolling up a long last section pushes the active item off the bottom |
-| **`sticky-tether` ✨** | Pure `position: sticky` + bi-directional scroll delta tethering + **Active Item Viewport Guard** | **Zero nested scrollbars**; responds 1:1 to single-page scroll in both directions; **guarantees the focused TOC/menu item never escapes the visible viewport** |
+```mermaid
+flowchart LR
+    subgraph Scroll["Viewport Scroll Stream"]
+        W["Scroll Container<br/>(window · HTMLElement)"]
+        D["Direction & Delta Tracker<br/>(down ↔ up re-anchor)"]
+    end
+    G(("Active Item Guard<br/>[minDelta, maxDelta]"))
+    S["Pure position: sticky<br/>(style.top = stickyTop - delta)"]
 
----
+    W -->|"scroll / resize"| D
+    D -->|"raw delta"| G
+    G -->|"clamped delta + anchor sync"| S
+```
 
-## Key Features
-
-1. **Bi-Directional Scroll Tethering**
-   - Tracks `window` (or any custom scroll container) in both `down` and `up` directions.
-   - Re-anchors immediately when reversing scroll direction so the sidebar glides in the new direction without waiting or jumping.
-2. **Active Item Viewport Guard (`[minDeltaLimit, maxDeltaLimit]`)**
-   - Automatically detects the active item inside the sticky element (`[aria-current="location"]`, `[aria-current="page"]`, `[data-active="true"]`, `.active`, or a custom selector).
-   - **Scrolling Down**: Prevents the active item from being pushed above the top sticky boundary (`stickyTop`).
-   - **Scrolling Up**: Prevents the active item from being pushed below the bottom viewport boundary (`window.innerHeight - bottomPadding`).
-   - **Zero Scroll Debt**: Synchronizes the scroll anchor whenever clamped at a boundary so advancing to the next section glides smoothly from the exact current position.
-3. **Pure `position: sticky` & Zero Dependencies**
-   - Never toggles `position: relative` or injects layout spacer nodes — immune to sibling layout shifts (lazy images, videos, embeds).
-   - Built-in `ResizeObserver` and `MutationObserver` automatically recalculate bounds when accordion menus expand/collapse or active states change.
-
----
+| Approach | Mechanism | Behavior on Tall Sidebars / TOCs |
+| --- | --- | --- |
+| **Native `position: sticky`** | Pins top edge at `top: Npx` | Everything below `100vh` is permanently clipped until the bottom of the page |
+| **Nested Scrollbar (`overflow-y: auto`)** | Internal scroll container + `scrollIntoView` | Creates an ugly **double scrollbar**; requires hovering the sidebar to scroll; jumps on section change |
+| **Generic Sticky Box (`react-sticky-box`)** | Switches between `position: relative` and `sticky` | **Unaware of the active TOC/menu item** — scrolling down a long top section pushes the active item off the top of the screen; scrolling up a long bottom section pushes it off the bottom |
+| **Sticky Tether (`sticky-tether`)** | Pure `position: sticky` + bi-directional delta tethering + **Active Item Viewport Guard** | **Zero nested scrollbars**; glides 1:1 with page scroll in both directions; **guarantees the focused item (`[aria-current]`) stays inside the visible viewport** |
 
 ## Installation
 
 ```bash
 npm install sticky-tether
 # or
-yarn add sticky-tether
-# or
 pnpm add sticky-tether
+# or
+yarn add sticky-tether
 ```
 
----
-
-## Quick Start
+## Quickstart
 
 ### 1. React Hook (`useTether` / `useStickyTether`)
 
@@ -121,12 +127,24 @@ const tether = createStickyTether(aside, {
 // tether.destroy()
 ```
 
----
+## Core Capabilities
 
-## Options (`StickyTetherOptions`)
+### 1. Bi-Directional Scroll Tethering
+
+Tracks `window` (or any custom scroll container) in both `down` and `up` directions. The moment the user reverses scroll direction, `Sticky Tether` re-anchors `stickyScrollTop` to the current scroll position so the sidebar glides in the new direction immediately without waiting to unwind prior scroll distance.
+
+### 2. Active Item Viewport Guard (`[minDeltaLimit, maxDeltaLimit]`)
+
+Automatically detects the focused element inside the sticky container (`[aria-current="location"]`, `[aria-current="page"]`, `[data-active="true"]`, `.active`, or a custom `activeSelector`):
+
+- **Scrolling Down (`maxDeltaLimit`)**: Prevents the active item's top edge from being pushed above the top sticky boundary (`stickyTop`).
+- **Scrolling Up (`minDeltaLimit`)**: Prevents the active item's bottom edge from being pushed below the bottom viewport boundary (`viewportHeight - bottomPadding`).
+- **Zero Scroll Debt**: Synchronizes the internal scroll anchor whenever clamped at a boundary so advancing to the next section glides smoothly from the exact current offset.
+
+### 3. Options (`StickyTetherOptions`)
 
 | Option | Type | Default | Description |
-| :--- | :--- | :--- | :--- |
+| --- | --- | --- | --- |
 | `headerHeight` | `number \| string` | `'--header-height'` | Fixed header height in `px`, or a CSS custom property name (auto-checks `--header-height` and `--notion-header-height`). |
 | `defaultHeaderHeight` | `number` | `0` | Fallback header height in `px` when no CSS custom property is found. |
 | `topPadding` | `number` | `0` | Extra spacing (in `px`) below the fixed header when stuck at the top. |
@@ -135,8 +153,15 @@ const tether = createStickyTether(aside, {
 | `container` | `HTMLElement \| Window \| string \| null` | `window` | Scroll container element, `window`, or a CSS selector string (e.g. `'#app-container'`). |
 | `activeSelector` | `string \| false` | `'[aria-current="location"], [aria-current="page"], [data-active="true"], .active'` | CSS selector for the active/focused item inside the sticky element to guard within the viewport. Set to `false` to disable active-item clamping. |
 
----
+## Development & Verification
+
+Run the full typecheck, unit test suite, and package build before committing any changes:
+
+```bash
+npm test
+npm run build
+```
 
 ## License
 
-[MIT](LICENSE) © [firejune](https://github.com/firejune)
+[MIT](LICENSE)
