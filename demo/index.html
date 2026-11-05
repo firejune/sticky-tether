@@ -1611,25 +1611,19 @@
         statusB.textContent = visB ? 'Active Visible' : 'Hidden Below Scroll'
         statusB.style.color = visB ? 'var(--muted)' : 'var(--warning)'
 
-        // Apply C telemetry
-        const baseTop = 40 + cmpState.topPadding
-        const curTop = cmpSidebarC.style.top
-          ? Number.parseFloat(cmpSidebarC.style.top)
-          : baseTop
-        const delta = Math.round(baseTop - curTop)
-        const maxDelta = Math.max(
-          0,
-          cmpSidebarC.offsetHeight -
-            (vpCmp.offsetHeight - baseTop - cmpState.bottomPadding)
-        )
+        // Apply C telemetry via StickyTetherInstance.getState()
+        const tetherState = cmpTether?.getState()
         const statusC = document.getElementById('cmp-status-c')
-        if (Math.abs(delta - maxDelta) <= 2 && delta > 0) {
-          statusC.textContent = `Bottom Locked · Δ ${delta}px`
-        } else if (delta <= 1 && st > 0) {
-          statusC.textContent = `Top Locked · Δ 0px`
-        } else {
-          const arrow = cmpState.dir === 'down' ? '↓' : '↑'
-          statusC.textContent = `${arrow} 1:1 · Δ ${delta}px`
+        if (tetherState) {
+          const delta = Math.round(tetherState.delta)
+          if (tetherState.status === 'bottom-locked') {
+            statusC.textContent = `Bottom Locked · Δ ${delta}px`
+          } else if (tetherState.status === 'top-locked' && st > 0) {
+            statusC.textContent = `Top Locked · Δ 0px`
+          } else {
+            const arrow = tetherState.direction === 'down' ? '↓' : '↑'
+            statusC.textContent = `${arrow} 1:1 · Δ ${delta}px`
+          }
         }
       }
 
@@ -1640,7 +1634,8 @@
           headerHeight: 40,
           topPadding: cmpState.topPadding,
           bottomPadding: cmpState.bottomPadding,
-          activeSelector: cmpState.activeGuard ? '[aria-current="location"]' : false
+          activeSelector: cmpState.activeGuard ? '[aria-current="location"]' : false,
+          onChange: () => updateCmpTelemetry()
         })
         updateCmpTelemetry()
       }
@@ -1770,15 +1765,6 @@
           blogTocList.offsetHeight - topInset - linkRect.height
         )
         blogIndicator.style.clipPath = `inset(${topInset}px 0 ${bottomInset}px 0)`
-
-        requestAnimationFrame(() => {
-          const curTop = blogAside.style.top
-            ? Number.parseFloat(blogAside.style.top)
-            : 72
-          const delta = Math.round(72 - curTop)
-          document.getElementById('blog-telemetry').textContent =
-            `top: ${Math.round(curTop)}px · Δ ${delta}px`
-        })
       }
 
       function mountBlogTether() {
@@ -1788,7 +1774,11 @@
           headerHeight: 48,
           topPadding: 24,
           bottomPadding: 24,
-          activeSelector: blogGuardOn ? '[aria-current="location"]' : false
+          activeSelector: blogGuardOn ? '[aria-current="location"]' : false,
+          onChange: (s) => {
+            document.getElementById('blog-telemetry').textContent =
+              `top: ${Math.round(s.top)}px · Δ ${Math.round(s.delta)}px`
+          }
         })
       }
 
@@ -1883,6 +1873,7 @@
         btn.addEventListener('click', () => {
           secWrap.dataset.open = secWrap.dataset.open === 'true' ? 'false' : 'true'
           docsTether.update()
+          updateDocsTelemetry()
           syncDocsScroll()
         })
 
@@ -1931,6 +1922,12 @@
       let docsGuardOn = false
       let docsTether = null
 
+      function updateDocsTelemetry(s = docsTether?.getState()) {
+        if (!s) return
+        document.getElementById('docs-telemetry').textContent =
+          `Sidebar: ${docsLnb.offsetHeight}px · Δ ${Math.round(s.delta)}px`
+      }
+
       function syncDocsScroll() {
         const vpRect = vpDocs.getBoundingClientRect()
         const triggerY = vpRect.top + 48 + 52
@@ -1949,13 +1946,6 @@
             d.link.removeAttribute('aria-current')
           }
         }
-
-        requestAnimationFrame(() => {
-          const curTop = docsLnb.style.top ? Number.parseFloat(docsLnb.style.top) : 68
-          const delta = Math.round(68 - curTop)
-          document.getElementById('docs-telemetry').textContent =
-            `Sidebar: ${docsLnb.offsetHeight}px · Δ ${delta}px`
-        })
       }
 
       function mountDocsTether() {
@@ -1965,8 +1955,10 @@
           headerHeight: 48,
           topPadding: 20,
           bottomPadding: 24,
-          activeSelector: docsGuardOn ? '[aria-current="page"]' : false
+          activeSelector: docsGuardOn ? '[aria-current="page"]' : false,
+          onChange: (s) => updateDocsTelemetry(s)
         })
+        updateDocsTelemetry()
       }
 
       vpDocs.addEventListener('scroll', syncDocsScroll, { passive: true })
@@ -1987,6 +1979,7 @@
           s.dataset.open = String(anyClosed)
         })
         docsTether?.update()
+        updateDocsTelemetry()
         syncDocsScroll()
       })
 
@@ -2210,36 +2203,21 @@
 
       renderChartDrawer(CHART_CLUSTERS[0])
 
-      const chartTether = createStickyTether(chartDrawer, {
+      createStickyTether(chartDrawer, {
         container: vpChart,
         headerHeight: 48,
         topPadding: 20,
         bottomPadding: 24,
-        activeSelector: false
+        activeSelector: false,
+        onChange: (s) => {
+          const el = document.getElementById('chart-telemetry')
+          const delta = Math.round(s.delta)
+          el.textContent =
+            s.status === 'bottom-locked'
+              ? `Bottom Locked · Δ ${delta}px`
+              : `Drawer: 1:1 · Δ ${delta}px`
+        }
       })
-
-      vpChart.addEventListener(
-        'scroll',
-        () => {
-          requestAnimationFrame(() => {
-            const curTop = chartDrawer.style.top
-              ? Number.parseFloat(chartDrawer.style.top)
-              : 68
-            const delta = Math.round(68 - curTop)
-            const maxDelta = Math.max(
-              0,
-              chartDrawer.offsetHeight - (vpChart.offsetHeight - 68 - 24)
-            )
-            const el = document.getElementById('chart-telemetry')
-            if (Math.abs(delta - maxDelta) <= 2 && delta > 0) {
-              el.textContent = `Bottom Locked · Δ ${delta}px`
-            } else {
-              el.textContent = `Drawer: 1:1 · Δ ${delta}px`
-            }
-          })
-        },
-        { passive: true }
-      )
     </script>
   </body>
 </html>

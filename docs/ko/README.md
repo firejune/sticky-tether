@@ -151,6 +151,7 @@ const tether = createStickyTether(aside, {
 | `offsetTop` | `number` | `0` | 스티키 테더링이 시작되기 전의 초기 오프셋(`px`). |
 | `container` | `HTMLElement \| Window \| string \| null` | `window` | 스크롤 컨테이너 엘리먼트, `window`, 또는 CSS 셀렉터 문자열(예: `'#app-container'`). |
 | `activeSelector` | `string \| false` | `'[aria-current="location"], [aria-current="page"], [data-active="true"], .active'` | 뷰포트 내부에 가둘 활성 항목 CSS 셀렉터. `false`로 설정 시 비활성화. |
+| `onChange` | `(state: StickyTetherState) => void` | `undefined` | 테더 상태(`top`, `baseTop`, `delta`, `maxDelta`, `direction`, `status`, `hasRunway`)가 변경될 때 호출되는 콜백. |
 
 ## 개발 및 검증 (Development & Verification)
 

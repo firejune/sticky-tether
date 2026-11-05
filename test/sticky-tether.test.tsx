@@ -2,7 +2,13 @@ import React, { act } from 'react'
 import { createRoot } from 'react-dom/client'
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 
-import { createStickyTether, StickyTether, useStickyTether, useTether } from '../src'
+import {
+  createStickyTether,
+  StickyTether,
+  type StickyTetherState,
+  useStickyTether,
+  useTether
+} from '../src'
 
 ;(globalThis as Record<string, unknown>).IS_REACT_ACT_ENVIRONMENT = true
 
@@ -50,7 +56,7 @@ describe('sticky-tether', () => {
     document.body.innerHTML = ''
   })
 
-  test('leaves style.top empty when element height fits inside viewport', () => {
+  test('retains base stickyTop when element height fits inside viewport (bypassed) and ensures position: sticky', () => {
     const parent = document.createElement('div')
     const sticky = document.createElement('aside')
     setOffsetHeight(sticky, 300)
@@ -64,67 +70,130 @@ describe('sticky-tether', () => {
       bottomPadding: 24
     })
 
+    expect(sticky.style.position).toBe('sticky')
+    expect(sticky.style.top).toBe('84px')
+    expect(tether.getState()).toMatchObject({
+      top: 84,
+      baseTop: 84,
+      delta: 0,
+      maxDelta: 0,
+      status: 'bypassed',
+      hasRunway: true
+    })
+
     window.scrollY = 200
     window.dispatchEvent(new Event('scroll'))
 
-    expect(sticky.style.top).toBe('')
+    expect(sticky.style.top).toBe('84px')
     tether.destroy()
+    expect(sticky.style.top).toBe('')
+    expect(sticky.style.position).toBe('')
   })
 
-  test('does not engage when parent top is still below sticky threshold', () => {
+  test('stays idle at base stickyTop when parent content top is still below sticky threshold (including parent padding-top)', () => {
     const parent = document.createElement('div')
+    parent.style.paddingTop = '16px'
     const sticky = document.createElement('aside')
     setOffsetHeight(sticky, 800)
-    mockRect(parent, { top: 120 })
+    setOffsetHeight(parent, 2000)
+    // parent border-box top is 40px, + 16px padding-top = 56px content top.
+    // With stickyTop = 40 + 16 = 56px, parentContentTop - stickyTop === 0 -> idle!
+    mockRect(parent, { top: 40 })
     parent.appendChild(sticky)
     document.body.appendChild(parent)
 
     const tether = createStickyTether(sticky, {
-      headerHeight: 54,
-      topPadding: 30,
-      bottomPadding: 24
+      headerHeight: 40,
+      topPadding: 16,
+      bottomPadding: 20
     })
 
-    window.scrollY = 100
-    window.dispatchEvent(new Event('scroll'))
+    expect(sticky.style.top).toBe('56px')
+    expect(tether.getState().status).toBe('idle')
+    expect(tether.getState().delta).toBe(0)
 
-    expect(sticky.style.top).toBe('')
     tether.destroy()
   })
 
-  test('tracks bi-directional scroll and re-anchors on direction reversal without jumping', () => {
-    // viewportHeight = 500 - (54 + 30) - 24 = 392
-    // stickyHeight = 692 => maxDelta = 300, stickyTop = 84
+  test('warns once and sets hasRunway=false when parent.offsetHeight <= el.offsetHeight', () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
     const parent = document.createElement('div')
     const sticky = document.createElement('aside')
-    setOffsetHeight(sticky, 692)
+    setOffsetHeight(parent, 700)
+    setOffsetHeight(sticky, 700)
     mockRect(parent, { top: -20 })
     parent.appendChild(sticky)
     document.body.appendChild(parent)
 
     const tether = createStickyTether(sticky, {
-      headerHeight: 54,
-      topPadding: 30,
-      bottomPadding: 24
+      headerHeight: 40,
+      topPadding: 16,
+      bottomPadding: 20
     })
 
-    // Initial at scrollY = 0 -> delta = 0 -> top = 84px
-    expect(sticky.style.top).toBe('84px')
+    expect(tether.getState().hasRunway).toBe(false)
+    expect(warnSpy).toHaveBeenCalledTimes(1)
 
-    // Scroll down 100px -> delta = 100 -> top = 84 - 100 = -16px
+    window.scrollY = 100
+    window.dispatchEvent(new Event('scroll'))
+    expect(warnSpy).toHaveBeenCalledTimes(1)
+
+    warnSpy.mockRestore()
+    tether.destroy()
+  })
+
+  test('tracks bi-directional scroll, re-anchors on direction reversal, and emits onChange state', () => {
+    // viewportHeight = 500 - (54 + 30) - 24 = 392
+    // stickyHeight = 692 => maxDelta = 300, stickyTop = 84
+    const parent = document.createElement('div')
+    const sticky = document.createElement('aside')
+    setOffsetHeight(parent, 3000)
+    setOffsetHeight(sticky, 692)
+    mockRect(parent, { top: -20 })
+    parent.appendChild(sticky)
+    document.body.appendChild(parent)
+
+    const states: StickyTetherState[] = []
+    const tether = createStickyTether(sticky, {
+      headerHeight: 54,
+      topPadding: 30,
+      bottomPadding: 24,
+      onChange: (s) => states.push(s)
+    })
+
+    // Initial at scrollY = 0 -> delta = 0 -> top = 84px (top-locked)
+    expect(sticky.style.top).toBe('84px')
+    expect(tether.getState().status).toBe('top-locked')
+
+    // Scroll down 100px -> delta = 100 -> top = 84 - 100 = -16px (tethering)
     window.scrollY = 100
     window.dispatchEvent(new Event('scroll'))
     expect(sticky.style.top).toBe('-16px')
+    expect(tether.getState()).toMatchObject({
+      top: -16,
+      delta: 100,
+      maxDelta: 300,
+      direction: 'down',
+      status: 'tethering'
+    })
 
-    // Scroll down far past maxDelta (scrollY = 1000) -> clamped at maxDelta = 300 -> top = 84 - 300 = -216px
+    // Scroll down far past maxDelta (scrollY = 1000) -> clamped at maxDelta = 300 -> top = 84 - 300 = -216px (bottom-locked)
     window.scrollY = 1000
     window.dispatchEvent(new Event('scroll'))
     expect(sticky.style.top).toBe('-216px')
+    expect(tether.getState().status).toBe('bottom-locked')
 
     // Reverse direction: scroll up by 40px (scrollY = 960) -> immediately moves up by 40px -> delta = 260 -> top = 84 - 260 = -176px
     window.scrollY = 960
     window.dispatchEvent(new Event('scroll'))
     expect(sticky.style.top).toBe('-176px')
+    expect(tether.getState()).toMatchObject({
+      top: -176,
+      delta: 260,
+      direction: 'up',
+      status: 'tethering'
+    })
+    expect(states.length).toBeGreaterThanOrEqual(4)
 
     tether.destroy()
     expect(sticky.style.top).toBe('')
@@ -137,6 +206,7 @@ describe('sticky-tether', () => {
     const activeItem = document.createElement('a')
     activeItem.setAttribute('aria-current', 'location')
 
+    setOffsetHeight(parent, 3000)
     setOffsetHeight(sticky, 692)
     mockRect(parent, { top: -50 })
     mockRect(sticky, { top: 84, height: 692 })
@@ -215,6 +285,7 @@ describe('sticky-tether', () => {
     const parent = document.createElement('div')
     const sticky = document.createElement('aside')
     setOffsetHeight(scrollBox, 600)
+    setOffsetHeight(parent, 3000)
     setOffsetHeight(sticky, 1000)
 
     // Scroll container sits at y=800 in the window, parent has scrolled 30px past container top

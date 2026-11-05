@@ -1,3 +1,27 @@
+export type StickyTetherStatus =
+  | 'idle'
+  | 'bypassed'
+  | 'top-locked'
+  | 'bottom-locked'
+  | 'tethering'
+
+export interface StickyTetherState {
+  /** Current computed `top` offset in px (`baseTop - delta`). */
+  top: number
+  /** Base sticky top offset in px (`headerHeight + topPadding + offsetTop`). */
+  baseTop: number
+  /** Current upward scroll delta in px (`offsetTop <= delta <= maxDelta`). */
+  delta: number
+  /** Maximum upward scroll delta in px (`Math.max(0, el.offsetHeight - viewportHeight) + offsetTop`). */
+  maxDelta: number
+  /** Last observed scroll direction (`'up' | 'down'`). */
+  direction: 'up' | 'down'
+  /** High-level tethering status for UI indicators, shadows, or fade masks. */
+  status: StickyTetherStatus
+  /** Whether the parent container is taller than the sticky element so CSS sticky has scroll runway. */
+  hasRunway: boolean
+}
+
 export interface StickyTetherOptions {
   /**
    * Extra spacing (in px) below the fixed header when stuck at the top.
@@ -38,12 +62,18 @@ export interface StickyTetherOptions {
    * @default '[aria-current="location"], [aria-current="page"], [data-active="true"], .active'
    */
   activeSelector?: string | false
+  /**
+   * Optional callback invoked whenever the tether state changes.
+   */
+  onChange?: (state: StickyTetherState) => void
 }
 
 export interface StickyTetherInstance {
   /** Force a measurement and position update. */
   update: () => void
-  /** Disconnect all listeners and reset inline `style.top`. */
+  /** Return the current tether state snapshot. */
+  getState: () => StickyTetherState
+  /** Disconnect all listeners and restore original inline `style.top` and `style.position`. */
   destroy: () => void
 }
 
@@ -109,15 +139,37 @@ export function createStickyTether(
     headerHeight: headerHeightOption,
     defaultHeaderHeight = 0,
     container: containerOption,
-    activeSelector = DEFAULT_ACTIVE_SELECTOR
+    activeSelector = DEFAULT_ACTIVE_SELECTOR,
+    onChange
   } = options
+
+  const fallbackState: StickyTetherState = {
+    top: 0,
+    baseTop: 0,
+    delta: offsetTop,
+    maxDelta: offsetTop,
+    direction: 'down',
+    status: 'idle',
+    hasRunway: true
+  }
 
   const scrollTarget = resolveContainer(containerOption)
   if (!scrollTarget || typeof window === 'undefined') {
     return {
       update: () => {},
+      getState: () => fallbackState,
       destroy: () => {}
     }
+  }
+
+  const initialStyleTop = el.style.top
+  const initialStylePosition = el.style.position
+  if (
+    !el.style.position &&
+    (typeof getComputedStyle !== 'function' ||
+      getComputedStyle(el).position !== 'sticky')
+  ) {
+    el.style.position = 'sticky'
   }
 
   const isWindow = scrollTarget === window
@@ -131,7 +183,26 @@ export function createStickyTether(
     isSticky: false,
     lastScrollTop: getScrollTop(),
     lastDirection: 'down' as 'up' | 'down',
-    currentDelta: offsetTop
+    currentDelta: offsetTop,
+    warnedNoRunway: false,
+    snapshot: { ...fallbackState }
+  }
+
+  const commitSnapshot = (next: StickyTetherState) => {
+    const prev = state.snapshot
+    const changed =
+      prev.top !== next.top ||
+      prev.baseTop !== next.baseTop ||
+      prev.delta !== next.delta ||
+      prev.maxDelta !== next.maxDelta ||
+      prev.direction !== next.direction ||
+      prev.status !== next.status ||
+      prev.hasRunway !== next.hasRunway
+
+    state.snapshot = next
+    if (changed) {
+      onChange?.(next)
+    }
   }
 
   const update = () => {
@@ -144,31 +215,11 @@ export function createStickyTether(
       defaultHeaderHeight
     )
     const stickyTop = resolvedHeaderHeight + topPadding
+    const baseTop = stickyTop > 0 ? stickyTop + offsetTop : 0
+    const idleTop = stickyTop > 0 ? stickyTop : 0
     const scrollTop = getScrollTop()
     const containerHeight = getContainerHeight()
     const viewportHeight = containerHeight - stickyTop - bottomPadding
-
-    // Element fits inside the viewport (or is hidden): let native CSS sticky handle it
-    if (el.offsetHeight <= 0 || el.offsetHeight <= viewportHeight) {
-      el.style.top = ''
-      state.isSticky = false
-      state.currentDelta = offsetTop
-      state.lastScrollTop = scrollTop
-      return
-    }
-
-    // Parent has not reached the sticky threshold yet (measured relative to scroll container)
-    const containerTop = isWindow
-      ? 0
-      : (scrollTarget as HTMLElement).getBoundingClientRect().top
-    const parentTop = parent.getBoundingClientRect().top - containerTop
-    if (parentTop - stickyTop >= 0) {
-      el.style.top = ''
-      state.isSticky = false
-      state.currentDelta = offsetTop
-      state.lastScrollTop = scrollTop
-      return
-    }
 
     const direction: 'up' | 'down' =
       scrollTop > state.lastScrollTop
@@ -176,6 +227,74 @@ export function createStickyTether(
         : scrollTop < state.lastScrollTop
           ? 'up'
           : state.lastDirection
+
+    const hasRunway =
+      parent.offsetHeight <= 0 ||
+      el.offsetHeight <= 0 ||
+      parent.offsetHeight > el.offsetHeight
+
+    if (
+      !hasRunway &&
+      el.offsetHeight > viewportHeight &&
+      !state.warnedNoRunway &&
+      typeof console !== 'undefined' &&
+      typeof console.warn === 'function'
+    ) {
+      state.warnedNoRunway = true
+      console.warn(
+        '[sticky-tether] The sticky element’s parent has no scroll runway (parent.offsetHeight <= el.offsetHeight). Ensure the parent container stretches to the full content height (e.g. avoid "align-items: start" on a parent Grid/Flex container).'
+      )
+    }
+
+    // Element fits inside the viewport (or is hidden): pin at idleTop so CSS doesn't need a duplicate top rule
+    if (el.offsetHeight <= 0 || el.offsetHeight <= viewportHeight) {
+      el.style.top = el.offsetHeight > 0 && idleTop > 0 ? `${idleTop}px` : ''
+      state.isSticky = false
+      state.currentDelta = offsetTop
+      state.lastDirection = direction
+      state.lastScrollTop = scrollTop
+      commitSnapshot({
+        top: idleTop,
+        baseTop,
+        delta: offsetTop,
+        maxDelta: offsetTop,
+        direction,
+        status: 'bypassed',
+        hasRunway
+      })
+      return
+    }
+
+    const maxDelta = el.offsetHeight - viewportHeight + offsetTop
+
+    // Parent content box has not reached the sticky threshold yet (accounting for parent padding-top)
+    const containerTop = isWindow
+      ? 0
+      : (scrollTarget as HTMLElement).getBoundingClientRect().top
+    const parentPaddingTop =
+      typeof getComputedStyle === 'function'
+        ? Number.parseFloat(getComputedStyle(parent).paddingTop) || 0
+        : 0
+    const parentContentTop =
+      parent.getBoundingClientRect().top + parentPaddingTop - containerTop
+
+    if (parentContentTop - stickyTop >= 0) {
+      el.style.top = idleTop > 0 ? `${idleTop}px` : ''
+      state.isSticky = false
+      state.currentDelta = offsetTop
+      state.lastDirection = direction
+      state.lastScrollTop = scrollTop
+      commitSnapshot({
+        top: idleTop,
+        baseTop,
+        delta: offsetTop,
+        maxDelta,
+        direction,
+        status: 'idle',
+        hasRunway
+      })
+      return
+    }
 
     // Re-anchor on initial sticky activation or scroll direction reversal
     if (!state.isSticky || direction !== state.lastDirection) {
@@ -186,7 +305,6 @@ export function createStickyTether(
     }
 
     const delta = scrollTop - state.stickyScrollTop + offsetTop
-    const maxDelta = el.offsetHeight - viewportHeight + offsetTop
 
     let minDeltaLimit = offsetTop
     let maxDeltaLimit = maxDelta
@@ -216,9 +334,26 @@ export function createStickyTether(
     }
 
     state.currentDelta = clampedDelta
-    const baseTop = stickyTop > 0 ? stickyTop + offsetTop : 0
-    el.style.top = `${baseTop - clampedDelta}px`
+    const computedTop = baseTop - clampedDelta
+    el.style.top = `${computedTop}px`
     state.lastScrollTop = scrollTop
+
+    const status: StickyTetherStatus =
+      Math.abs(clampedDelta - maxDelta) <= 1 && maxDelta > offsetTop
+        ? 'bottom-locked'
+        : Math.abs(clampedDelta - offsetTop) <= 1
+          ? 'top-locked'
+          : 'tethering'
+
+    commitSnapshot({
+      top: computedTop,
+      baseTop,
+      delta: clampedDelta,
+      maxDelta,
+      direction,
+      status,
+      hasRunway
+    })
   }
 
   update()
@@ -245,8 +380,13 @@ export function createStickyTether(
     resizeObserver?.disconnect()
     scrollTarget.removeEventListener('scroll', update)
     window.removeEventListener('resize', update)
-    el.style.top = ''
+    el.style.top = initialStyleTop
+    el.style.position = initialStylePosition
   }
 
-  return { update, destroy }
+  return {
+    update,
+    getState: () => state.snapshot,
+    destroy
+  }
 }
