@@ -1,66 +1,43 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
   <defs>
-    <!-- Deep obsidian dark background -->
+    <!-- Deep obsidian slate background -->
     <radialGradient id="bg-glow" cx="50%" cy="46%" r="70%">
-      <stop offset="0%" stop-color="#141826" stop-opacity="0.96"/>
-      <stop offset="55%" stop-color="#080a12" stop-opacity="0.98"/>
-      <stop offset="100%" stop-color="#040508" stop-opacity="1"/>
+      <stop offset="0%" stop-color="#111726" stop-opacity="0.98"/>
+      <stop offset="60%" stop-color="#080b12" stop-opacity="0.99"/>
+      <stop offset="100%" stop-color="#04060a" stop-opacity="1"/>
     </radialGradient>
 
-    <!-- Tri-Agent Ambient Spectrum -->
-    <linearGradient id="tri-spectrum" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#FF6B4A"/>
-      <stop offset="35%" stop-color="#FF9F0A"/>
-      <stop offset="65%" stop-color="#30D158"/>
-      <stop offset="85%" stop-color="#0A84FF"/>
-      <stop offset="100%" stop-color="#BF5AF2"/>
+    <!-- Left Viewport Rail (Muted Slate) -->
+    <linearGradient id="rail-left" gradientUnits="userSpaceOnUse" x1="168" y1="136" x2="168" y2="376">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="100%" stop-color="#1E293B"/>
     </linearGradient>
 
-    <!-- Left Viewport Scroll Rail -->
-    <linearGradient id="rail-viewport" gradientUnits="userSpaceOnUse" x1="152" y1="132" x2="152" y2="380">
-      <stop offset="0%" stop-color="#FF9F0A"/>
-      <stop offset="50%" stop-color="#FF6B4A"/>
-      <stop offset="100%" stop-color="#651FFF"/>
+    <!-- Right Sticky Clamped Rail (Slate to Cyan) -->
+    <linearGradient id="rail-right" gradientUnits="userSpaceOnUse" x1="344" y1="136" x2="344" y2="376">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="65%" stop-color="#0284C7"/>
+      <stop offset="100%" stop-color="#0369A1"/>
     </linearGradient>
 
-    <!-- Right Sticky Clamped Rail -->
-    <linearGradient id="rail-sticky" gradientUnits="userSpaceOnUse" x1="360" y1="132" x2="360" y2="380">
-      <stop offset="0%" stop-color="#BF5AF2"/>
-      <stop offset="50%" stop-color="#0A84FF"/>
-      <stop offset="100%" stop-color="#30D158"/>
-    </linearGradient>
-
-    <!-- Primary Elastic Tether Curve -->
-    <linearGradient id="tether-primary" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FF6B4A"/>
-      <stop offset="50%" stop-color="#A855F7"/>
+    <!-- Single Elastic S-Curve Tether -->
+    <linearGradient id="tether-line" gradientUnits="userSpaceOnUse" x1="168" y1="196" x2="344" y2="316">
+      <stop offset="0%" stop-color="#E2E8F0"/>
+      <stop offset="50%" stop-color="#7DD3FC"/>
       <stop offset="100%" stop-color="#38BDF8"/>
     </linearGradient>
 
-    <!-- Upper Clamp Suspension Curve -->
-    <linearGradient id="tether-upper" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#FF9F0A"/>
-      <stop offset="100%" stop-color="#BF5AF2"/>
+    <!-- Active Clamp Node Ring -->
+    <linearGradient id="cyan-node" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7DD3FC"/>
+      <stop offset="50%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#0284C7"/>
     </linearGradient>
 
-    <!-- Lower Clamp Suspension Curve -->
-    <linearGradient id="tether-lower" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#651FFF"/>
-      <stop offset="50%" stop-color="#0A84FF"/>
-      <stop offset="100%" stop-color="#30D158"/>
-    </linearGradient>
-
-    <!-- Active Item Core Ring Gradient -->
-    <linearGradient id="broker-ring" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38BDF8"/>
-      <stop offset="50%" stop-color="#A855F7"/>
-      <stop offset="100%" stop-color="#FF6B4A"/>
-    </linearGradient>
-
-    <!-- Mechanical Joint Dark Void Fill -->
+    <!-- Joint Void Fill -->
     <linearGradient id="joint-void" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#05070d"/>
-      <stop offset="100%" stop-color="#121624"/>
+      <stop offset="100%" stop-color="#0f1523"/>
     </linearGradient>
 
     <!-- Depth Shadows -->
@@ -68,70 +45,42 @@
       <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000000" flood-opacity="0.82"/>
     </filter>
 
-    <!-- Soft Ambient Backlight -->
+    <!-- Subtle Cyan Ambient Backlight -->
     <filter id="ambient-blur" x="-40%" y="-40%" width="180%" height="180%">
       <feGaussianBlur stdDeviation="38" result="blur"/>
     </filter>
   </defs>
 
   <!-- Clean dark container -->
-  <rect width="512" height="512" rx="112" fill="url(#bg-glow)" stroke="#1a202e" stroke-width="1.5" />
+  <rect width="512" height="512" rx="112" fill="url(#bg-glow)" stroke="#1a2234" stroke-width="1.5" />
 
-  <!-- Ambient Tri-Spectrum Glow -->
-  <circle cx="256" cy="256" r="152" fill="url(#tri-spectrum)" opacity="0.14" filter="url(#ambient-blur)" />
+  <!-- Subtle Mono-Tone Cyan Glow -->
+  <circle cx="268" cy="264" r="140" fill="#0EA5E9" opacity="0.10" filter="url(#ambient-blur)" />
 
-  <g id="sticky-tether-emblem">
-    <!-- Tension Suspension Spokes (Upper & Lower Viewport Bounds) -->
+  <g id="sticky-tether-minimal">
+    <!-- Parallel Vertical Rails: Left Viewport Track (168) & Right Sticky Track (344) -->
     <g filter="url(#bridge-depth)">
-      <path d="M 152.0 192.0 C 232.0 192.0, 276.0 132.0, 360.0 132.0" fill="none" stroke="url(#tether-upper)" stroke-width="24" stroke-linecap="round" />
-      <path d="M 152.0 336.0 C 232.0 336.0, 276.0 380.0, 360.0 380.0" fill="none" stroke="url(#tether-lower)" stroke-width="24" stroke-linecap="round" />
-      <path d="M 152.0 336.0 C 236.0 336.0, 268.0 256.0, 360.0 256.0" fill="none" stroke="url(#tether-lower)" stroke-width="22" stroke-linecap="round" opacity="0.85" />
+      <line x1="168.0" y1="136.0" x2="168.0" y2="376.0" stroke="url(#rail-left)" stroke-width="32" stroke-linecap="round" />
+      <line x1="344.0" y1="136.0" x2="344.0" y2="376.0" stroke="url(#rail-right)" stroke-width="32" stroke-linecap="round" />
     </g>
 
-    <!-- Parallel Vertical Rails: Left Viewport Axis (152) & Right Sticky Track (360) -->
+    <!-- Single S-Curve Elastic Tether -->
     <g filter="url(#bridge-depth)">
-      <line x1="152.0" y1="132.0" x2="152.0" y2="380.0" stroke="url(#rail-viewport)" stroke-width="34" stroke-linecap="round" />
-      <line x1="360.0" y1="132.0" x2="360.0" y2="380.0" stroke="url(#rail-sticky)" stroke-width="34" stroke-linecap="round" />
+      <path d="M 168.0 196.0 C 256.0 196.0, 256.0 316.0, 344.0 316.0" fill="none" stroke="url(#tether-line)" stroke-width="28" stroke-linecap="round" />
     </g>
 
-    <!-- Primary S-Curve Elastic Tether (Viewport Driver -> Active Focus Hub) -->
+    <!-- Left Node: Viewport Scroll Anchor (Silver/Slate) -->
     <g filter="url(#bridge-depth)">
-      <path d="M 152.0 192.0 C 256.0 192.0, 256.0 256.0, 360.0 256.0" fill="none" stroke="url(#tether-primary)" stroke-width="32" stroke-linecap="round" />
+      <circle cx="168.0" cy="196.0" r="38" fill="#E2E8F0" />
+      <circle cx="168.0" cy="196.0" r="15.5" fill="url(#joint-void)" stroke="#090b12" stroke-width="2" />
+      <circle cx="168.0" cy="196.0" r="5.5" fill="#94A3B8" />
     </g>
 
-    <!-- Node 1: Top Viewport Clamp Guard (Top-Right - Violet/Blue) -->
+    <!-- Right Node: Active Item Clamped Hub (Cyan) -->
     <g filter="url(#bridge-depth)">
-      <circle cx="360.0" cy="132.0" r="36" fill="#A855F7" />
-      <circle cx="360.0" cy="132.0" r="14.5" fill="url(#joint-void)" stroke="#090b12" stroke-width="2" />
-      <circle cx="360.0" cy="132.0" r="5.5" fill="#38BDF8" />
-    </g>
-
-    <!-- Node 2: Bottom Viewport Clamp Guard (Bottom-Right - Emerald/Teal) -->
-    <g filter="url(#bridge-depth)">
-      <circle cx="360.0" cy="380.0" r="36" fill="#30D158" />
-      <circle cx="360.0" cy="380.0" r="14.5" fill="url(#joint-void)" stroke="#090b12" stroke-width="2" />
-      <circle cx="360.0" cy="380.0" r="5.5" fill="#00C7BE" />
-    </g>
-
-    <!-- Node 3: Lower Re-Anchor Pulley (Bottom-Left - Indigo/Violet) -->
-    <g filter="url(#bridge-depth)">
-      <circle cx="152.0" cy="336.0" r="34" fill="#651FFF" />
-      <circle cx="152.0" cy="336.0" r="13.5" fill="url(#joint-void)" stroke="#090b12" stroke-width="2" />
-      <circle cx="152.0" cy="336.0" r="5" fill="#38BDF8" />
-    </g>
-
-    <!-- Node 4: Viewport Scroll Driver Anchor (Mid-Left - Coral/Amber) -->
-    <g filter="url(#bridge-depth)">
-      <circle cx="152.0" cy="192.0" r="42" fill="#FF6B4A" />
-      <circle cx="152.0" cy="192.0" r="17" fill="url(#joint-void)" stroke="#090b12" stroke-width="2" />
-      <circle cx="152.0" cy="192.0" r="6.5" fill="#FF9F0A" />
-    </g>
-
-    <!-- Node 5: Active Item Focus Core Hub (Center-Right - Spectrum Ring) -->
-    <g filter="url(#bridge-depth)">
-      <circle cx="360.0" cy="256.0" r="50" fill="url(#broker-ring)" />
-      <circle cx="360.0" cy="256.0" r="21" fill="url(#joint-void)" stroke="#090b12" stroke-width="2.5" />
-      <circle cx="360.0" cy="256.0" r="8.5" fill="#F8FAFC" />
+      <circle cx="344.0" cy="316.0" r="44" fill="url(#cyan-node)" />
+      <circle cx="344.0" cy="316.0" r="18" fill="url(#joint-void)" stroke="#090b12" stroke-width="2.5" />
+      <circle cx="344.0" cy="316.0" r="7.5" fill="#F8FAFC" />
     </g>
   </g>
 </svg>
