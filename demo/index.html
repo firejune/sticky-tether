@@ -396,18 +396,17 @@
       }
 
       .cmp-content {
-        padding: 16px 28px 280px 24px;
+        padding: 16px 28px 20px 24px;
         min-width: 0;
       }
 
       .min-sec {
-        padding: 22px 0;
+        padding: 20px 0;
         border-bottom: 1px solid var(--border);
-        min-height: 220px;
       }
 
-      .min-sec[data-long='true'] {
-        min-height: 1150px;
+      .min-sec:last-child {
+        border-bottom: none;
       }
 
       .min-sec-kicker {
@@ -552,11 +551,36 @@
       .blog-layout {
         max-width: 1080px;
         margin: 0 auto;
-        padding: 24px 32px 260px;
+        padding: 24px 32px;
         display: grid;
         grid-template-columns: minmax(0, 1fr) 260px;
         gap: 56px;
         align-items: stretch;
+      }
+
+      .blog-footer {
+        border-top: 1px solid var(--border);
+        background: var(--bg-subtle);
+        padding: 36px 32px;
+      }
+
+      .blog-footer-inner {
+        max-width: 1080px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        font-size: 12.5px;
+        color: var(--text-secondary);
+      }
+
+      .blog-footer-links {
+        display: flex;
+        gap: 20px;
+        color: var(--muted);
+        font-size: 12px;
       }
 
       .blog-aside-col {
@@ -743,7 +767,7 @@
       }
 
       .docs-main {
-        padding: 20px 36px 260px;
+        padding: 20px 36px 24px;
       }
 
       /* =====================================================================
@@ -770,8 +794,12 @@
       }
 
       .chart-table-wrap {
-        padding: 20px 24px 220px;
+        padding: 20px 24px;
         min-width: 0;
+      }
+
+      .chart-table tbody tr:last-child td {
+        border-bottom: none;
       }
 
       .chart-table {
@@ -966,23 +994,7 @@
                 >
                   + Active Item Guard
                 </button>
-                <button
-                  type="button"
-                  class="seg-btn"
-                  data-cmp-preset="wide"
-                  aria-pressed="false"
-                >
-                  Wide Padding (48px)
-                </button>
               </div>
-              <button
-                type="button"
-                class="mini-btn"
-                id="btn-cmp-long"
-                aria-pressed="false"
-              >
-                Long Section (#06)
-              </button>
             </div>
           </div>
 
@@ -1117,6 +1129,22 @@
                 </aside>
               </div>
             </div>
+
+            <footer class="blog-footer">
+              <div class="blog-footer-inner">
+                <div>
+                  <strong style="color: var(--text)">Engineering Blog</strong>
+                  <span style="margin-left: 8px">
+                    Full-width page footer — the sticky TOC locks inside the article container and stops cleanly above this boundary.
+                  </span>
+                </div>
+                <div class="blog-footer-links">
+                  <span>RSS Feed</span>
+                  <span>Architecture Archive</span>
+                  <span>GitHub</span>
+                </div>
+              </div>
+            </footer>
           </div>
         </div>
       </section>
@@ -1142,6 +1170,14 @@
             </div>
             <div class="browser-url">https://example.com/docs/api-reference</div>
             <div class="toolbar-controls">
+              <button
+                type="button"
+                class="mini-btn"
+                id="btn-docs-guard"
+                aria-pressed="false"
+              >
+                Active Guard: OFF
+              </button>
               <button type="button" class="mini-btn" id="btn-docs-expand-all">
                 Toggle Accordions
               </button>
@@ -1600,40 +1636,11 @@
             b.setAttribute('aria-pressed', String(b === btn))
           })
           const p = btn.dataset.cmpPreset
-          if (p === 'bi-directional') {
-            cmpState.activeGuard = false
-            cmpState.topPadding = 16
-            cmpState.bottomPadding = 20
-          } else if (p === 'active-guard') {
-            cmpState.activeGuard = true
-            cmpState.topPadding = 16
-            cmpState.bottomPadding = 20
-          } else if (p === 'wide') {
-            cmpState.activeGuard = false
-            cmpState.topPadding = 48
-            cmpState.bottomPadding = 48
-          }
+          cmpState.activeGuard = p === 'active-guard'
+          cmpState.topPadding = 16
+          cmpState.bottomPadding = 20
           mountCmpTether()
         })
-      })
-
-      const btnCmpLong = document.getElementById('btn-cmp-long')
-      btnCmpLong.addEventListener('click', () => {
-        const sec6 = cmpSections[5].el
-        const next = sec6.dataset.long !== 'true'
-        sec6.dataset.long = String(next)
-        btnCmpLong.setAttribute('aria-pressed', String(next))
-        if (next) {
-          cmpState.activeGuard = true
-          document.querySelectorAll('[data-cmp-preset]').forEach((b) => {
-            b.setAttribute(
-              'aria-pressed',
-              String(b.dataset.cmpPreset === 'active-guard')
-            )
-          })
-          mountCmpTether()
-          vpCmp.scrollTo({ top: sec6.offsetTop - 48, behavior: 'smooth' })
-        }
       })
 
       updateCmpActiveLinks()
@@ -1652,7 +1659,7 @@
         { title: '2.2 Re-Anchoring on Reversal', indent: 1 },
         { title: '2.3 Eliminating Scroll Debt', indent: 1 },
         { title: '2.4 Pure Sticky Top Modulation', indent: 1 },
-        { title: '3. Active Item Viewport Guard', indent: 0, long: true },
+        { title: '3. Active Item Viewport Guard', indent: 0 },
         { title: '3.1 Top Boundary Clamping', indent: 1 },
         { title: '3.2 Bottom Boundary Clamping', indent: 1 },
         { title: '3.3 MutationObserver Integration', indent: 1 },
@@ -1681,16 +1688,11 @@
         const sec = document.createElement('section')
         sec.className = 'min-sec'
         sec.id = id
-        if (item.long) sec.dataset.long = 'true'
         sec.innerHTML = `
           <div class="min-sec-kicker">Section ${i + 1}</div>
           <h3>${item.title}</h3>
           <p>
-            ${
-              item.long
-                ? 'This is an intentionally tall article section (1,150px). Scroll down through this section and watch the right-hand TOC clamp the active heading at the top boundary so it never escapes your view.'
-                : 'Minimal blog prose demonstrating a right-hand Table of Contents with an animated vertical indicator and clean bottom boundary lock.'
-            }
+            Minimal blog prose demonstrating a right-hand Table of Contents with an animated vertical indicator and clean bottom boundary lock.
           </p>
           <div class="skeleton-line" style="width: 92%"></div>
           <div class="skeleton-line" style="width: 78%"></div>
@@ -1902,6 +1904,9 @@
         docsLnb.appendChild(secWrap)
       }
 
+      let docsGuardOn = false
+      let docsTether = null
+
       function syncDocsScroll() {
         const vpRect = vpDocs.getBoundingClientRect()
         const triggerY = vpRect.top + 48 + 52
@@ -1929,14 +1934,26 @@
         })
       }
 
+      function mountDocsTether() {
+        if (docsTether) docsTether.destroy()
+        docsTether = createStickyTether(docsLnb, {
+          container: vpDocs,
+          headerHeight: 48,
+          topPadding: 20,
+          bottomPadding: 24,
+          activeSelector: docsGuardOn ? '[aria-current="page"]' : false
+        })
+      }
+
       vpDocs.addEventListener('scroll', syncDocsScroll, { passive: true })
 
-      const docsTether = createStickyTether(docsLnb, {
-        container: vpDocs,
-        headerHeight: 48,
-        topPadding: 20,
-        bottomPadding: 24,
-        activeSelector: false
+      const btnDocsGuard = document.getElementById('btn-docs-guard')
+      btnDocsGuard.addEventListener('click', () => {
+        docsGuardOn = !docsGuardOn
+        btnDocsGuard.setAttribute('aria-pressed', String(docsGuardOn))
+        btnDocsGuard.textContent = `Active Guard: ${docsGuardOn ? 'ON' : 'OFF'}`
+        mountDocsTether()
+        syncDocsScroll()
       })
 
       document.getElementById('btn-docs-expand-all').addEventListener('click', () => {
@@ -1945,11 +1962,12 @@
         allSecs.forEach((s) => {
           s.dataset.open = String(anyClosed)
         })
-        docsTether.update()
+        docsTether?.update()
         syncDocsScroll()
       })
 
       syncDocsScroll()
+      mountDocsTether()
 
       /* =====================================================================
        * ROW 4 SETUP: Case 3 — Chart (Table + Right Chart Drawer)
