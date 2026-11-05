@@ -1,23 +1,17 @@
 <!doctype html>
-<html lang="ko" data-theme="dark">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sticky-tether — Documentation & UX Comparison</title>
+    <title>sticky-tether — Interactive Showcase & Real-World Cases</title>
     <style>
       :root {
         color-scheme: dark light;
-        --nav-height: 48px;
-        --col-bar-height: 42px;
-        --header-height: 90px; /* nav-height (48) + col-bar-height (42) — strictly fixed */
-        --top-padding: 20px;
-        --bottom-padding: 24px;
-        --offset-top: 0px;
-        --toc-item-pad-y: 7px;
-
-        --bg: #0b0d12;
-        --bg-subtle: #10141d;
-        --bg-glass: rgba(11, 13, 18, 0.92);
+        --bg: #080a0f;
+        --bg-frame: #0c0f17;
+        --bg-chrome: #121722;
+        --bg-subtle: #161c2a;
+        --bg-hover: #1d2536;
         --border: rgba(255, 255, 255, 0.08);
         --border-strong: rgba(255, 255, 255, 0.16);
         --text: #f1f5f9;
@@ -26,29 +20,31 @@
 
         --brand-color: #38bdf8;
         --accent: #38bdf8;
-        --accent-soft: rgba(56, 189, 248, 0.1);
+        --accent-soft: rgba(56, 189, 248, 0.12);
         --danger: #f43f5e;
         --warning: #f59e0b;
         --success: #10b981;
         --purple: #a855f7;
 
         --color-neutral-70: #334155;
-        --color-neutral-90: #0b0d12;
+        --color-neutral-90: #0c0f17;
       }
 
       html[data-theme='light'] {
-        --bg: #ffffff;
-        --bg-subtle: #f8fafc;
-        --bg-glass: rgba(255, 255, 255, 0.94);
+        --bg: #f1f5f9;
+        --bg-frame: #ffffff;
+        --bg-chrome: #f8fafc;
+        --bg-subtle: #f1f5f9;
+        --bg-hover: #e2e8f0;
         --border: rgba(15, 23, 42, 0.08);
-        --border-strong: rgba(15, 23, 42, 0.18);
+        --border-strong: rgba(15, 23, 42, 0.16);
         --text: #0f172a;
         --text-secondary: #475569;
         --muted: #94a3b8;
 
         --brand-color: #0284c7;
         --accent: #0284c7;
-        --accent-soft: rgba(2, 132, 199, 0.08);
+        --accent-soft: rgba(2, 132, 199, 0.1);
 
         --color-neutral-70: #cbd5e1;
         --color-neutral-90: #f8fafc;
@@ -61,72 +57,190 @@
       body {
         margin: 0;
         font-family:
-          -apple-system, BlinkMacSystemFont, 'Pretendard', 'Inter', 'Segoe UI',
-          Roboto, sans-serif;
+          -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto,
+          sans-serif;
         background: var(--bg);
         color: var(--text);
-        line-height: 1.6;
+        line-height: 1.55;
         accent-color: var(--brand-color);
         -webkit-font-smoothing: antialiased;
       }
 
-      /* Strictly Fixed Top Chrome (Never changes height) */
-      .top-chrome {
+      /* Page Top Navigation */
+      .page-nav {
         position: sticky;
         top: 0;
-        z-index: 200;
-        height: var(--header-height);
-        background: var(--bg-glass);
+        z-index: 500;
+        height: 52px;
+        background: rgba(8, 10, 15, 0.86);
         backdrop-filter: blur(12px);
         border-bottom: 1px solid var(--border);
       }
 
-      /* Row 1: Site Top Bar (48px fixed) */
-      .site-nav {
-        max-width: 1600px;
-        height: var(--nav-height);
+      html[data-theme='light'] .page-nav {
+        background: rgba(241, 245, 249, 0.88);
+      }
+
+      .page-nav-inner {
+        max-width: 1440px;
+        height: 100%;
         margin: 0 auto;
         padding: 0 24px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         gap: 16px;
-        border-bottom: 1px solid var(--border);
         white-space: nowrap;
       }
 
-      .brand {
+      .page-brand {
         display: flex;
         align-items: center;
         gap: 10px;
-        min-width: 0;
-      }
-
-      .brand-title {
         font-weight: 700;
         font-size: 15px;
-        letter-spacing: -0.02em;
         color: var(--text);
         text-decoration: none;
       }
 
-      .meta-note {
-        font-size: 12px;
-        color: var(--muted);
-        font-variant-numeric: tabular-nums;
+      .page-brand-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--accent);
       }
 
-      .nav-controls {
+      .page-links {
         display: flex;
         align-items: center;
         gap: 6px;
-        position: relative;
+      }
+
+      .jump-link {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text-secondary);
+        text-decoration: none;
+        padding: 5px 10px;
+        border-radius: 6px;
+        transition: color 120ms ease, background 120ms ease;
+      }
+
+      .jump-link:hover {
+        color: var(--text);
+        background: var(--bg-subtle);
+      }
+
+      /* Main Showcase Stack (4 Rows) */
+      .showcase-container {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 36px 24px 120px;
+        display: flex;
+        flex-direction: column;
+        gap: 56px;
+      }
+
+      .row-section {
+        scroll-margin-top: 72px;
+      }
+
+      .row-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 14px;
+        flex-wrap: wrap;
+      }
+
+      .row-title-group {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+      }
+
+      .row-kicker {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--accent);
+      }
+
+      .row-title {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+
+      .row-subtitle {
+        margin: 0;
+        font-size: 13px;
+        color: var(--text-secondary);
+      }
+
+      /* Browser Frame Mockup (max-height: 800px) */
+      .browser-frame {
+        background: var(--bg-frame);
+        border: 1px solid var(--border-strong);
+        border-radius: 12px;
+        overflow: hidden;
+        max-height: 800px;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.55);
+      }
+
+      .browser-toolbar {
+        height: 44px;
+        flex-shrink: 0;
+        background: var(--bg-chrome);
+        border-bottom: 1px solid var(--border);
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        white-space: nowrap;
+      }
+
+      .browser-dots {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .browser-dots span {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--border-strong);
+      }
+
+      .browser-url {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11.5px;
+        color: var(--muted);
+        background: var(--bg-frame);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 3px 12px;
+        min-width: 240px;
+        text-align: center;
+      }
+
+      .toolbar-controls {
+        display: flex;
+        align-items: center;
+        gap: 6px;
       }
 
       .seg-group {
         display: inline-flex;
-        align-items: center;
-        background: var(--bg-subtle);
+        background: var(--bg-frame);
         border: 1px solid var(--border);
         border-radius: 6px;
         padding: 2px;
@@ -137,7 +251,7 @@
         border: none;
         background: transparent;
         color: var(--text-secondary);
-        font-size: 11.5px;
+        font-size: 11px;
         font-weight: 500;
         padding: 3px 8px;
         border-radius: 4px;
@@ -150,432 +264,45 @@
       }
 
       .seg-btn[aria-pressed='true'] {
-        background: var(--bg);
+        background: var(--bg-subtle);
         color: var(--accent);
         font-weight: 600;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
       }
 
-      .flat-btn {
-        height: 28px;
-        padding: 0 10px;
-        border-radius: 6px;
+      .mini-btn {
+        height: 26px;
+        padding: 0 9px;
+        border-radius: 5px;
         border: 1px solid var(--border);
-        background: var(--bg-subtle);
+        background: var(--bg-frame);
         color: var(--text-secondary);
-        font-size: 11.5px;
+        font-size: 11px;
         font-weight: 500;
         cursor: pointer;
         display: inline-flex;
         align-items: center;
-        gap: 5px;
+        gap: 4px;
         white-space: nowrap;
       }
 
-      .flat-btn:hover {
+      .mini-btn:hover {
         border-color: var(--border-strong);
         color: var(--text);
       }
 
-      .flat-btn[aria-pressed='true'],
-      .flat-btn[data-active='true'] {
+      .mini-btn[aria-pressed='true'] {
         border-color: var(--accent);
         color: var(--accent);
         background: var(--accent-soft);
       }
 
-      /* Floating Popover for Fine-Grained Tether Options (Zero Layout Shift) */
-      .options-popover {
-        position: absolute;
-        top: calc(100% + 8px);
-        right: 0;
-        width: 310px;
-        background: var(--bg-subtle);
-        border: 1px solid var(--border-strong);
-        border-radius: 8px;
-        padding: 14px;
-        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
-        display: none;
-        flex-direction: column;
-        gap: 10px;
-        z-index: 300;
-        white-space: normal;
-      }
-
-      .options-popover[data-open='true'] {
-        display: flex;
-      }
-
-      .opt-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 8px;
-        font-size: 12px;
-        color: var(--text-secondary);
-      }
-
-      .opt-row code {
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 11.5px;
-        color: var(--text);
-      }
-
-      .opt-right {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .opt-right input[type='range'] {
-        width: 96px;
-        cursor: pointer;
-      }
-
-      .opt-val {
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 11px;
-        font-variant-numeric: tabular-nums;
-        min-width: 36px;
-        text-align: right;
-        color: var(--accent);
-      }
-
-      /* Fallback for older browsers without accent-color */
-      @supports not (accent-color: var(--brand-color)) {
-        .options-popover input[type='checkbox'].visually-hidden {
-          position: absolute !important;
-          clip-path: inset(50%) !important;
-          overflow: hidden !important;
-          width: 1px !important;
-          height: 1px !important;
-          margin: -1px !important;
-          padding: 0 !important;
-          border: 0 !important;
-          white-space: nowrap !important;
-        }
-
-        .options-popover label.checkbox-label {
-          position: relative;
-          padding-left: 1.5rem;
-          cursor: pointer;
-          display: inline-flex;
-          align-items: center;
-        }
-
-        .options-popover input[type='checkbox'] + span::before {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 1rem;
-          height: 1rem;
-          border: 1px solid var(--border-strong);
-          background: var(--bg);
-          border-radius: 3px;
-        }
-
-        .options-popover input[type='checkbox']:checked + span::before {
-          background-color: var(--brand-color);
-          border-color: var(--brand-color);
-        }
-
-        .options-popover input[type='checkbox']:checked + span::after {
-          content: '✓';
-          position: absolute;
-          left: 0.2rem;
-          top: 50%;
-          transform: translateY(-50%);
-          color: #fff;
-          font-size: 0.75rem;
-        }
-
-        .options-popover input[type='range'] {
-          -webkit-appearance: none;
-          appearance: none;
-          background: transparent;
-        }
-
-        .options-popover input[type='range']::-webkit-slider-runnable-track {
-          height: 5px;
-          background: linear-gradient(
-            to right,
-            var(--brand-color) var(--progress, 30%),
-            var(--border-strong) var(--progress, 30%)
-          );
-          border-radius: 3px;
-        }
-
-        .options-popover input[type='range']::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          appearance: none;
-          height: 13px;
-          width: 13px;
-          border-radius: 50%;
-          background: var(--brand-color);
-          margin-top: -4px;
-        }
-      }
-
-      /* Row 2: Fixed 4:2:2:2 Column Title & Single-Line Status Bar (42px fixed) */
-      .col-header-bar {
-        max-width: 1600px;
-        height: var(--col-bar-height);
-        margin: 0 auto;
-        display: grid;
-        grid-template-columns: 4fr 2fr 2fr 2fr;
-        align-items: stretch;
-      }
-
-      .col-header-cell {
-        padding: 0 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 8px;
-        min-width: 0;
-        white-space: nowrap;
-        overflow: hidden;
-        border-left: 1px solid var(--border);
-      }
-
-      .col-header-cell:first-child {
-        padding-left: 24px;
-        border-left: none;
-      }
-
-      .col-title {
-        font-size: 12.5px;
-        font-weight: 700;
-        color: var(--text);
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        flex-shrink: 0;
-      }
-
-      .col-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        flex-shrink: 0;
-      }
-
-      .col-status {
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 11px;
-        font-variant-numeric: tabular-nums;
-        color: var(--muted);
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-
-      .inline-link-btn {
-        border: none;
-        background: none;
-        color: var(--text-secondary);
-        font-size: 11px;
-        padding: 2px 5px;
-        border-radius: 4px;
-        cursor: pointer;
-        border: 1px solid var(--border);
-        flex-shrink: 0;
-      }
-
-      .inline-link-btn:hover {
-        color: var(--text);
-        border-color: var(--border-strong);
-      }
-
-      /* Subtle X-Ray Guard Lines */
-      .xray-line {
-        position: fixed;
-        left: 0;
-        right: 0;
-        height: 0;
-        z-index: 150;
-        pointer-events: none;
-        opacity: 0;
-        transition: opacity 150ms ease;
-      }
-
-      .xray-line[data-visible='true'] {
-        opacity: 1;
-      }
-
-      .xray-line-top {
-        border-top: 1px dashed rgba(56, 189, 248, 0.55);
-      }
-
-      .xray-line-bottom {
-        border-top: 1px dashed rgba(168, 85, 247, 0.55);
-      }
-
-      .xray-tag {
-        position: absolute;
-        right: 16px;
-        transform: translateY(-50%);
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 10px;
-        padding: 1px 6px;
-        border-radius: 4px;
-        background: var(--bg-subtle);
-        color: var(--text-secondary);
-        border: 1px solid var(--border);
-      }
-
-      /* Main 4:2:2:2 Layout Grid */
-      .arena {
-        max-width: 1600px;
-        margin: 0 auto;
-        display: grid;
-        grid-template-columns: 4fr 2fr 2fr 2fr;
-        align-items: start;
-      }
-
-      /* Column 1 (4fr): Flat Documentation Article */
-      main#article {
-        min-width: 0;
-        padding: 32px 36px 160px 24px;
-      }
-
-      .doc-intro {
-        padding-bottom: 28px;
-        margin-bottom: 28px;
-        border-bottom: 1px solid var(--border);
-      }
-
-      .doc-intro h1 {
-        margin: 0 0 10px;
-        font-size: 26px;
-        font-weight: 800;
-        letter-spacing: -0.025em;
-      }
-
-      .doc-intro p {
-        margin: 0;
-        font-size: 14.5px;
-        color: var(--text-secondary);
-        max-width: 68ch;
-      }
-
-      section.doc-section {
-        padding: 28px 0;
-        border-bottom: 1px solid var(--border);
-        min-height: 290px;
-        scroll-margin-top: 120px;
-      }
-
-      section.doc-section[data-long='true'] {
-        min-height: 2000px;
-      }
-
-      .sec-eyebrow {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 6px;
-        font-size: 11.5px;
-        font-weight: 600;
-        color: var(--muted);
-      }
-
-      section.doc-section[data-active-section='true'] .sec-eyebrow-label {
-        color: var(--accent);
-      }
-
-      section.doc-section h2 {
-        margin: 0 0 10px;
-        font-size: 19px;
-        font-weight: 700;
-        letter-spacing: -0.015em;
-      }
-
-      section.doc-section p {
-        margin: 0 0 12px;
-        font-size: 14px;
-        color: var(--text-secondary);
-        max-width: 66ch;
-      }
-
-      .long-guide {
-        display: none;
-        margin-top: 24px;
-        padding-left: 14px;
-        border-left: 2px solid var(--accent);
-        color: var(--text-secondary);
-        font-size: 13px;
-      }
-
-      section.doc-section[data-long='true'] .long-guide {
-        display: block;
-      }
-
-      .long-markers {
-        display: none;
-        margin-top: 40px;
-        flex-direction: column;
-        gap: 220px;
-        padding-left: 14px;
-        border-left: 1px dashed var(--border-strong);
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 12px;
-        color: var(--muted);
-      }
-
-      section.doc-section[data-long='true'] .long-markers {
-        display: flex;
-      }
-
-      /* Sidebar Columns (2fr each) — Flat Docs Style */
-      .sidebar-col {
-        min-width: 0;
-        min-height: 100%;
-        border-left: 1px solid var(--border);
-        padding: 0 16px;
-        position: relative;
-      }
-
-      .sidebar-pane {
-        padding: 0;
-      }
-
-      /* Apply A: Unapplied (Static Flow by default) */
-      .sidebar-pane-unapplied {
-        margin-top: var(--top-padding);
-        margin-bottom: var(--bottom-padding);
-      }
-
-      .sidebar-pane-unapplied[data-submode='pure-sticky'] {
-        position: sticky;
-        top: calc(var(--header-height) + var(--top-padding));
-      }
-
-      .offscreen-indicator {
-        position: sticky;
-        top: calc(var(--header-height) + 20px);
-        padding: 12px 0;
-        color: var(--muted);
-        font-size: 12px;
-        display: none;
-      }
-
-      .offscreen-indicator[data-visible='true'] {
-        display: block;
-      }
-
-      /* Apply B: Standard Sticky + Inner Scroll */
-      .sidebar-pane-inner {
-        position: sticky;
-        top: calc(var(--header-height) + var(--top-padding));
-        max-height: calc(
-          100vh - var(--header-height) - var(--top-padding) - var(--bottom-padding)
-        );
+      /* Inner Scroll Viewport inside each Browser Frame */
+      .browser-viewport {
+        height: 740px;
+        max-height: 740px;
         overflow-y: auto;
-        padding-top: 0;
-        padding-bottom: 0;
+        position: relative;
+        scroll-behavior: smooth;
 
         /* MANDATORY: scrollbar-color and scrollbar-width with CSS variables */
         --scrollbar-thumb: var(--color-neutral-70);
@@ -586,43 +313,188 @@
 
       /* Legacy fallback for WebKit/Blink browsers */
       @supports not (scrollbar-color: auto) {
-        .sidebar-pane-inner::-webkit-scrollbar {
+        .browser-viewport::-webkit-scrollbar,
+        .cmp-sidebar-inner::-webkit-scrollbar {
           width: 8px;
           height: 8px;
         }
 
-        .sidebar-pane-inner::-webkit-scrollbar-thumb {
+        .browser-viewport::-webkit-scrollbar-thumb,
+        .cmp-sidebar-inner::-webkit-scrollbar-thumb {
           background: var(--scrollbar-thumb);
         }
 
-        .sidebar-pane-inner::-webkit-scrollbar-track {
+        .browser-viewport::-webkit-scrollbar-track,
+        .cmp-sidebar-inner::-webkit-scrollbar-track {
           background: var(--scrollbar-track);
         }
       }
 
-      /* Apply C: Sticky Tether */
-      .sidebar-pane-tether {
+      /* =====================================================================
+       * ROW 1: 4:2:2:2 Side-by-Side Comparison
+       * ===================================================================== */
+      .cmp-sticky-header {
         position: sticky;
-        top: calc(var(--header-height) + var(--top-padding));
-        padding-top: 0;
-        padding-bottom: 0;
+        top: 0;
+        z-index: 50;
+        height: 40px;
+        background: var(--bg-frame);
+        border-bottom: 1px solid var(--border);
+        display: grid;
+        grid-template-columns: 4fr 2fr 2fr 2fr;
+        align-items: stretch;
       }
 
-      /* Flat TOC List */
+      .cmp-header-cell {
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        border-left: 1px solid var(--border);
+      }
+
+      .cmp-header-cell:first-child {
+        border-left: none;
+        padding-left: 24px;
+      }
+
+      .cmp-col-title {
+        font-size: 12px;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
+      }
+
+      .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+      }
+
+      .cmp-col-status {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        font-variant-numeric: tabular-nums;
+        color: var(--muted);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .cmp-grid {
+        display: grid;
+        grid-template-columns: 4fr 2fr 2fr 2fr;
+        align-items: start;
+      }
+
+      .cmp-content {
+        padding: 20px 28px 120px 24px;
+        min-width: 0;
+      }
+
+      .min-sec {
+        padding: 20px 0;
+        border-bottom: 1px solid var(--border);
+        min-height: 210px;
+      }
+
+      .min-sec[data-long='true'] {
+        min-height: 1150px;
+      }
+
+      .min-sec-kicker {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 10.5px;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+
+      .min-sec[data-active='true'] .min-sec-kicker {
+        color: var(--accent);
+      }
+
+      .min-sec h3 {
+        margin: 0 0 8px;
+        font-size: 16px;
+        font-weight: 650;
+      }
+
+      .min-sec p {
+        margin: 0 0 12px;
+        font-size: 13px;
+        color: var(--text-secondary);
+      }
+
+      .skeleton-line {
+        height: 8px;
+        border-radius: 4px;
+        background: var(--bg-subtle);
+        margin-bottom: 8px;
+      }
+
+      .cmp-col {
+        border-left: 1px solid var(--border);
+        padding: 0 14px;
+        min-width: 0;
+        min-height: 100%;
+      }
+
+      .cmp-sidebar {
+        min-height: 1280px;
+        padding: 16px 0 24px;
+      }
+
+      .cmp-sidebar-inner {
+        position: sticky;
+        top: 56px;
+        max-height: calc(740px - 56px - 20px);
+        min-height: 0;
+        overflow-y: auto;
+        --scrollbar-thumb: var(--color-neutral-70);
+        --scrollbar-track: var(--color-neutral-90);
+        scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+        scrollbar-width: thin;
+      }
+
+      .cmp-sidebar-tether {
+        position: sticky;
+        top: 56px;
+      }
+
+      .cmp-offscreen-note {
+        position: sticky;
+        top: 64px;
+        padding: 10px 0;
+        font-size: 11.5px;
+        color: var(--muted);
+        display: none;
+      }
+
+      .cmp-offscreen-note[data-visible='true'] {
+        display: block;
+      }
+
       nav.toc-nav {
-        /* Enables automatic tracking of fragment links where supported */
         scroll-target-group: auto;
       }
 
-      .toc-group-title {
-        font-size: 11px;
+      .toc-group-label {
+        font-size: 10.5px;
         font-weight: 600;
-        color: var(--text);
-        margin: 14px 0 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--muted);
+        margin: 14px 0 6px;
         padding-left: 10px;
       }
 
-      .toc-group:first-child .toc-group-title {
+      .toc-group-label:first-child {
         margin-top: 0;
       }
 
@@ -633,865 +505,1599 @@
         border-left: 1px solid var(--border);
       }
 
-      .toc-item {
+      .toc-link {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 8px;
-        padding: var(--toc-item-pad-y) 10px;
+        padding: 11px 10px;
         margin-left: -1px;
         border-left: 2px solid transparent;
+        font-size: 12px;
         color: var(--text-secondary);
         text-decoration: none;
-        font-size: 12.5px;
-        line-height: 1.35;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        transition: color 100ms ease, border-color 100ms ease;
       }
 
-      .toc-item span:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .toc-item:hover {
+      .toc-link:hover {
         color: var(--text);
       }
 
-      /* Combine native :target-current, fallback class, and aria-current */
       nav.toc-nav a:is(:target-current, .target-current),
-      .toc-item[aria-current='location'] {
+      .toc-link[aria-current='location'] {
         color: var(--accent);
         border-left-color: var(--accent);
         font-weight: 600;
       }
 
-      .toc-num {
-        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-        font-size: 10.5px;
-        color: var(--muted);
-        flex-shrink: 0;
+      /* =====================================================================
+       * ROW 2: Case 1 — Blog Article TOC (firejune.io style)
+       * ===================================================================== */
+      .blog-header {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        height: 48px;
+        background: var(--bg-frame);
+        border-bottom: 1px solid var(--border);
+        padding: 0 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 13px;
       }
 
-      .toc-item[aria-current='location'] .toc-num {
+      .blog-layout {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 28px 32px 120px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 260px;
+        gap: 56px;
+        align-items: start;
+      }
+
+      .blog-aside {
+        position: sticky;
+        top: 72px;
+        min-height: 1280px;
+      }
+
+      .blog-toc-heading {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--muted);
+        margin-bottom: 12px;
+      }
+
+      .blog-toc-track {
+        position: relative;
+        border-left: 1px solid var(--border);
+      }
+
+      .blog-toc-indicator {
+        position: absolute;
+        left: -1px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: var(--accent);
+        transition: clip-path 110ms linear;
+      }
+
+      .blog-toc-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .blog-toc-item {
+        display: block;
+        padding: 12px 12px;
+        font-size: 12.5px;
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: color 120ms ease;
+      }
+
+      .blog-toc-item[data-indent='1'] {
+        padding-left: 24px;
+        font-size: 12px;
+      }
+
+      .blog-toc-item:hover {
+        color: var(--text);
+      }
+
+      .blog-toc-item[aria-current='location'] {
         color: var(--accent);
+        font-weight: 600;
+      }
+
+      /* =====================================================================
+       * ROW 3: Case 2 — Documentation Left Sidebar LNB (oris style)
+       * ===================================================================== */
+      .docs-header {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        height: 48px;
+        background: var(--bg-frame);
+        border-bottom: 1px solid var(--border);
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 13px;
+      }
+
+      .docs-layout {
+        display: grid;
+        grid-template-columns: 270px minmax(0, 1fr);
+        align-items: start;
+      }
+
+      .docs-lnb-col {
+        border-right: 1px solid var(--border);
+        padding: 0 16px;
+        min-height: 100%;
+      }
+
+      .docs-lnb {
+        position: sticky;
+        top: 68px;
+        min-height: 1280px;
+        padding: 16px 0 28px;
+      }
+
+      .lnb-section {
+        margin-bottom: 10px;
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 8px;
+      }
+
+      .lnb-group-btn {
+        width: 100%;
+        background: none;
+        border: none;
+        color: var(--text);
+        font-size: 12.5px;
+        font-weight: 600;
+        padding: 8px 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        border-radius: 6px;
+      }
+
+      .lnb-group-btn:hover {
+        background: var(--bg-subtle);
+      }
+
+      .lnb-chevron {
+        font-size: 10px;
+        color: var(--muted);
+        transition: transform 150ms ease;
+      }
+
+      .lnb-section[data-open='false'] .lnb-chevron {
+        transform: rotate(-90deg);
+      }
+
+      .lnb-sublist {
+        list-style: none;
+        margin: 2px 0 0;
+        padding: 0 0 0 8px;
+      }
+
+      .lnb-section[data-open='false'] .lnb-sublist {
+        display: none;
+      }
+
+      .lnb-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 9px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        color: var(--text-secondary);
+        text-decoration: none;
+      }
+
+      .lnb-link:hover {
+        color: var(--text);
+        background: var(--bg-subtle);
+      }
+
+      .lnb-link[aria-current='page'] {
+        color: var(--accent);
+        background: var(--accent-soft);
+        font-weight: 600;
+      }
+
+      .method-tag {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 9.5px;
+        font-weight: 700;
+        padding: 1px 5px;
+        border-radius: 3px;
+        background: var(--bg-subtle);
+        color: var(--muted);
+      }
+
+      .docs-main {
+        padding: 24px 36px 120px;
+      }
+
+      /* =====================================================================
+       * ROW 4: Case 3 — Enterprise Report & Analytics Drawer (hmg-esm style)
+       * ===================================================================== */
+      .esm-header {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        height: 48px;
+        background: var(--bg-frame);
+        border-bottom: 1px solid var(--border);
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 13px;
+      }
+
+      .esm-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 380px;
+        align-items: stretch;
+      }
+
+      .esm-table-wrap {
+        padding: 20px 24px 120px;
+        min-width: 0;
+      }
+
+      .esm-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12.5px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .esm-table th {
+        text-align: left;
+        padding: 10px 12px;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--muted);
+        border-bottom: 1px solid var(--border-strong);
+        background: var(--bg-subtle);
+      }
+
+      .esm-table td {
+        padding: 12px;
+        border-bottom: 1px solid var(--border);
+        color: var(--text-secondary);
+      }
+
+      .esm-row {
+        cursor: pointer;
+        transition: background 100ms ease;
+      }
+
+      .esm-row:hover td {
+        background: var(--bg-subtle);
+      }
+
+      .esm-row[data-selected='true'] td {
+        background: var(--accent-soft);
+        color: var(--text);
+      }
+
+      .esm-domain-name {
+        font-weight: 600;
+        color: var(--text);
+      }
+
+      .esm-drawer-track {
+        border-left: 1px solid var(--border);
+        background: var(--bg-subtle);
+        padding: 0 22px;
+      }
+
+      .esm-drawer {
+        position: sticky;
+        top: 68px;
+        min-height: 1280px;
+        padding: 20px 0 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .drawer-card {
+        background: var(--bg-frame);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 16px;
+      }
+
+      .drawer-card-title {
+        font-size: 11.5px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--muted);
+        margin: 0 0 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .kpi-box {
+        padding: 10px 12px;
+        background: var(--bg-subtle);
+        border-radius: 6px;
+      }
+
+      .kpi-label {
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .kpi-val {
+        font-size: 17px;
+        font-weight: 700;
+        margin-top: 2px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .bar-row {
+        display: grid;
+        grid-template-columns: 44px 1fr 64px;
+        align-items: center;
+        gap: 10px;
+        font-size: 11.5px;
+        margin-bottom: 10px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .bar-track {
+        height: 10px;
+        background: var(--bg-subtle);
+        border-radius: 999px;
+        overflow: hidden;
+        display: flex;
+      }
+
+      .bar-si {
+        background: var(--accent);
+        height: 100%;
+      }
+
+      .bar-sm {
+        background: var(--purple);
+        height: 100%;
       }
     </style>
   </head>
   <body>
-    <!-- Strictly Fixed 90px Top Chrome: Site Bar (48px) + 4:2:2:2 Column Title Bar (42px) -->
-    <header class="top-chrome" id="top-chrome">
-      <div class="site-nav">
-        <div class="brand">
-          <a href="#top" class="brand-title">sticky-tether</a>
-          <span class="meta-note" id="overflow-info">
-            사이드바 --px / 뷰포트 --px
-          </span>
-        </div>
+    <!-- Global Top Nav -->
+    <header class="page-nav">
+      <div class="page-nav-inner">
+        <a href="#row-comparison" class="page-brand">
+          <span class="page-brand-dot"></span>
+          <span>sticky-tether</span>
+        </a>
 
-        <div class="nav-controls">
-          <div class="seg-group" role="group" aria-label="Tether Presets">
-            <button
-              type="button"
-              class="seg-btn"
-              data-preset="default"
-              aria-pressed="true"
-            >
-              기본 (Guard ON)
-            </button>
-            <button
-              type="button"
-              class="seg-btn"
-              data-preset="no-guard"
-              aria-pressed="false"
-            >
-              Guard OFF
-            </button>
-            <button
-              type="button"
-              class="seg-btn"
-              data-preset="spacious"
-              aria-pressed="false"
-            >
-              넓은 여백
-            </button>
-            <button
-              type="button"
-              class="seg-btn"
-              data-preset="offset"
-              aria-pressed="false"
-            >
-              오프셋 +48px
-            </button>
-          </div>
-
-          <button type="button" class="flat-btn" id="btn-long-sec" aria-pressed="true">
-            긴 섹션 (#10)
-          </button>
-
-          <button type="button" class="flat-btn" id="btn-xray" aria-pressed="false">
-            가드선 표시
-          </button>
-
-          <button type="button" class="flat-btn" id="btn-options" aria-expanded="false">
-            세부 옵션 ▾
-          </button>
-
-          <button type="button" class="flat-btn" id="btn-autotour" data-active="false">
-            ▶ 자동 스크롤
-          </button>
-
-          <button type="button" class="flat-btn" id="btn-theme">
-            테마
-          </button>
-
-          <!-- Floating Popover for sliders (Zero layout shift) -->
-          <div class="options-popover" id="options-popover" data-open="false">
-            <div class="opt-row">
-              <label class="checkbox-label" for="opt-guard">
-                <input
-                  type="checkbox"
-                  id="opt-guard"
-                  class="visually-hidden"
-                  checked
-                />
-                <span><code>activeSelector</code> Guard</span>
-              </label>
-            </div>
-
-            <div class="opt-row">
-              <label for="opt-top-padding"><code>topPadding</code></label>
-              <div class="opt-right">
-                <input
-                  type="range"
-                  id="opt-top-padding"
-                  min="0"
-                  max="96"
-                  step="4"
-                  value="20"
-                />
-                <span class="opt-val" id="val-top-padding">20px</span>
-              </div>
-            </div>
-
-            <div class="opt-row">
-              <label for="opt-bottom-padding"><code>bottomPadding</code></label>
-              <div class="opt-right">
-                <input
-                  type="range"
-                  id="opt-bottom-padding"
-                  min="0"
-                  max="96"
-                  step="4"
-                  value="24"
-                />
-                <span class="opt-val" id="val-bottom-padding">24px</span>
-              </div>
-            </div>
-
-            <div class="opt-row">
-              <label for="opt-offset-top"><code>offsetTop</code></label>
-              <div class="opt-right">
-                <input
-                  type="range"
-                  id="opt-offset-top"
-                  min="0"
-                  max="72"
-                  step="4"
-                  value="0"
-                />
-                <span class="opt-val" id="val-offset-top">0px</span>
-              </div>
-            </div>
-
-            <div class="opt-row">
-              <label for="opt-density">최소 높이 배율</label>
-              <div class="opt-right">
-                <input
-                  type="range"
-                  id="opt-density"
-                  min="160"
-                  max="250"
-                  step="10"
-                  value="180"
-                />
-                <span class="opt-val" id="val-density">180%</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Fixed 4:2:2:2 Column Titles & Single-line Status -->
-      <div class="col-header-bar">
-        <div class="col-header-cell">
-          <span class="col-title">컨텐츠</span>
-          <span class="col-status" id="status-content">#01 Overview</span>
-        </div>
-
-        <div class="col-header-cell">
-          <span class="col-title">
-            <span class="col-dot" style="background: var(--danger)"></span>
-            무적용
-          </span>
-          <span class="col-status" id="status-unapplied">화면 내</span>
-        </div>
-
-        <div class="col-header-cell">
-          <span class="col-title">
-            <span class="col-dot" style="background: var(--warning)"></span>
-            일반 스티키
-          </span>
-          <div style="display: flex; align-items: center; gap: 6px; min-width: 0">
-            <span class="col-status" id="status-inner">보임</span>
-            <button
-              type="button"
-              class="inline-link-btn"
-              id="btn-inner-autoscroll"
-              title="섹션 변경 시 내부 scrollIntoView 강제 실행 여부"
-            >
-              Auto: OFF
-            </button>
-          </div>
-        </div>
-
-        <div class="col-header-cell">
-          <span class="col-title">
-            <span class="col-dot" style="background: var(--accent)"></span>
-            Sticky Tether
-          </span>
-          <span class="col-status" id="status-tether" style="color: var(--accent)">
-            1:1 · Δ 0px
-          </span>
-        </div>
+        <nav class="page-links" aria-label="Showcase Sections">
+          <a href="#row-comparison" class="jump-link">01. Side-by-Side Comparison</a>
+          <a href="#row-blog" class="jump-link">02. Case 1: Blog TOC (firejune.io)</a>
+          <a href="#row-docs" class="jump-link">03. Case 2: Docs Sidebar (oris)</a>
+          <a href="#row-report" class="jump-link">04. Case 3: Report Drawer (hmg-esm)</a>
+          <button type="button" class="mini-btn" id="btn-theme">Theme</button>
+        </nav>
       </div>
     </header>
 
-    <!-- Optional Visual Guard Lines -->
-    <div class="xray-line xray-line-top" id="xray-top" data-visible="false">
-      <span class="xray-tag" id="xray-top-label">topGuard</span>
-    </div>
-    <div class="xray-line xray-line-bottom" id="xray-bottom" data-visible="false">
-      <span class="xray-tag" id="xray-bottom-label">bottomGuard</span>
-    </div>
-
-    <!-- Main 4:2:2:2 Arena -->
-    <div class="arena" id="top">
-      <!-- Column 1 (4fr): Documentation Content -->
-      <main id="article">
-        <div class="doc-intro">
-          <h1>Bi-Directional Sticky Scroll Tethering</h1>
-          <p>
-            뷰포트보다 긴 사이드바를 다룰 때 발생하는 스크롤 문제를 세 가지 컬럼(<strong>무적용</strong> · <strong>일반 스티키 이너스크롤</strong> · <strong>Sticky Tether</strong>)으로 동시에 비교합니다. 페이지를 위아래로 스크롤하거나 상단의 프리셋을 전환해 동작 차이를 확인해 보세요.
+    <div class="showcase-container">
+      <!-- ===================================================================
+       * ROW 1: 4:2:2:2 Side-by-Side Comparison
+       * =================================================================== -->
+      <section class="row-section" id="row-comparison">
+        <div class="row-header">
+          <div class="row-title-group">
+            <span class="row-kicker">Row 01 · Comparison</span>
+            <h2 class="row-title">3-Sidebar Scroll UX Comparison (4:2:2:2)</h2>
+          </div>
+          <p class="row-subtitle">
+            Scroll inside the frame below — each sidebar is 1,280px tall inside a 740px viewport.
           </p>
         </div>
-        <div id="sections-container"></div>
-      </main>
 
-      <!-- Column 2 (2fr): Unapplied (Scrolls away) -->
-      <div class="sidebar-col">
-        <aside
-          class="sidebar-pane sidebar-pane-unapplied"
-          id="sidebar-unapplied"
-          data-submode="static"
-        >
-          <nav class="toc-nav" aria-label="Unapplied Sidebar">
-            <div id="toc-unapplied"></div>
-          </nav>
-        </aside>
-
-        <div class="offscreen-indicator" id="unapplied-ghost" data-visible="false">
-          <div style="margin-bottom: 8px; color: var(--text-secondary)">
-            스크롤되어 위로 사라짐 (<code id="ghost-offset">-0px</code>)
+        <div class="browser-frame">
+          <div class="browser-toolbar">
+            <div class="browser-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="browser-url">https://sticky-tether.dev/comparison</div>
+            <div class="toolbar-controls">
+              <div class="seg-group" role="group" aria-label="Tether Presets">
+                <button
+                  type="button"
+                  class="seg-btn"
+                  data-cmp-preset="default"
+                  aria-pressed="true"
+                >
+                  Default (Guard ON)
+                </button>
+                <button
+                  type="button"
+                  class="seg-btn"
+                  data-cmp-preset="no-guard"
+                  aria-pressed="false"
+                >
+                  Guard OFF
+                </button>
+                <button
+                  type="button"
+                  class="seg-btn"
+                  data-cmp-preset="wide"
+                  aria-pressed="false"
+                >
+                  Wide Padding (56px)
+                </button>
+              </div>
+              <button
+                type="button"
+                class="mini-btn"
+                id="btn-cmp-long"
+                aria-pressed="true"
+              >
+                Long Section (#06)
+              </button>
+            </div>
           </div>
-          <button type="button" class="inline-link-btn" id="btn-scroll-top">
-            ↑ 맨 위로 이동
-          </button>
+
+          <div class="browser-viewport" id="vp-comparison">
+            <!-- Fixed 4:2:2:2 Column Titles -->
+            <div class="cmp-sticky-header">
+              <div class="cmp-header-cell">
+                <span class="cmp-col-title">Content</span>
+                <span class="cmp-col-status" id="cmp-status-content">#01 Overview</span>
+              </div>
+              <div class="cmp-header-cell">
+                <span class="cmp-col-title">
+                  <span class="dot" style="background: var(--danger)"></span>
+                  Apply A · Unapplied
+                </span>
+                <span class="cmp-col-status" id="cmp-status-a">Visible</span>
+              </div>
+              <div class="cmp-header-cell">
+                <span class="cmp-col-title">
+                  <span class="dot" style="background: var(--warning)"></span>
+                  Apply B · Inner Scroll
+                </span>
+                <span class="cmp-col-status" id="cmp-status-b">Nested Scroll</span>
+              </div>
+              <div class="cmp-header-cell">
+                <span class="cmp-col-title">
+                  <span class="dot" style="background: var(--accent)"></span>
+                  Apply C · Sticky Tether
+                </span>
+                <span
+                  class="cmp-col-status"
+                  id="cmp-status-c"
+                  style="color: var(--accent)"
+                >
+                  1:1 · Δ 0px
+                </span>
+              </div>
+            </div>
+
+            <div class="cmp-grid">
+              <div class="cmp-content" id="cmp-articles"></div>
+
+              <!-- Apply A: Unapplied -->
+              <div class="cmp-col">
+                <aside class="cmp-sidebar" id="cmp-sidebar-a">
+                  <nav class="toc-nav" aria-label="Unapplied TOC" id="cmp-toc-a"></nav>
+                </aside>
+                <div class="cmp-offscreen-note" id="cmp-ghost-a" data-visible="false">
+                  Scrolled off-screen (<code id="cmp-ghost-px">-0px</code>)
+                </div>
+              </div>
+
+              <!-- Apply B: Standard Sticky + Inner Scroll -->
+              <div class="cmp-col">
+                <aside class="cmp-sidebar cmp-sidebar-inner" id="cmp-sidebar-b">
+                  <nav class="toc-nav" aria-label="Inner Scroll TOC" id="cmp-toc-b"></nav>
+                </aside>
+              </div>
+
+              <!-- Apply C: Sticky Tether -->
+              <div class="cmp-col">
+                <aside class="cmp-sidebar cmp-sidebar-tether" id="cmp-sidebar-c">
+                  <nav class="toc-nav" aria-label="Tether TOC" id="cmp-toc-c"></nav>
+                </aside>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Column 3 (2fr): Standard Sticky + Inner Scroll -->
-      <div class="sidebar-col">
-        <aside class="sidebar-pane sidebar-pane-inner" id="sidebar-inner">
-          <nav class="toc-nav" aria-label="Inner Scroll Sidebar">
-            <div id="toc-inner"></div>
-          </nav>
-        </aside>
-      </div>
+      <!-- ===================================================================
+       * ROW 2: Case 1 — Blog Article TOC (firejune.io reference)
+       * =================================================================== -->
+      <section class="row-section" id="row-blog">
+        <div class="row-header">
+          <div class="row-title-group">
+            <span class="row-kicker">Row 02 · Case 1 (firejune.io)</span>
+            <h2 class="row-title">Blog Article Table of Contents with Animated Indicator</h2>
+          </div>
+          <p class="row-subtitle">
+            Replicates firejune.io’s right-hand “On this page” TOC with smooth clip-path indicator and active-item viewport guard.
+          </p>
+        </div>
 
-      <!-- Column 4 (2fr): Sticky Tether -->
-      <div class="sidebar-col">
-        <aside class="sidebar-pane sidebar-pane-tether" id="sidebar-tether">
-          <nav class="toc-nav" aria-label="Sticky Tether Sidebar">
-            <div id="toc-tether"></div>
-          </nav>
-        </aside>
-      </div>
+        <div class="browser-frame">
+          <div class="browser-toolbar">
+            <div class="browser-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="browser-url">https://firejune.io/blog/sticky-tether-architecture</div>
+            <div class="toolbar-controls">
+              <button
+                type="button"
+                class="mini-btn"
+                id="btn-blog-guard"
+                aria-pressed="true"
+              >
+                Active Guard: ON
+              </button>
+              <span
+                class="cmp-col-status"
+                id="blog-telemetry"
+                style="min-width: 110px; text-align: right"
+              >
+                top: 72px · Δ 0px
+              </span>
+            </div>
+          </div>
+
+          <div class="browser-viewport" id="vp-blog">
+            <div class="blog-header">
+              <strong>firejune.io</strong>
+              <span style="color: var(--muted); font-size: 12px">
+                Engineering Notes · 8 min read
+              </span>
+            </div>
+
+            <div class="blog-layout">
+              <article id="blog-articles"></article>
+
+              <aside class="blog-aside" id="blog-aside">
+                <div class="blog-toc-heading">On this page</div>
+                <div class="blog-toc-track">
+                  <span
+                    class="blog-toc-indicator"
+                    id="blog-indicator"
+                    aria-hidden="true"
+                  ></span>
+                  <ol class="blog-toc-list" id="blog-toc-list"></ol>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+       * ROW 3: Case 2 — Documentation Left Sidebar LNB (oris reference)
+       * =================================================================== -->
+      <section class="row-section" id="row-docs">
+        <div class="row-header">
+          <div class="row-title-group">
+            <span class="row-kicker">Row 03 · Case 2 (oris docs)</span>
+            <h2 class="row-title">Documentation Left Accordion Sidebar Navigation</h2>
+          </div>
+          <p class="row-subtitle">
+            Expand or collapse category accordions on the left — ResizeObserver recalculates sticky bounds seamlessly.
+          </p>
+        </div>
+
+        <div class="browser-frame">
+          <div class="browser-toolbar">
+            <div class="browser-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="browser-url">https://docs.oris.io/api/v2/reference</div>
+            <div class="toolbar-controls">
+              <button type="button" class="mini-btn" id="btn-docs-expand-all">
+                Expand All
+              </button>
+              <span
+                class="cmp-col-status"
+                id="docs-telemetry"
+                style="min-width: 115px; text-align: right"
+              >
+                LNB: 1,280px · Δ 0px
+              </span>
+            </div>
+          </div>
+
+          <div class="browser-viewport" id="vp-docs">
+            <div class="docs-header">
+              <strong>ORIS OpenAPI Reference v2.4</strong>
+              <span style="color: var(--muted); font-size: 12px">
+                Core Banking & Ledger Endpoints
+              </span>
+            </div>
+
+            <div class="docs-layout">
+              <div class="docs-lnb-col">
+                <aside class="docs-lnb" id="docs-lnb"></aside>
+              </div>
+              <div class="docs-main" id="docs-articles"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+       * ROW 4: Case 3 — Report Analytics Drawer (hmg-esm reference)
+       * =================================================================== -->
+      <section class="row-section" id="row-report">
+        <div class="row-header">
+          <div class="row-title-group">
+            <span class="row-kicker">Row 04 · Case 3 (hmg-esm report)</span>
+            <h2 class="row-title">Enterprise Cost Report & Bi-Directional Analytics Drawer</h2>
+          </div>
+          <p class="row-subtitle">
+            Scroll the domain cost table or select any row — the 1,280px right-hand analytics drawer glides in both directions without nested scrollbars.
+          </p>
+        </div>
+
+        <div class="browser-frame">
+          <div class="browser-toolbar">
+            <div class="browser-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="browser-url">https://esm.enterprise.io/report/domain-cost</div>
+            <div class="toolbar-controls">
+              <span
+                class="cmp-col-status"
+                id="esm-telemetry"
+                style="min-width: 130px; text-align: right"
+              >
+                Drawer: 1:1 · Δ 0px
+              </span>
+            </div>
+          </div>
+
+          <div class="browser-viewport" id="vp-esm">
+            <div class="esm-header">
+              <strong>Enterprise IT System Cost Report (FY2022–FY2026)</strong>
+              <span style="color: var(--muted); font-size: 12px">
+                Unit: USD ($M) · SI vs SM Breakdown
+              </span>
+            </div>
+
+            <div class="esm-layout">
+              <div class="esm-table-wrap">
+                <table class="esm-table">
+                  <thead>
+                    <tr>
+                      <th>Domain Hierarchy</th>
+                      <th>Category</th>
+                      <th>FY2024</th>
+                      <th>FY2025</th>
+                      <th>FY2026</th>
+                      <th>YoY</th>
+                    </tr>
+                  </thead>
+                  <tbody id="esm-tbody"></tbody>
+                </table>
+              </div>
+
+              <div class="esm-drawer-track">
+                <aside class="esm-drawer" id="esm-drawer">
+                  <div class="drawer-card">
+                    <div class="drawer-card-title">
+                      <span>Selected Domain</span>
+                      <span style="color: var(--accent)">Live Sync</span>
+                    </div>
+                    <div
+                      id="esm-selected-name"
+                      style="font-size: 16px; font-weight: 700; margin-bottom: 12px"
+                    >
+                      01. Cloud Infrastructure & Kubernetes
+                    </div>
+                    <div class="kpi-grid">
+                      <div class="kpi-box">
+                        <div class="kpi-label">FY2026 Total</div>
+                        <div class="kpi-val" id="esm-kpi-total">$48.2M</div>
+                      </div>
+                      <div class="kpi-box">
+                        <div class="kpi-label">YoY Growth</div>
+                        <div
+                          class="kpi-val"
+                          id="esm-kpi-yoy"
+                          style="color: var(--danger)"
+                        >
+                          +14.8%
+                        </div>
+                      </div>
+                      <div class="kpi-box">
+                        <div class="kpi-label">SI (Build) Share</div>
+                        <div class="kpi-val" id="esm-kpi-si">62%</div>
+                      </div>
+                      <div class="kpi-box">
+                        <div class="kpi-label">SM (Run) Share</div>
+                        <div class="kpi-val" id="esm-kpi-sm">38%</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="drawer-card">
+                    <div class="drawer-card-title">
+                      <span>5-Year SI / SM Stacked Trend</span>
+                      <span>FY22–FY26</span>
+                    </div>
+                    <div id="esm-bars"></div>
+                  </div>
+
+                  <div class="drawer-card">
+                    <div class="drawer-card-title">
+                      <span>Sub-Domain Allocation Breakdown</span>
+                      <span>Top 6</span>
+                    </div>
+                    <div id="esm-subdomains"></div>
+                  </div>
+
+                  <div class="drawer-card">
+                    <div class="drawer-card-title">
+                      <span>Quarterly Accrual Velocity</span>
+                      <span>Q1–Q4</span>
+                    </div>
+                    <div class="bar-row">
+                      <span>Q1</span>
+                      <div class="bar-track">
+                        <div class="bar-si" style="width: 48%"></div>
+                        <div class="bar-sm" style="width: 24%"></div>
+                      </div>
+                      <span>$10.4M</span>
+                    </div>
+                    <div class="bar-row">
+                      <span>Q2</span>
+                      <div class="bar-track">
+                        <div class="bar-si" style="width: 54%"></div>
+                        <div class="bar-sm" style="width: 26%"></div>
+                      </div>
+                      <span>$11.8M</span>
+                    </div>
+                    <div class="bar-row">
+                      <span>Q3</span>
+                      <div class="bar-track">
+                        <div class="bar-si" style="width: 60%"></div>
+                        <div class="bar-sm" style="width: 28%"></div>
+                      </div>
+                      <span>$12.6M</span>
+                    </div>
+                    <div class="bar-row">
+                      <span>Q4</span>
+                      <div class="bar-track">
+                        <div class="bar-si" style="width: 66%"></div>
+                        <div class="bar-sm" style="width: 30%"></div>
+                      </div>
+                      <span>$13.4M</span>
+                    </div>
+                  </div>
+
+                  <div class="drawer-card">
+                    <div class="drawer-card-title">
+                      <span>Governance & Audit Summary</span>
+                      <span>Verified</span>
+                    </div>
+                    <p style="margin: 0 0 10px; font-size: 12px; color: var(--text-secondary)">
+                      Scroll up and down the left table: notice how this 1,280px side drawer smoothly glides to reveal bottom cards on downward scroll and immediately returns top KPI cards on upward scroll.
+                    </p>
+                    <div class="skeleton-line" style="width: 90%"></div>
+                    <div class="skeleton-line" style="width: 75%"></div>
+                    <div class="skeleton-line" style="width: 60%"></div>
+                  </div>
+                </aside>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
 
     <script type="module">
       import { createStickyTether } from '../dist/core.js'
 
-      const GROUPS = [
+      // Theme Toggle
+      document.getElementById('btn-theme').addEventListener('click', () => {
+        const html = document.documentElement
+        html.dataset.theme = html.dataset.theme === 'light' ? 'dark' : 'light'
+      })
+
+      /* =====================================================================
+       * ROW 1 SETUP: 4:2:2:2 Comparison
+       * ===================================================================== */
+      const CMP_GROUPS = [
         {
-          phase: 'Core Mechanics',
+          group: 'Core Engine',
           items: [
-            'Overview & Problem',
-            'Native Sticky Clipping',
-            'Inner Scrollbar Traps',
-            'Bi-Directional Deltas',
-            'Direction Re-Anchoring',
-            'Zero Scroll Debt',
-            'Natural Full Height'
+            '01. Overview & Motivation',
+            '02. Native Sticky Clipping',
+            '03. Nested Scrollbar Traps',
+            '04. Bi-Directional Delta',
+            '05. Instant Re-Anchoring'
           ]
         },
         {
-          phase: 'Active Item Guard',
+          group: 'Viewport Guard',
           items: [
-            'Active Selector Match',
-            'Top Boundary Guard',
-            'Bottom Boundary Guard',
-            'Downward Clamping',
-            'Upward Clamping',
-            'Anchor Sync at Bounds',
-            'MutationObserver Sync'
+            '06. Active Item Guard',
+            '07. Top Clamping Bound',
+            '08. Bottom Clamping Bound',
+            '09. Zero Scroll Debt',
+            '10. Mutation Sync'
           ]
         },
         {
-          phase: 'Options & API',
+          group: 'Integration',
           items: [
-            'Header Height Variable',
-            'Top & Bottom Padding',
-            'Initial Offset Top',
-            'Custom Scroll Container',
-            'Resize Recalculation',
-            'Guard Disable Mode',
-            'React Hook & Component'
-          ]
-        },
-        {
-          phase: 'Verification',
-          items: [
-            'Short Sidebar Bypass',
-            'Accordion Transitions',
-            '4K Display Overflow',
-            'Rapid Reversal Stability',
-            'SSR Hydration Safety',
-            'Passive Scroll Perf',
-            'Architecture Summary'
+            '11. Custom Containers',
+            '12. CSS Custom Properties',
+            '13. ResizeObserver Hook',
+            '14. React useTether API',
+            '15. SSR Safe Hydration',
+            '16. Final Summary'
           ]
         }
       ]
 
-      const HEADER_HEIGHT = 90 // Fixed 48px nav + 42px col-header-bar
-      const sectionsContainer = document.getElementById('sections-container')
-      const tocContainers = {
-        unapplied: document.getElementById('toc-unapplied'),
-        inner: document.getElementById('toc-inner'),
-        tether: document.getElementById('toc-tether')
-      }
-      const sidebars = {
-        unapplied: document.getElementById('sidebar-unapplied'),
-        inner: document.getElementById('sidebar-inner'),
-        tether: document.getElementById('sidebar-tether')
-      }
+      const vpCmp = document.getElementById('vp-comparison')
+      const cmpArticles = document.getElementById('cmp-articles')
+      const cmpTocA = document.getElementById('cmp-toc-a')
+      const cmpTocB = document.getElementById('cmp-toc-b')
+      const cmpTocC = document.getElementById('cmp-toc-c')
+      const cmpSidebarA = document.getElementById('cmp-sidebar-a')
+      const cmpSidebarB = document.getElementById('cmp-sidebar-b')
+      const cmpSidebarC = document.getElementById('cmp-sidebar-c')
 
-      const allSections = []
-      let itemIndex = 0
+      const cmpSections = []
+      let cmpIdx = 0
 
-      for (const group of GROUPS) {
-        const groupEls = {
-          unapplied: document.createElement('div'),
-          inner: document.createElement('div'),
-          tether: document.createElement('div')
-        }
-
-        for (const key of Object.keys(groupEls)) {
-          groupEls[key].className = 'toc-group'
-          const titleEl = document.createElement('div')
-          titleEl.className = 'toc-group-title'
-          titleEl.textContent = group.phase
+      for (const g of CMP_GROUPS) {
+        for (const navEl of [cmpTocA, cmpTocB, cmpTocC]) {
+          const lbl = document.createElement('div')
+          lbl.className = 'toc-group-label'
+          lbl.textContent = g.group
           const ol = document.createElement('ol')
           ol.className = 'toc-list'
-          groupEls[key].appendChild(titleEl)
-          groupEls[key].appendChild(ol)
-          tocContainers[key].appendChild(groupEls[key])
+          ol.dataset.group = g.group
+          navEl.appendChild(lbl)
+          navEl.appendChild(ol)
         }
 
-        for (const title of group.items) {
-          itemIndex += 1
-          const id = `section-${itemIndex}`
-          const numStr = String(itemIndex).padStart(2, '0')
-
+        for (const title of g.items) {
+          cmpIdx += 1
+          const id = `cmp-sec-${cmpIdx}`
           const sec = document.createElement('section')
-          sec.className = 'doc-section'
+          sec.className = 'min-sec'
           sec.id = id
-          if (itemIndex === 10) {
-            sec.dataset.long = 'true'
-          }
-
+          if (cmpIdx === 6) sec.dataset.long = 'true'
           sec.innerHTML = `
-            <div class="sec-eyebrow">
-              <span class="sec-eyebrow-label">${group.phase} · #${numStr}</span>
-              <button type="button" class="inline-link-btn btn-toggle-long" data-target="${id}">
-                ${itemIndex === 10 ? '긴 섹션 축소' : '섹션 높이 확장'}
-              </button>
-            </div>
-            <h2>${numStr}. ${title}</h2>
-            <p>
-              우측의 세 가지 사이드바 컬럼이 스크롤에 어떻게 반응하는지 비교해 보세요.
-              <strong>무적용</strong>은 페이지 상단에 머물다 사라지고, <strong>일반 스티키</strong>는 내부 스크롤바에 갇히며,
-              <strong>Sticky Tether</strong>는 페이지 스크롤 방향에 맞춰 1:1로 부드럽게 따라 움직이면서 현재 활성 항목을 화면 안에 유지합니다.
-            </p>
-            <div class="long-guide">
-              <strong>장문 섹션 테스트 구간 (#${numStr})</strong> — 이 섹션 안에서 계속 아래로 스크롤할 때 상단의 <code>기본 (Guard ON)</code>과 <code>Guard OFF</code>를 번갈아 눌러보세요. Guard가 켜져 있으면 <code>#${numStr}</code> 항목이 상단 경계에 멈춰 화면 밖으로 나가지 않습니다.
-            </div>
-            <div class="long-markers">
-              <span>+400px · 아래로 스크롤 중 (우측 Sticky Tether의 #${numStr} 위치를 확인하세요)</span>
-              <span>+800px · Guard ON 상태에서 #${numStr} 항목이 상단 경계에 고정됩니다</span>
-              <span>+1200px · 여기서 위로 살짝 스크롤하면 즉시 반대 방향으로 반응합니다</span>
-              <span>+1600px · 섹션 하단 도달</span>
-            </div>
+            <div class="min-sec-kicker">${g.group}</div>
+            <h3>${title}</h3>
+            <p>Minimal section block for comparing <strong>Unapplied</strong>, <strong>Inner Scroll</strong>, and <strong>Sticky Tether</strong> side-by-side.</p>
+            <div class="skeleton-line" style="width: 88%"></div>
+            <div class="skeleton-line" style="width: 64%"></div>
           `
-          sectionsContainer.appendChild(sec)
-          allSections.push(sec)
+          cmpArticles.appendChild(sec)
+          cmpSections.push({ id, title, el: sec })
 
-          for (const key of ['unapplied', 'inner', 'tether']) {
-            const ol = groupEls[key].querySelector('.toc-list')
+          for (const navEl of [cmpTocA, cmpTocB, cmpTocC]) {
+            const ol = navEl.querySelector(`ol[data-group="${g.group}"]`)
             const li = document.createElement('li')
             const a = document.createElement('a')
-            a.className = 'toc-item'
+            a.className = 'toc-link'
             a.href = `#${id}`
             a.dataset.id = id
-            a.dataset.label = `#${numStr} ${title}`
-            a.innerHTML = `
-              <span>${title}</span>
-              <span class="toc-num">${numStr}</span>
-            `
+            a.textContent = title
+            a.addEventListener('click', (e) => {
+              e.preventDefault()
+              vpCmp.scrollTo({ top: sec.offsetTop - 52, behavior: 'smooth' })
+            })
             li.appendChild(a)
             ol.appendChild(li)
           }
         }
       }
 
-      const state = {
+      const cmpState = {
         activeGuard: true,
-        topPadding: 20,
-        bottomPadding: 24,
-        offsetTop: 0,
-        innerAutoScroll: false,
-        xray: false,
-        lastScrollY: window.scrollY,
-        direction: 'down'
+        topPadding: 16,
+        bottomPadding: 20,
+        lastScrollTop: 0,
+        dir: 'down'
       }
 
-      const densitySlider = document.getElementById('opt-density')
-      const overflowInfo = document.getElementById('overflow-info')
+      let cmpTether = null
 
-      function ensureSidebarOverflow() {
-        const vh = window.innerHeight
-        const minRatio = Number(densitySlider.value) / 100
-        document.getElementById('val-density').textContent = `${densitySlider.value}%`
-
-        document.documentElement.style.setProperty('--toc-item-pad-y', '6px')
-        const baseHeight = sidebars.tether.offsetHeight
-        const targetHeight = Math.max(vh * minRatio, vh + 380)
-
-        if (baseHeight < targetHeight) {
-          const extraNeeded = targetHeight - baseHeight
-          const extraPerItem = Math.ceil(extraNeeded / (allSections.length * 2))
-          const newPadY = Math.min(26, 6 + extraPerItem)
-          document.documentElement.style.setProperty('--toc-item-pad-y', `${newPadY}px`)
-        }
-
-        const finalHeight = sidebars.tether.offsetHeight
-        const pct = Math.round((finalHeight / Math.max(1, vh)) * 100)
-        overflowInfo.textContent = `사이드바 ${finalHeight}px (${pct}% vh)`
-      }
-
-      let tetherInstance = null
-
-      function syncCssAndXRay() {
-        document.documentElement.style.setProperty(
-          '--top-padding',
-          `${state.topPadding}px`
-        )
-        document.documentElement.style.setProperty(
-          '--bottom-padding',
-          `${state.bottomPadding}px`
-        )
-        document.documentElement.style.setProperty(
-          '--offset-top',
-          `${state.offsetTop}px`
-        )
-
-        const topGuardY = HEADER_HEIGHT + state.topPadding + state.offsetTop
-        const xrayTop = document.getElementById('xray-top')
-        const xrayBottom = document.getElementById('xray-bottom')
-        xrayTop.style.top = `${topGuardY}px`
-        xrayBottom.style.bottom = `${state.bottomPadding}px`
-        document.getElementById('xray-top-label').textContent =
-          `topGuard: ${topGuardY}px`
-        document.getElementById('xray-bottom-label').textContent =
-          `bottomGuard: ${state.bottomPadding}px`
-      }
-
-      function mountOrRecreateTether() {
-        if (tetherInstance) tetherInstance.destroy()
-        syncCssAndXRay()
-        ensureSidebarOverflow()
-
-        tetherInstance = createStickyTether(sidebars.tether, {
-          headerHeight: HEADER_HEIGHT,
-          topPadding: state.topPadding,
-          bottomPadding: state.bottomPadding,
-          offsetTop: state.offsetTop,
-          activeSelector: state.activeGuard ? '[aria-current="location"]' : false
+      function mountCmpTether() {
+        if (cmpTether) cmpTether.destroy()
+        cmpTether = createStickyTether(cmpSidebarC, {
+          container: vpCmp,
+          headerHeight: 40,
+          topPadding: cmpState.topPadding,
+          bottomPadding: cmpState.bottomPadding,
+          activeSelector: cmpState.activeGuard ? '[aria-current="location"]' : false
         })
-
-        updateStatusStrip()
       }
 
-      let currentActiveId = allSections[0].id
+      function syncCmpScroll() {
+        const st = vpCmp.scrollTop
+        if (st > cmpState.lastScrollTop) cmpState.dir = 'down'
+        else if (st < cmpState.lastScrollTop) cmpState.dir = 'up'
+        cmpState.lastScrollTop = st
 
-      function updateActiveSection() {
-        const triggerLine = HEADER_HEIGHT + state.topPadding + 32
-        let nextActiveId = allSections[0].id
+        const vpRect = vpCmp.getBoundingClientRect()
+        const triggerY = vpRect.top + 40 + 48
+        let active = cmpSections[0]
 
-        for (const sec of allSections) {
-          if (sec.getBoundingClientRect().top <= triggerLine) {
-            nextActiveId = sec.id
+        for (const s of cmpSections) {
+          if (s.el.getBoundingClientRect().top <= triggerY) {
+            active = s
           }
         }
 
-        const changed = nextActiveId !== currentActiveId
-        currentActiveId = nextActiveId
-
-        for (const sec of allSections) {
-          if (sec.id === currentActiveId) {
-            sec.setAttribute('data-active-section', 'true')
-          } else {
-            sec.removeAttribute('data-active-section')
-          }
+        for (const s of cmpSections) {
+          s.el.dataset.active = String(s.id === active.id)
         }
 
-        let activeLabel = '#01'
-        for (const key of ['unapplied', 'inner', 'tether']) {
-          const links = tocContainers[key].querySelectorAll('.toc-item')
-          for (const link of links) {
-            const isActive = link.dataset.id === currentActiveId
-            link.classList.toggle('target-current', isActive)
-            if (isActive) {
-              link.setAttribute('aria-current', 'location')
-              activeLabel = link.dataset.label || currentActiveId
-            } else {
-              link.removeAttribute('aria-current')
-            }
-          }
+        for (const navEl of [cmpTocA, cmpTocB, cmpTocC]) {
+          navEl.querySelectorAll('.toc-link').forEach((a) => {
+            const isAct = a.dataset.id === active.id
+            a.classList.toggle('target-current', isAct)
+            if (isAct) a.setAttribute('aria-current', 'location')
+            else a.removeAttribute('aria-current')
+          })
         }
 
-        document.getElementById('status-content').textContent = activeLabel
+        document.getElementById('cmp-status-content').textContent = active.title
 
-        if (changed && state.innerAutoScroll) {
-          const activeInnerLink = tocContainers.inner.querySelector(
-            '[aria-current="location"]'
-          )
-          activeInnerLink?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
-        }
-      }
-
-      function isVisibleInBounds(el, topBound, bottomBound) {
-        if (!el) return false
-        const r = el.getBoundingClientRect()
-        return r.top >= topBound - 4 && r.bottom <= bottomBound + 4
-      }
-
-      function updateStatusStrip() {
-        const scrollY = window.scrollY
-        if (scrollY > state.lastScrollY) state.direction = 'down'
-        else if (scrollY < state.lastScrollY) state.direction = 'up'
-        state.lastScrollY = scrollY
-
-        const vh = window.innerHeight
-
-        // 1. Unapplied status (Strictly concise single-line)
-        const unappliedRect = sidebars.unapplied.getBoundingClientRect()
-        const statusUnapplied = document.getElementById('status-unapplied')
-        const ghostEl = document.getElementById('unapplied-ghost')
-
-        if (unappliedRect.bottom < HEADER_HEIGHT + 10) {
-          const offPx = Math.round(unappliedRect.bottom - HEADER_HEIGHT)
-          statusUnapplied.textContent = `사라짐 (${offPx}px)`
-          statusUnapplied.style.color = 'var(--danger)'
-          ghostEl.dataset.visible = 'true'
-          document.getElementById('ghost-offset').textContent = `${offPx}px`
+        // Apply A telemetry
+        const rectA = cmpSidebarA.getBoundingClientRect()
+        const offPx = Math.round(rectA.bottom - (vpRect.top + 40))
+        const statusA = document.getElementById('cmp-status-a')
+        const ghostA = document.getElementById('cmp-ghost-a')
+        if (offPx < 0) {
+          statusA.textContent = `Off-screen (${offPx}px)`
+          statusA.style.color = 'var(--danger)'
+          ghostA.dataset.visible = 'true'
+          document.getElementById('cmp-ghost-px').textContent = `${offPx}px`
         } else {
-          const activeEl = tocContainers.unapplied.querySelector(
-            '[aria-current="location"]'
-          )
-          const vis = isVisibleInBounds(activeEl, HEADER_HEIGHT, vh)
-          statusUnapplied.textContent = vis ? '활성 보임' : '하단 잘림'
-          statusUnapplied.style.color = vis ? 'var(--text-secondary)' : 'var(--warning)'
-          ghostEl.dataset.visible = 'false'
+          statusA.textContent = 'Visible'
+          statusA.style.color = 'var(--muted)'
+          ghostA.dataset.visible = 'false'
         }
 
-        // 2. Inner scroll status
-        const innerActive = tocContainers.inner.querySelector(
-          '[aria-current="location"]'
-        )
-        const innerRect = sidebars.inner.getBoundingClientRect()
-        const innerVis = isVisibleInBounds(innerActive, innerRect.top, innerRect.bottom)
-        const statusInner = document.getElementById('status-inner')
-        statusInner.textContent = innerVis ? '활성 보임' : '스크롤 밖'
-        statusInner.style.color = innerVis ? 'var(--text-secondary)' : 'var(--warning)'
+        // Apply B telemetry
+        const actB = cmpTocB.querySelector('[aria-current="location"]')
+        const rectB = cmpSidebarB.getBoundingClientRect()
+        const actBRect = actB?.getBoundingClientRect()
+        const visB =
+          actBRect && actBRect.top >= rectB.top && actBRect.bottom <= rectB.bottom
+        const statusB = document.getElementById('cmp-status-b')
+        statusB.textContent = visB ? 'Active Visible' : 'Hidden Below Scroll'
+        statusB.style.color = visB ? 'var(--muted)' : 'var(--warning)'
 
-        // 3. Sticky Tether status
-        const inlineTop = sidebars.tether.style.top
-        const baseTop = HEADER_HEIGHT + state.topPadding + state.offsetTop
-        const parsedTop = inlineTop ? Number.parseFloat(inlineTop) : baseTop
-        const delta = Math.round(baseTop - parsedTop)
-        const tetherActive = tocContainers.tether.querySelector(
-          '[aria-current="location"]'
-        )
-        const statusTether = document.getElementById('status-tether')
-
-        if (tetherActive) {
-          const aRect = tetherActive.getBoundingClientRect()
-          const clampedTop =
-            state.activeGuard && Math.abs(aRect.top - baseTop) <= 5 && delta > 0
-          const clampedBottom =
-            state.activeGuard &&
-            Math.abs(aRect.bottom - (vh - state.bottomPadding)) <= 5
-
-          if (clampedTop) {
-            statusTether.textContent = `상단 Guard · Δ${delta}px`
-            statusTether.style.color = 'var(--accent)'
-          } else if (clampedBottom) {
-            statusTether.textContent = `하단 Guard · Δ${delta}px`
-            statusTether.style.color = 'var(--purple)'
-          } else {
-            const arrow = state.direction === 'down' ? '↓' : '↑'
-            statusTether.textContent = `${arrow} 1:1 · Δ${delta}px`
-            statusTether.style.color = 'var(--success)'
-          }
-        }
+        // Apply C telemetry
+        const baseTop = 40 + cmpState.topPadding
+        const curTop = cmpSidebarC.style.top
+          ? Number.parseFloat(cmpSidebarC.style.top)
+          : baseTop
+        const delta = Math.round(baseTop - curTop)
+        const arrow = cmpState.dir === 'down' ? '↓' : '↑'
+        document.getElementById('cmp-status-c').textContent =
+          `${arrow} 1:1 · Δ ${delta}px`
       }
 
-      window.addEventListener(
+      vpCmp.addEventListener(
         'scroll',
         () => {
-          updateActiveSection()
-          if (tetherInstance) tetherInstance.update()
-          updateStatusStrip()
+          syncCmpScroll()
+          cmpTether?.update()
         },
         { passive: true }
       )
 
-      sidebars.inner.addEventListener('scroll', updateStatusStrip, { passive: true })
-      window.addEventListener('resize', mountOrRecreateTether)
-
-      // Controls & Presets
-      const optGuard = document.getElementById('opt-guard')
-      const optTopPad = document.getElementById('opt-top-padding')
-      const optBottomPad = document.getElementById('opt-bottom-padding')
-      const optOffsetTop = document.getElementById('opt-offset-top')
-
-      function updateRangeFill(input) {
-        const min = Number(input.min || 0)
-        const max = Number(input.max || 100)
-        const val = Number(input.value || 0)
-        const pct = Math.round(((val - min) / Math.max(1, max - min)) * 100)
-        input.style.setProperty('--progress', `${pct}%`)
-      }
-
-      function applyOptionsFromUI(presetName = null) {
-        state.activeGuard = optGuard.checked
-        state.topPadding = Number(optTopPad.value)
-        state.bottomPadding = Number(optBottomPad.value)
-        state.offsetTop = Number(optOffsetTop.value)
-
-        document.getElementById('val-top-padding').textContent = `${state.topPadding}px`
-        document.getElementById('val-bottom-padding').textContent =
-          `${state.bottomPadding}px`
-        document.getElementById('val-offset-top').textContent = `${state.offsetTop}px`
-
-        for (const r of [optTopPad, optBottomPad, optOffsetTop, densitySlider]) {
-          updateRangeFill(r)
-        }
-
-        document.querySelectorAll('.seg-btn[data-preset]').forEach((btn) => {
-          btn.setAttribute(
-            'aria-pressed',
-            btn.dataset.preset === presetName ? 'true' : 'false'
-          )
-        })
-
-        mountOrRecreateTether()
-      }
-
-      optGuard.addEventListener('change', () => applyOptionsFromUI())
-      optTopPad.addEventListener('input', () => applyOptionsFromUI())
-      optBottomPad.addEventListener('input', () => applyOptionsFromUI())
-      optOffsetTop.addEventListener('input', () => applyOptionsFromUI())
-      densitySlider.addEventListener('input', () => {
-        updateRangeFill(densitySlider)
-        ensureSidebarOverflow()
-        if (tetherInstance) tetherInstance.update()
-        updateStatusStrip()
-      })
-
-      const PRESETS = {
-        default: { activeGuard: true, topPadding: 20, bottomPadding: 24, offsetTop: 0 },
-        'no-guard': {
-          activeGuard: false,
-          topPadding: 20,
-          bottomPadding: 24,
-          offsetTop: 0
-        },
-        spacious: { activeGuard: true, topPadding: 64, bottomPadding: 72, offsetTop: 0 },
-        offset: { activeGuard: true, topPadding: 20, bottomPadding: 24, offsetTop: 48 }
-      }
-
-      document.querySelectorAll('.seg-btn[data-preset]').forEach((btn) => {
+      document.querySelectorAll('[data-cmp-preset]').forEach((btn) => {
         btn.addEventListener('click', () => {
-          const p = PRESETS[btn.dataset.preset]
-          if (!p) return
-          optGuard.checked = p.activeGuard
-          optTopPad.value = String(p.topPadding)
-          optBottomPad.value = String(p.bottomPadding)
-          optOffsetTop.value = String(p.offsetTop)
-          applyOptionsFromUI(btn.dataset.preset)
+          document.querySelectorAll('[data-cmp-preset]').forEach((b) => {
+            b.setAttribute('aria-pressed', String(b === btn))
+          })
+          const p = btn.dataset.cmpPreset
+          if (p === 'default') {
+            cmpState.activeGuard = true
+            cmpState.topPadding = 16
+            cmpState.bottomPadding = 20
+          } else if (p === 'no-guard') {
+            cmpState.activeGuard = false
+            cmpState.topPadding = 16
+            cmpState.bottomPadding = 20
+          } else if (p === 'wide') {
+            cmpState.activeGuard = true
+            cmpState.topPadding = 56
+            cmpState.bottomPadding = 56
+          }
+          mountCmpTether()
+          syncCmpScroll()
         })
       })
 
-      // Options Popover toggle
-      const btnOptions = document.getElementById('btn-options')
-      const popover = document.getElementById('options-popover')
-      btnOptions.addEventListener('click', (e) => {
-        e.stopPropagation()
-        const nextOpen = popover.dataset.open !== 'true'
-        popover.dataset.open = String(nextOpen)
-        btnOptions.setAttribute('aria-expanded', String(nextOpen))
-      })
-      document.addEventListener('click', (e) => {
-        if (!popover.contains(e.target) && e.target !== btnOptions) {
-          popover.dataset.open = 'false'
-          btnOptions.setAttribute('aria-expanded', 'false')
+      const btnCmpLong = document.getElementById('btn-cmp-long')
+      btnCmpLong.addEventListener('click', () => {
+        const sec6 = cmpSections[5].el
+        const next = sec6.dataset.long !== 'true'
+        sec6.dataset.long = String(next)
+        btnCmpLong.setAttribute('aria-pressed', String(next))
+        if (next) {
+          vpCmp.scrollTo({ top: sec6.offsetTop - 48, behavior: 'smooth' })
         }
       })
 
-      // Long Section (#10) Quick Jump / Toggle
-      const btnLongSec = document.getElementById('btn-long-sec')
-      btnLongSec.addEventListener('click', () => {
-        const sec10 = document.getElementById('section-10')
-        if (!sec10) return
-        sec10.dataset.long = 'true'
-        btnLongSec.setAttribute('aria-pressed', 'true')
-        sec10.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      mountCmpTether()
+      syncCmpScroll()
+
+      /* =====================================================================
+       * ROW 2 SETUP: Case 1 — Blog Article TOC (firejune.io style)
+       * ===================================================================== */
+      const BLOG_ITEMS = [
+        { title: '1. Why Sticky Sidebars Break', indent: 0 },
+        { title: '1.1 Viewport Overflow on Laptops', indent: 1 },
+        { title: '1.2 Double Scrollbar Anti-Pattern', indent: 1 },
+        { title: '2. Bi-Directional Delta Model', indent: 0 },
+        { title: '2.1 Tracking Scroll Direction', indent: 1 },
+        { title: '2.2 Re-Anchoring on Reversal', indent: 1 },
+        { title: '2.3 Eliminating Scroll Debt', indent: 1 },
+        { title: '3. Active Item Viewport Guard', indent: 0, long: true },
+        { title: '3.1 Top Boundary Clamping', indent: 1 },
+        { title: '3.2 Bottom Boundary Clamping', indent: 1 },
+        { title: '3.3 MutationObserver Integration', indent: 1 },
+        { title: '4. Smooth Clip-Path Indicator', indent: 0 },
+        { title: '4.1 Exponential Damping Loop', indent: 1 },
+        { title: '4.2 Reduced Motion Support', indent: 1 },
+        { title: '5. React & Vanilla Ergonomics', indent: 0 },
+        { title: '5.1 Zero-Dependency Footprint', indent: 1 },
+        { title: '5.2 Custom Container Support', indent: 1 },
+        { title: '6. Production Takeaways', indent: 0 }
+      ]
+
+      const vpBlog = document.getElementById('vp-blog')
+      const blogArticles = document.getElementById('blog-articles')
+      const blogTocList = document.getElementById('blog-toc-list')
+      const blogAside = document.getElementById('blog-aside')
+      const blogIndicator = document.getElementById('blog-indicator')
+      const blogSections = []
+
+      BLOG_ITEMS.forEach((item, i) => {
+        const id = `blog-sec-${i + 1}`
+        const sec = document.createElement('section')
+        sec.className = 'min-sec'
+        sec.id = id
+        if (item.long) sec.dataset.long = 'true'
+        sec.innerHTML = `
+          <div class="min-sec-kicker">Section ${i + 1}</div>
+          <h3>${item.title}</h3>
+          <p>
+            ${
+              item.long
+                ? 'This is an intentionally tall article section (1,150px). Scroll down through this section and watch the right-hand TOC clamp the active heading at the top boundary so it never escapes your view.'
+                : 'Minimal blog prose demonstrating firejune.io’s right-hand Table of Contents with an animated vertical indicator.'
+            }
+          </p>
+          <div class="skeleton-line" style="width: 92%"></div>
+          <div class="skeleton-line" style="width: 78%"></div>
+          <div class="skeleton-line" style="width: 55%"></div>
+        `
+        blogArticles.appendChild(sec)
+
+        const li = document.createElement('li')
+        const a = document.createElement('a')
+        a.className = 'blog-toc-item'
+        a.href = `#${id}`
+        a.dataset.id = id
+        a.dataset.indent = String(item.indent)
+        a.textContent = item.title
+        a.addEventListener('click', (e) => {
+          e.preventDefault()
+          vpBlog.scrollTo({ top: sec.offsetTop - 56, behavior: 'smooth' })
+        })
+        li.appendChild(a)
+        blogTocList.appendChild(li)
+        blogSections.push({ id, el: sec, link: a })
       })
 
-      sectionsContainer.addEventListener('click', (e) => {
-        const btn = e.target.closest('.btn-toggle-long')
-        if (!btn) return
-        const sec = document.getElementById(btn.dataset.target)
-        if (!sec) return
-        const nextLong = sec.dataset.long !== 'true'
-        sec.dataset.long = String(nextLong)
-        btn.textContent = nextLong ? '긴 섹션 축소' : '섹션 높이 확장'
-      })
+      let blogGuardOn = true
+      let blogTether = null
 
-      // Inner Scroll Auto-scroll toggle
-      const btnInnerAuto = document.getElementById('btn-inner-autoscroll')
-      btnInnerAuto.addEventListener('click', () => {
-        state.innerAutoScroll = !state.innerAutoScroll
-        btnInnerAuto.textContent = `Auto: ${state.innerAutoScroll ? 'ON' : 'OFF'}`
-        if (state.innerAutoScroll) {
-          tocContainers.inner
-            .querySelector('[aria-current="location"]')
-            ?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
-        }
-      })
-
-      // X-Ray Guard lines toggle
-      const btnXray = document.getElementById('btn-xray')
-      btnXray.addEventListener('click', () => {
-        state.xray = !state.xray
-        btnXray.setAttribute('aria-pressed', String(state.xray))
-        document.getElementById('xray-top').dataset.visible = String(state.xray)
-        document.getElementById('xray-bottom').dataset.visible = String(state.xray)
-      })
-
-      document.getElementById('btn-scroll-top').addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
-      })
-
-      document.getElementById('btn-theme').addEventListener('click', () => {
-        const html = document.documentElement
-        html.dataset.theme = html.dataset.theme === 'light' ? 'dark' : 'light'
-      })
-
-      // Auto-Scroll Tour
-      const btnAutotour = document.getElementById('btn-autotour')
-      let autoTourRaf = null
-      let autoTourDir = 1
-      let autoTourFrames = 0
-
-      function stopAutoTour() {
-        if (autoTourRaf) {
-          cancelAnimationFrame(autoTourRaf)
-          autoTourRaf = null
-        }
-        btnAutotour.dataset.active = 'false'
-        btnAutotour.textContent = '▶ 자동 스크롤'
+      function mountBlogTether() {
+        if (blogTether) blogTether.destroy()
+        blogTether = createStickyTether(blogAside, {
+          container: vpBlog,
+          headerHeight: 48,
+          topPadding: 24,
+          bottomPadding: 24,
+          activeSelector: blogGuardOn ? '[aria-current="location"]' : false
+        })
       }
 
-      function stepAutoTour() {
-        autoTourFrames += 1
-        if (autoTourFrames === 220) autoTourDir = -1
-        else if (autoTourFrames === 310) {
-          autoTourDir = 1
-          autoTourFrames = 0
+      function syncBlogScroll() {
+        const vpRect = vpBlog.getBoundingClientRect()
+        const triggerY = vpRect.top + 48 + 52
+        let active = blogSections[0]
+
+        for (const s of blogSections) {
+          if (s.el.getBoundingClientRect().top <= triggerY) {
+            active = s
+          }
         }
 
-        const maxScroll =
-          document.documentElement.scrollHeight - window.innerHeight - 4
-        if (window.scrollY >= maxScroll && autoTourDir > 0) {
-          autoTourDir = -1
-          autoTourFrames = 221
-        } else if (window.scrollY <= 0 && autoTourDir < 0) {
-          autoTourDir = 1
-          autoTourFrames = 0
+        for (const s of blogSections) {
+          if (s.id === active.id) {
+            s.link.setAttribute('aria-current', 'location')
+          } else {
+            s.link.removeAttribute('aria-current')
+          }
         }
 
-        window.scrollBy(0, autoTourDir * 4)
-        autoTourRaf = requestAnimationFrame(stepAutoTour)
+        // Update firejune.io clip-path indicator
+        const listRect = blogTocList.getBoundingClientRect()
+        const linkRect = active.link.getBoundingClientRect()
+        const topInset = Math.max(0, linkRect.top - listRect.top)
+        const bottomInset = Math.max(
+          0,
+          blogTocList.offsetHeight - topInset - linkRect.height
+        )
+        blogIndicator.style.clipPath = `inset(${topInset}px 0 ${bottomInset}px 0)`
+
+        const curTop = blogAside.style.top ? Number.parseFloat(blogAside.style.top) : 72
+        const delta = Math.round(72 - curTop)
+        document.getElementById('blog-telemetry').textContent =
+          `top: ${Math.round(curTop)}px · Δ ${delta}px`
       }
 
-      btnAutotour.addEventListener('click', () => {
-        if (autoTourRaf) {
-          stopAutoTour()
-        } else {
-          btnAutotour.dataset.active = 'true'
-          btnAutotour.textContent = '⏸ 정지'
-          autoTourFrames = 0
-          autoTourDir = 1
-          autoTourRaf = requestAnimationFrame(stepAutoTour)
-        }
-      })
-
-      window.addEventListener(
-        'wheel',
+      vpBlog.addEventListener(
+        'scroll',
         () => {
-          if (autoTourRaf) stopAutoTour()
+          syncBlogScroll()
+          blogTether?.update()
         },
         { passive: true }
       )
 
-      // Initial Boot
-      updateActiveSection()
-      applyOptionsFromUI('default')
+      const btnBlogGuard = document.getElementById('btn-blog-guard')
+      btnBlogGuard.addEventListener('click', () => {
+        blogGuardOn = !blogGuardOn
+        btnBlogGuard.setAttribute('aria-pressed', String(blogGuardOn))
+        btnBlogGuard.textContent = `Active Guard: ${blogGuardOn ? 'ON' : 'OFF'}`
+        mountBlogTether()
+        syncBlogScroll()
+      })
+
+      mountBlogTether()
+      syncBlogScroll()
+
+      /* =====================================================================
+       * ROW 3 SETUP: Case 2 — Documentation Left Sidebar LNB (oris style)
+       * ===================================================================== */
+      const DOCS_MENU = [
+        {
+          category: 'Getting Started',
+          items: [
+            { title: 'Architecture Overview', method: 'DOC' },
+            { title: 'Environment & Sandbox', method: 'DOC' },
+            { title: 'Idempotency Keys', method: 'DOC' }
+          ]
+        },
+        {
+          category: 'Authentication & OAuth',
+          items: [
+            { title: 'Issue Access Token', method: 'POST' },
+            { title: 'Rotate Signing Key', method: 'PUT' },
+            { title: 'Verify Session Claims', method: 'GET' }
+          ]
+        },
+        {
+          category: 'Accounts & Ledgers',
+          items: [
+            { title: 'List Core Accounts', method: 'GET' },
+            { title: 'Create Sub-Ledger', method: 'POST' },
+            { title: 'Real-Time Balance', method: 'GET' },
+            { title: 'Freeze Account State', method: 'PATCH' }
+          ]
+        },
+        {
+          category: 'Transaction Pipeline',
+          items: [
+            { title: 'Submit Wire Transfer', method: 'POST' },
+            { title: 'Batch Settlement Run', method: 'POST' },
+            { title: 'Reverse Transaction', method: 'POST' },
+            { title: 'Query Settlement Log', method: 'GET' }
+          ]
+        },
+        {
+          category: 'Webhook Subscriptions',
+          items: [
+            { title: 'Register Endpoint', method: 'POST' },
+            { title: 'Replay Failed Event', method: 'POST' },
+            { title: 'Verify HMAC Signature', method: 'DOC' }
+          ]
+        },
+        {
+          category: 'Error Codes & Quotas',
+          items: [
+            { title: 'Rate Limit Headers', method: 'DOC' },
+            { title: 'Standard Error Schema', method: 'DOC' },
+            { title: 'Audit Trail Export', method: 'GET' }
+          ]
+        }
+      ]
+
+      const vpDocs = document.getElementById('vp-docs')
+      const docsLnb = document.getElementById('docs-lnb')
+      const docsArticles = document.getElementById('docs-articles')
+      const docsEntries = []
+      let docsIdx = 0
+
+      for (const group of DOCS_MENU) {
+        const secWrap = document.createElement('div')
+        secWrap.className = 'lnb-section'
+        secWrap.dataset.open = 'true'
+
+        const btn = document.createElement('button')
+        btn.type = 'button'
+        btn.className = 'lnb-group-btn'
+        btn.innerHTML = `<span>${group.category}</span><span class="lnb-chevron">▼</span>`
+        btn.addEventListener('click', () => {
+          secWrap.dataset.open = secWrap.dataset.open === 'true' ? 'false' : 'true'
+          docsTether?.update()
+          syncDocsScroll()
+        })
+
+        const ul = document.createElement('ul')
+        ul.className = 'lnb-sublist'
+
+        for (const item of group.items) {
+          docsIdx += 1
+          const id = `docs-ep-${docsIdx}`
+
+          const li = document.createElement('li')
+          const a = document.createElement('a')
+          a.className = 'lnb-link'
+          a.href = `#${id}`
+          a.dataset.id = id
+          a.innerHTML = `
+            <span>${item.title}</span>
+            <span class="method-tag">${item.method}</span>
+          `
+          a.addEventListener('click', (e) => {
+            e.preventDefault()
+            vpDocs.scrollTo({ top: artSec.offsetTop - 56, behavior: 'smooth' })
+          })
+          li.appendChild(a)
+          ul.appendChild(li)
+
+          const artSec = document.createElement('section')
+          artSec.className = 'min-sec'
+          artSec.id = id
+          artSec.innerHTML = `
+            <div class="min-sec-kicker">${group.category} · ${item.method}</div>
+            <h3>${item.title}</h3>
+            <p>Endpoint specification and request/response schema for <strong>${item.title}</strong>. Expand or collapse left sidebar categories to see automatic height recalculation.</p>
+            <div class="skeleton-line" style="width: 85%"></div>
+            <div class="skeleton-line" style="width: 65%"></div>
+          `
+          docsArticles.appendChild(artSec)
+          docsEntries.push({ id, el: artSec, link: a })
+        }
+
+        secWrap.appendChild(btn)
+        secWrap.appendChild(ul)
+        docsLnb.appendChild(secWrap)
+      }
+
+      const docsTether = createStickyTether(docsLnb, {
+        container: vpDocs,
+        headerHeight: 48,
+        topPadding: 20,
+        bottomPadding: 24
+      })
+
+      function syncDocsScroll() {
+        const vpRect = vpDocs.getBoundingClientRect()
+        const triggerY = vpRect.top + 48 + 52
+        let active = docsEntries[0]
+
+        for (const d of docsEntries) {
+          if (d.el.getBoundingClientRect().top <= triggerY) {
+            active = d
+          }
+        }
+
+        for (const d of docsEntries) {
+          if (d.id === active.id) {
+            d.link.setAttribute('aria-current', 'page')
+          } else {
+            d.link.removeAttribute('aria-current')
+          }
+        }
+
+        const curTop = docsLnb.style.top ? Number.parseFloat(docsLnb.style.top) : 68
+        const delta = Math.round(68 - curTop)
+        document.getElementById('docs-telemetry').textContent =
+          `LNB: ${docsLnb.offsetHeight}px · Δ ${delta}px`
+      }
+
+      vpDocs.addEventListener(
+        'scroll',
+        () => {
+          syncDocsScroll()
+          docsTether.update()
+        },
+        { passive: true }
+      )
+
+      document.getElementById('btn-docs-expand-all').addEventListener('click', () => {
+        const allSecs = docsLnb.querySelectorAll('.lnb-section')
+        const anyClosed = Array.from(allSecs).some((s) => s.dataset.open === 'false')
+        allSecs.forEach((s) => {
+          s.dataset.open = String(anyClosed)
+        })
+        docsTether.update()
+        syncDocsScroll()
+      })
+
+      syncDocsScroll()
+
+      /* =====================================================================
+       * ROW 4 SETUP: Case 3 — Report Analytics Drawer (hmg-esm style)
+       * ===================================================================== */
+      const ESM_DOMAINS = [
+        {
+          name: '01. Cloud Infrastructure & Kubernetes',
+          y24: 36.4,
+          y25: 42.0,
+          y26: 48.2,
+          yoy: '+14.8%',
+          si: 62,
+          sm: 38
+        },
+        {
+          name: '02. AI & Enterprise Data Platform',
+          y24: 28.1,
+          y25: 35.5,
+          y26: 44.6,
+          yoy: '+25.6%',
+          si: 74,
+          sm: 26
+        },
+        {
+          name: '03. Connected Vehicle Telemetry',
+          y24: 31.0,
+          y25: 33.8,
+          y26: 37.9,
+          yoy: '+12.1%',
+          si: 55,
+          sm: 45
+        },
+        {
+          name: '04. Global ERP & Core Finance',
+          y24: 40.2,
+          y25: 39.1,
+          y26: 36.8,
+          yoy: '-5.9%',
+          si: 34,
+          sm: 66
+        },
+        {
+          name: '05. Smart Factory & MES Pipeline',
+          y24: 22.4,
+          y25: 26.9,
+          y26: 31.2,
+          yoy: '+16.0%',
+          si: 68,
+          sm: 32
+        },
+        {
+          name: '06. Zero-Trust Security & IAM',
+          y24: 18.5,
+          y25: 21.2,
+          y26: 24.7,
+          yoy: '+16.5%',
+          si: 58,
+          sm: 42
+        },
+        {
+          name: '07. Digital Showroom & Commerce',
+          y24: 19.8,
+          y25: 20.4,
+          y26: 22.1,
+          yoy: '+8.3%',
+          si: 51,
+          sm: 49
+        },
+        {
+          name: '08. Supply Chain & Logistics Control',
+          y24: 24.0,
+          y25: 23.2,
+          y26: 21.9,
+          yoy: '-5.6%',
+          si: 40,
+          sm: 60
+        },
+        {
+          name: '09. Autonomous Driving Sim Cluster',
+          y24: 15.2,
+          y25: 19.0,
+          y26: 23.8,
+          yoy: '+25.3%',
+          si: 79,
+          sm: 21
+        },
+        {
+          name: '10. Customer Data & CRM Suite',
+          y24: 14.6,
+          y25: 15.8,
+          y26: 17.2,
+          yoy: '+8.9%',
+          si: 46,
+          sm: 54
+        }
+      ]
+
+      const vpEsm = document.getElementById('vp-esm')
+      const esmTbody = document.getElementById('esm-tbody')
+      const esmDrawer = document.getElementById('esm-drawer')
+
+      function renderEsmDrawer(domain) {
+        document.getElementById('esm-selected-name').textContent = domain.name
+        document.getElementById('esm-kpi-total').textContent = `$${domain.y26.toFixed(1)}M`
+        const yoyEl = document.getElementById('esm-kpi-yoy')
+        yoyEl.textContent = domain.yoy
+        yoyEl.style.color = domain.yoy.startsWith('+')
+          ? 'var(--danger)'
+          : 'var(--accent)'
+        document.getElementById('esm-kpi-si').textContent = `${domain.si}%`
+        document.getElementById('esm-kpi-sm').textContent = `${domain.sm}%`
+
+        const barsEl = document.getElementById('esm-bars')
+        const years = [
+          { y: 'FY22', val: +(domain.y24 * 0.78).toFixed(1) },
+          { y: 'FY23', val: +(domain.y24 * 0.89).toFixed(1) },
+          { y: 'FY24', val: domain.y24 },
+          { y: 'FY25', val: domain.y25 },
+          { y: 'FY26', val: domain.y26 }
+        ]
+        barsEl.innerHTML = years
+          .map((item) => {
+            const totalW = Math.min(100, Math.round((item.val / 52) * 100))
+            const siW = Math.round((totalW * domain.si) / 100)
+            const smW = totalW - siW
+            return `
+              <div class="bar-row">
+                <span>${item.y}</span>
+                <div class="bar-track">
+                  <div class="bar-si" style="width: ${siW}%"></div>
+                  <div class="bar-sm" style="width: ${smW}%"></div>
+                </div>
+                <span>$${item.val}M</span>
+              </div>
+            `
+          })
+          .join('')
+
+        const subEl = document.getElementById('esm-subdomains')
+        const subs = [
+          { label: 'Core Cluster Compute', share: 34 },
+          { label: 'Managed Storage & Backup', share: 22 },
+          { label: 'Network Ingress / Egress', share: 16 },
+          { label: 'Observability & Tracing', share: 12 },
+          { label: 'DR Multi-Region Standby', share: 10 },
+          { label: 'Other Shared Services', share: 6 }
+        ]
+        subEl.innerHTML = subs
+          .map(
+            (s) => `
+            <div class="bar-row" style="grid-template-columns: 1fr 80px 42px">
+              <span style="color: var(--text-secondary)">${s.label}</span>
+              <div class="bar-track">
+                <div class="bar-si" style="width: ${s.share * 2.2}%"></div>
+              </div>
+              <span>${s.share}%</span>
+            </div>
+          `
+          )
+          .join('')
+      }
+
+      ESM_DOMAINS.forEach((d, idx) => {
+        const categories = [
+          { cat: 'SI (System Integration)', mult: d.si / 100 },
+          { cat: 'SM (System Maintenance)', mult: d.sm / 100 },
+          { cat: 'TOTAL', mult: 1 }
+        ]
+
+        categories.forEach((c, cIdx) => {
+          const tr = document.createElement('tr')
+          tr.className = 'esm-row'
+          tr.dataset.domainIdx = String(idx)
+          if (idx === 0) tr.dataset.selected = 'true'
+
+          const v24 = (d.y24 * c.mult).toFixed(1)
+          const v25 = (d.y25 * c.mult).toFixed(1)
+          const v26 = (d.y26 * c.mult).toFixed(1)
+
+          tr.innerHTML = `
+            <td>${cIdx === 0 ? `<span class="esm-domain-name">${d.name}</span>` : ''}</td>
+            <td style="${c.cat === 'TOTAL' ? 'font-weight: 700; color: var(--text)' : ''}">${c.cat}</td>
+            <td>$${v24}M</td>
+            <td>$${v25}M</td>
+            <td style="font-weight: 600; color: var(--text)">$${v26}M</td>
+            <td style="color: ${d.yoy.startsWith('+') ? 'var(--danger)' : 'var(--accent)'}">${cIdx === 2 ? d.yoy : ''}</td>
+          `
+          tr.addEventListener('click', () => {
+            esmTbody.querySelectorAll('.esm-row').forEach((r) => {
+              r.dataset.selected = String(r.dataset.domainIdx === String(idx))
+            })
+            renderEsmDrawer(d)
+          })
+          esmTbody.appendChild(tr)
+        })
+      })
+
+      renderEsmDrawer(ESM_DOMAINS[0])
+
+      // Report Drawer uses pure bi-directional scroll tethering (activeSelector: false)
+      const esmTether = createStickyTether(esmDrawer, {
+        container: vpEsm,
+        headerHeight: 48,
+        topPadding: 20,
+        bottomPadding: 24,
+        activeSelector: false
+      })
+
+      vpEsm.addEventListener(
+        'scroll',
+        () => {
+          esmTether.update()
+          const curTop = esmDrawer.style.top
+            ? Number.parseFloat(esmDrawer.style.top)
+            : 68
+          const delta = Math.round(68 - curTop)
+          document.getElementById('esm-telemetry').textContent =
+            `Drawer: 1:1 · Δ ${delta}px`
+        },
+        { passive: true }
+      )
     </script>
   </body>
 </html>

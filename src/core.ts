@@ -157,8 +157,11 @@ export function createStickyTether(
       return
     }
 
-    // Parent has not reached the sticky threshold yet
-    const parentTop = parent.getBoundingClientRect().top
+    // Parent has not reached the sticky threshold yet (measured relative to scroll container)
+    const containerTop = isWindow
+      ? 0
+      : (scrollTarget as HTMLElement).getBoundingClientRect().top
+    const parentTop = parent.getBoundingClientRect().top - containerTop
     if (parentTop - stickyTop >= 0) {
       el.style.top = ''
       state.isSticky = false

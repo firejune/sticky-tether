@@ -209,4 +209,33 @@ describe('sticky-tether', () => {
       root.unmount()
     })
   })
+
+  test('supports custom HTMLElement scroll container positioned down the page', () => {
+    const scrollBox = document.createElement('div')
+    const parent = document.createElement('div')
+    const sticky = document.createElement('aside')
+    setOffsetHeight(scrollBox, 600)
+    setOffsetHeight(sticky, 1000)
+
+    // Scroll container sits at y=800 in the window, parent has scrolled 30px past container top
+    mockRect(scrollBox, { top: 800, height: 600 })
+    mockRect(parent, { top: 770 })
+    parent.appendChild(sticky)
+    scrollBox.appendChild(parent)
+    document.body.appendChild(scrollBox)
+
+    const tether = createStickyTether(sticky, {
+      container: scrollBox,
+      headerHeight: 40,
+      topPadding: 20,
+      bottomPadding: 20
+    })
+
+    scrollBox.scrollTop = 120
+    scrollBox.dispatchEvent(new Event('scroll'))
+    // stickyTop = 60, delta = 120 -> top = 60 - 120 = -60px
+    expect(sticky.style.top).toBe('-60px')
+
+    tether.destroy()
+  })
 })
