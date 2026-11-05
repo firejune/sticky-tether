@@ -1,0 +1,86 @@
+{
+  "name": "sticky-tether",
+  "version": "0.1.0",
+  "description": "Make rigid position: sticky flexible. Bi-directional scroll tethering with active-item viewport guard — no nested scrollbars.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./core": {
+      "types": "./dist/core.d.ts",
+      "import": "./dist/core.js",
+      "require": "./dist/core.cjs"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "import": "./dist/react.js",
+      "require": "./dist/react.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "demo",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "demo": "npm run build && npx --yes serve -l 5190 .",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "sticky",
+    "tether",
+    "scroll",
+    "sidebar",
+    "toc",
+    "table-of-contents",
+    "react",
+    "hook",
+    "useTether",
+    "useStickyTether",
+    "bi-directional-scroll"
+  ],
+  "author": "firejune <firejune@gmail.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "happy-dom": "^20.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.0",
+    "vitest": "^4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/firejune/sticky-tether.git"
+  },
+  "bugs": {
+    "url": "https://github.com/firejune/sticky-tether/issues"
+  },
+  "homepage": "https://github.com/firejune/sticky-tether#readme",
+  "engines": {
+    "node": ">=18"
+  }
+}
