@@ -4,9 +4,8 @@
 
 <p align="center">
   <a href="https://www.npmjs.com/package/sticky-tether"><img src="https://img.shields.io/npm/v/sticky-tether?style=flat-square&color=38BDF8" alt="npm version" /></a>
-  <img src="https://img.shields.io/badge/dependencies-zero-0284C7.svg?style=flat-square" alt="Zero Dependencies" />
-  <img src="https://img.shields.io/badge/targets-core%20%C2%B7%20react-475569.svg?style=flat-square" alt="Targets: Core &amp; React" />
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-334155.svg?style=flat-square" alt="MIT License" /></a>
+  <a href="https://www.npmjs.com/package/sticky-tether"><img src="https://img.shields.io/npm/dm/sticky-tether?style=flat-square&color=0284C7" alt="npm downloads" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/npm/l/sticky-tether?style=flat-square&color=475569" alt="license" /></a>
 </p>
 
 <p align="center">
