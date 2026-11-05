@@ -79,7 +79,7 @@
   "bugs": {
     "url": "https://github.com/firejune/sticky-tether/issues"
   },
-  "homepage": "https://labs.firejune.com/sticky-tether/",
+  "homepage": "https://firejune.github.io/sticky-tether/",
   "engines": {
     "node": ">=18"
   }

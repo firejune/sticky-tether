@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="../../README.md">English</a> · <strong>한국어</strong> · <a href="https://labs.firejune.com/sticky-tether/"><strong>라이브 데모 ↗</strong></a>
+  <a href="../../README.md">English</a> · <strong>한국어</strong> · <a href="https://firejune.github.io/sticky-tether/"><strong>라이브 데모 ↗</strong></a>
 </p>
 
 뷰포트(`100vh`)보다 긴 **스티키 사이드바, 플로팅 아코디언 메뉴, 목차(`On This Page` TOC) 패널**에서 내부 이중 스크롤바(`overflow-y: auto`)를 제거하고 브라우저 단일 스크롤과 부드럽게 연동하는 제로 디펜던시 라이브러리다. **Vanilla JS (`sticky-tether/core`)** 와 **React (`sticky-tether`)** 를 모두 지원한다.
