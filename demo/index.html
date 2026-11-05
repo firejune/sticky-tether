@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sticky-tether — Interactive Showcase & Real-World Cases</title>
+    <title>sticky-tether — Interactive Showcase</title>
     <style>
       :root {
         color-scheme: dark light;
@@ -123,7 +123,9 @@
         text-decoration: none;
         padding: 5px 10px;
         border-radius: 6px;
-        transition: color 120ms ease, background 120ms ease;
+        transition:
+          color 120ms ease,
+          background 120ms ease;
       }
 
       .jump-link:hover {
@@ -302,7 +304,6 @@
         max-height: 740px;
         overflow-y: auto;
         position: relative;
-        scroll-behavior: smooth;
 
         /* MANDATORY: scrollbar-color and scrollbar-width with CSS variables */
         --scrollbar-thumb: var(--color-neutral-70);
@@ -387,21 +388,22 @@
         white-space: nowrap;
       }
 
+      /* CRITICAL: align-items: stretch so .cmp-col stretches to full content height */
       .cmp-grid {
         display: grid;
         grid-template-columns: 4fr 2fr 2fr 2fr;
-        align-items: start;
+        align-items: stretch;
       }
 
       .cmp-content {
-        padding: 20px 28px 120px 24px;
+        padding: 16px 28px 280px 24px;
         min-width: 0;
       }
 
       .min-sec {
-        padding: 20px 0;
+        padding: 22px 0;
         border-bottom: 1px solid var(--border);
-        min-height: 210px;
+        min-height: 220px;
       }
 
       .min-sec[data-long='true'] {
@@ -440,21 +442,19 @@
 
       .cmp-col {
         border-left: 1px solid var(--border);
-        padding: 0 14px;
+        padding: 16px 14px 20px;
         min-width: 0;
-        min-height: 100%;
+        position: relative;
       }
 
       .cmp-sidebar {
-        min-height: 1280px;
-        padding: 16px 0 24px;
+        padding: 0;
       }
 
       .cmp-sidebar-inner {
         position: sticky;
         top: 56px;
         max-height: calc(740px - 56px - 20px);
-        min-height: 0;
         overflow-y: auto;
         --scrollbar-thumb: var(--color-neutral-70);
         --scrollbar-track: var(--color-neutral-90);
@@ -509,10 +509,11 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 11px 10px;
+        padding: 12px 10px;
         margin-left: -1px;
         border-left: 2px solid transparent;
         font-size: 12px;
+        line-height: 1.35;
         color: var(--text-secondary);
         text-decoration: none;
         white-space: nowrap;
@@ -532,7 +533,7 @@
       }
 
       /* =====================================================================
-       * ROW 2: Case 1 — Blog Article TOC (firejune.io style)
+       * ROW 2: Case 1 — Blog (Right TOC)
        * ===================================================================== */
       .blog-header {
         position: sticky;
@@ -551,17 +552,21 @@
       .blog-layout {
         max-width: 1080px;
         margin: 0 auto;
-        padding: 28px 32px 120px;
+        padding: 24px 32px 260px;
         display: grid;
         grid-template-columns: minmax(0, 1fr) 260px;
         gap: 56px;
-        align-items: start;
+        align-items: stretch;
+      }
+
+      .blog-aside-col {
+        min-width: 0;
+        position: relative;
       }
 
       .blog-aside {
         position: sticky;
         top: 72px;
-        min-height: 1280px;
       }
 
       .blog-toc-heading {
@@ -596,8 +601,9 @@
 
       .blog-toc-item {
         display: block;
-        padding: 12px 12px;
+        padding: 13px 12px;
         font-size: 12.5px;
+        line-height: 1.35;
         color: var(--text-secondary);
         text-decoration: none;
         transition: color 120ms ease;
@@ -618,7 +624,7 @@
       }
 
       /* =====================================================================
-       * ROW 3: Case 2 — Documentation Left Sidebar LNB (oris style)
+       * ROW 3: Case 2 — Docs (Left Accordion Sidebar)
        * ===================================================================== */
       .docs-header {
         position: sticky;
@@ -637,26 +643,31 @@
       .docs-layout {
         display: grid;
         grid-template-columns: 270px minmax(0, 1fr);
-        align-items: start;
+        align-items: stretch;
       }
 
       .docs-lnb-col {
         border-right: 1px solid var(--border);
-        padding: 0 16px;
-        min-height: 100%;
+        padding: 20px 16px 24px;
+        min-width: 0;
+        position: relative;
       }
 
       .docs-lnb {
         position: sticky;
         top: 68px;
-        min-height: 1280px;
-        padding: 16px 0 28px;
       }
 
       .lnb-section {
         margin-bottom: 10px;
         border-bottom: 1px solid var(--border);
         padding-bottom: 8px;
+      }
+
+      .lnb-section:last-child {
+        margin-bottom: 0;
+        border-bottom: none;
+        padding-bottom: 0;
       }
 
       .lnb-group-btn {
@@ -666,7 +677,7 @@
         color: var(--text);
         font-size: 12.5px;
         font-weight: 600;
-        padding: 8px 8px;
+        padding: 9px 8px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -702,9 +713,10 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 9px 10px;
+        padding: 11px 10px;
         border-radius: 6px;
         font-size: 12px;
+        line-height: 1.35;
         color: var(--text-secondary);
         text-decoration: none;
       }
@@ -731,13 +743,13 @@
       }
 
       .docs-main {
-        padding: 24px 36px 120px;
+        padding: 20px 36px 260px;
       }
 
       /* =====================================================================
-       * ROW 4: Case 3 — Enterprise Report & Analytics Drawer (hmg-esm style)
+       * ROW 4: Case 3 — Chart (Table + Right Chart Drawer)
        * ===================================================================== */
-      .esm-header {
+      .chart-header {
         position: sticky;
         top: 0;
         z-index: 40;
@@ -751,25 +763,25 @@
         font-size: 13px;
       }
 
-      .esm-layout {
+      .chart-layout {
         display: grid;
         grid-template-columns: minmax(0, 1fr) 380px;
         align-items: stretch;
       }
 
-      .esm-table-wrap {
-        padding: 20px 24px 120px;
+      .chart-table-wrap {
+        padding: 20px 24px 220px;
         min-width: 0;
       }
 
-      .esm-table {
+      .chart-table {
         width: 100%;
         border-collapse: collapse;
         font-size: 12.5px;
         font-variant-numeric: tabular-nums;
       }
 
-      .esm-table th {
+      .chart-table th {
         text-align: left;
         padding: 10px 12px;
         font-size: 11px;
@@ -780,52 +792,51 @@
         background: var(--bg-subtle);
       }
 
-      .esm-table td {
-        padding: 12px;
+      .chart-table td {
+        padding: 14px 12px;
         border-bottom: 1px solid var(--border);
         color: var(--text-secondary);
       }
 
-      .esm-row {
+      .chart-row {
         cursor: pointer;
         transition: background 100ms ease;
       }
 
-      .esm-row:hover td {
+      .chart-row:hover td {
         background: var(--bg-subtle);
       }
 
-      .esm-row[data-selected='true'] td {
+      .chart-row[data-selected='true'] td {
         background: var(--accent-soft);
         color: var(--text);
       }
 
-      .esm-domain-name {
+      .chart-group-name {
         font-weight: 600;
         color: var(--text);
       }
 
-      .esm-drawer-track {
+      .chart-drawer-track {
         border-left: 1px solid var(--border);
         background: var(--bg-subtle);
-        padding: 0 22px;
+        padding: 20px 22px 24px;
+        position: relative;
       }
 
-      .esm-drawer {
+      .chart-drawer {
         position: sticky;
         top: 68px;
-        min-height: 1280px;
-        padding: 20px 0 32px;
         display: flex;
         flex-direction: column;
-        gap: 20px;
+        gap: 18px;
       }
 
       .drawer-card {
         background: var(--bg-frame);
         border: 1px solid var(--border);
         border-radius: 8px;
-        padding: 16px;
+        padding: 18px;
       }
 
       .drawer-card-title {
@@ -847,7 +858,7 @@
       }
 
       .kpi-box {
-        padding: 10px 12px;
+        padding: 12px;
         background: var(--bg-subtle);
         border-radius: 6px;
       }
@@ -870,8 +881,12 @@
         align-items: center;
         gap: 10px;
         font-size: 11.5px;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
         font-variant-numeric: tabular-nums;
+      }
+
+      .bar-row:last-child {
+        margin-bottom: 0;
       }
 
       .bar-track {
@@ -882,12 +897,12 @@
         display: flex;
       }
 
-      .bar-si {
+      .bar-primary {
         background: var(--accent);
         height: 100%;
       }
 
-      .bar-sm {
+      .bar-secondary {
         background: var(--purple);
         height: 100%;
       }
@@ -903,10 +918,10 @@
         </a>
 
         <nav class="page-links" aria-label="Showcase Sections">
-          <a href="#row-comparison" class="jump-link">01. Side-by-Side Comparison</a>
-          <a href="#row-blog" class="jump-link">02. Case 1: Blog TOC (firejune.io)</a>
-          <a href="#row-docs" class="jump-link">03. Case 2: Docs Sidebar (oris)</a>
-          <a href="#row-report" class="jump-link">04. Case 3: Report Drawer (hmg-esm)</a>
+          <a href="#row-comparison" class="jump-link">01. Comparison</a>
+          <a href="#row-blog" class="jump-link">02. Case 1: Blog</a>
+          <a href="#row-docs" class="jump-link">03. Case 2: Docs</a>
+          <a href="#row-chart" class="jump-link">04. Case 3: Chart</a>
           <button type="button" class="mini-btn" id="btn-theme">Theme</button>
         </nav>
       </div>
@@ -923,7 +938,7 @@
             <h2 class="row-title">3-Sidebar Scroll UX Comparison (4:2:2:2)</h2>
           </div>
           <p class="row-subtitle">
-            Scroll inside the frame below — each sidebar is 1,280px tall inside a 740px viewport.
+            Scroll down and up inside the frame — Apply C glides 1:1 in both directions and locks its bottom edge cleanly inside the viewport.
           </p>
         </div>
 
@@ -932,24 +947,24 @@
             <div class="browser-dots">
               <span></span><span></span><span></span>
             </div>
-            <div class="browser-url">https://sticky-tether.dev/comparison</div>
+            <div class="browser-url">https://example.com/comparison</div>
             <div class="toolbar-controls">
               <div class="seg-group" role="group" aria-label="Tether Presets">
                 <button
                   type="button"
                   class="seg-btn"
-                  data-cmp-preset="default"
+                  data-cmp-preset="bi-directional"
                   aria-pressed="true"
                 >
-                  Default (Guard ON)
+                  Bi-Directional (Bottom Lock)
                 </button>
                 <button
                   type="button"
                   class="seg-btn"
-                  data-cmp-preset="no-guard"
+                  data-cmp-preset="active-guard"
                   aria-pressed="false"
                 >
-                  Guard OFF
+                  + Active Item Guard
                 </button>
                 <button
                   type="button"
@@ -957,14 +972,14 @@
                   data-cmp-preset="wide"
                   aria-pressed="false"
                 >
-                  Wide Padding (56px)
+                  Wide Padding (48px)
                 </button>
               </div>
               <button
                 type="button"
                 class="mini-btn"
                 id="btn-cmp-long"
-                aria-pressed="true"
+                aria-pressed="false"
               >
                 Long Section (#06)
               </button>
@@ -1039,16 +1054,16 @@
       </section>
 
       <!-- ===================================================================
-       * ROW 2: Case 1 — Blog Article TOC (firejune.io reference)
+       * ROW 2: Case 1 — Blog
        * =================================================================== -->
       <section class="row-section" id="row-blog">
         <div class="row-header">
           <div class="row-title-group">
-            <span class="row-kicker">Row 02 · Case 1 (firejune.io)</span>
-            <h2 class="row-title">Blog Article Table of Contents with Animated Indicator</h2>
+            <span class="row-kicker">Row 02 · Case 1: Blog</span>
+            <h2 class="row-title">Blog Article Table of Contents</h2>
           </div>
           <p class="row-subtitle">
-            Replicates firejune.io’s right-hand “On this page” TOC with smooth clip-path indicator and active-item viewport guard.
+            Right-hand “On this page” TOC with smooth clip-path indicator and active-item viewport guard.
           </p>
         </div>
 
@@ -1057,7 +1072,7 @@
             <div class="browser-dots">
               <span></span><span></span><span></span>
             </div>
-            <div class="browser-url">https://firejune.io/blog/sticky-tether-architecture</div>
+            <div class="browser-url">https://example.com/blog/sticky-tether</div>
             <div class="toolbar-controls">
               <button
                 type="button"
@@ -1079,42 +1094,44 @@
 
           <div class="browser-viewport" id="vp-blog">
             <div class="blog-header">
-              <strong>firejune.io</strong>
+              <strong>Engineering Blog</strong>
               <span style="color: var(--muted); font-size: 12px">
-                Engineering Notes · 8 min read
+                Article · 8 min read
               </span>
             </div>
 
             <div class="blog-layout">
               <article id="blog-articles"></article>
 
-              <aside class="blog-aside" id="blog-aside">
-                <div class="blog-toc-heading">On this page</div>
-                <div class="blog-toc-track">
-                  <span
-                    class="blog-toc-indicator"
-                    id="blog-indicator"
-                    aria-hidden="true"
-                  ></span>
-                  <ol class="blog-toc-list" id="blog-toc-list"></ol>
-                </div>
-              </aside>
+              <div class="blog-aside-col">
+                <aside class="blog-aside" id="blog-aside">
+                  <div class="blog-toc-heading">On this page</div>
+                  <div class="blog-toc-track">
+                    <span
+                      class="blog-toc-indicator"
+                      id="blog-indicator"
+                      aria-hidden="true"
+                    ></span>
+                    <ol class="blog-toc-list" id="blog-toc-list"></ol>
+                  </div>
+                </aside>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       <!-- ===================================================================
-       * ROW 3: Case 2 — Documentation Left Sidebar LNB (oris reference)
+       * ROW 3: Case 2 — Docs
        * =================================================================== -->
       <section class="row-section" id="row-docs">
         <div class="row-header">
           <div class="row-title-group">
-            <span class="row-kicker">Row 03 · Case 2 (oris docs)</span>
-            <h2 class="row-title">Documentation Left Accordion Sidebar Navigation</h2>
+            <span class="row-kicker">Row 03 · Case 2: Docs</span>
+            <h2 class="row-title">Documentation Left Accordion Sidebar</h2>
           </div>
           <p class="row-subtitle">
-            Expand or collapse category accordions on the left — ResizeObserver recalculates sticky bounds seamlessly.
+            Expand or collapse category accordions on the left — ResizeObserver recalculates sticky bounds and bottom lock seamlessly.
           </p>
         </div>
 
@@ -1123,26 +1140,26 @@
             <div class="browser-dots">
               <span></span><span></span><span></span>
             </div>
-            <div class="browser-url">https://docs.oris.io/api/v2/reference</div>
+            <div class="browser-url">https://example.com/docs/api-reference</div>
             <div class="toolbar-controls">
               <button type="button" class="mini-btn" id="btn-docs-expand-all">
-                Expand All
+                Toggle Accordions
               </button>
               <span
                 class="cmp-col-status"
                 id="docs-telemetry"
-                style="min-width: 115px; text-align: right"
+                style="min-width: 125px; text-align: right"
               >
-                LNB: 1,280px · Δ 0px
+                Sidebar: --px · Δ 0px
               </span>
             </div>
           </div>
 
           <div class="browser-viewport" id="vp-docs">
             <div class="docs-header">
-              <strong>ORIS OpenAPI Reference v2.4</strong>
+              <strong>Developer Documentation</strong>
               <span style="color: var(--muted); font-size: 12px">
-                Core Banking & Ledger Endpoints
+                API Reference v2.0
               </span>
             </div>
 
@@ -1157,16 +1174,16 @@
       </section>
 
       <!-- ===================================================================
-       * ROW 4: Case 3 — Report Analytics Drawer (hmg-esm reference)
+       * ROW 4: Case 3 — Chart
        * =================================================================== -->
-      <section class="row-section" id="row-report">
+      <section class="row-section" id="row-chart">
         <div class="row-header">
           <div class="row-title-group">
-            <span class="row-kicker">Row 04 · Case 3 (hmg-esm report)</span>
-            <h2 class="row-title">Enterprise Cost Report & Bi-Directional Analytics Drawer</h2>
+            <span class="row-kicker">Row 04 · Case 3: Chart</span>
+            <h2 class="row-title">Data Table & Sticky Chart Drawer</h2>
           </div>
           <p class="row-subtitle">
-            Scroll the domain cost table or select any row — the 1,280px right-hand analytics drawer glides in both directions without nested scrollbars.
+            Scroll the metrics table or select any row — the tall right-hand chart drawer locks at top and bottom boundaries smoothly.
           </p>
         </div>
 
@@ -1175,148 +1192,168 @@
             <div class="browser-dots">
               <span></span><span></span><span></span>
             </div>
-            <div class="browser-url">https://esm.enterprise.io/report/domain-cost</div>
+            <div class="browser-url">https://example.com/analytics/metrics</div>
             <div class="toolbar-controls">
               <span
                 class="cmp-col-status"
-                id="esm-telemetry"
-                style="min-width: 130px; text-align: right"
+                id="chart-telemetry"
+                style="min-width: 140px; text-align: right"
               >
                 Drawer: 1:1 · Δ 0px
               </span>
             </div>
           </div>
 
-          <div class="browser-viewport" id="vp-esm">
-            <div class="esm-header">
-              <strong>Enterprise IT System Cost Report (FY2022–FY2026)</strong>
+          <div class="browser-viewport" id="vp-chart">
+            <div class="chart-header">
+              <strong>Service Metrics Overview</strong>
               <span style="color: var(--muted); font-size: 12px">
-                Unit: USD ($M) · SI vs SM Breakdown
+                Throughput & Cache Efficiency
               </span>
             </div>
 
-            <div class="esm-layout">
-              <div class="esm-table-wrap">
-                <table class="esm-table">
+            <div class="chart-layout">
+              <div class="chart-table-wrap">
+                <table class="chart-table">
                   <thead>
                     <tr>
-                      <th>Domain Hierarchy</th>
-                      <th>Category</th>
-                      <th>FY2024</th>
-                      <th>FY2025</th>
-                      <th>FY2026</th>
-                      <th>YoY</th>
+                      <th>Service Cluster</th>
+                      <th>Traffic Tier</th>
+                      <th>Q2 Avg</th>
+                      <th>Q3 Avg</th>
+                      <th>Q4 Peak</th>
+                      <th>Delta</th>
                     </tr>
                   </thead>
-                  <tbody id="esm-tbody"></tbody>
+                  <tbody id="chart-tbody"></tbody>
                 </table>
               </div>
 
-              <div class="esm-drawer-track">
-                <aside class="esm-drawer" id="esm-drawer">
+              <div class="chart-drawer-track">
+                <aside class="chart-drawer" id="chart-drawer">
                   <div class="drawer-card">
                     <div class="drawer-card-title">
-                      <span>Selected Domain</span>
+                      <span>Selected Cluster</span>
                       <span style="color: var(--accent)">Live Sync</span>
                     </div>
                     <div
-                      id="esm-selected-name"
+                      id="chart-selected-name"
                       style="font-size: 16px; font-weight: 700; margin-bottom: 12px"
                     >
-                      01. Cloud Infrastructure & Kubernetes
+                      01. Edge Gateway US-East
                     </div>
                     <div class="kpi-grid">
                       <div class="kpi-box">
-                        <div class="kpi-label">FY2026 Total</div>
-                        <div class="kpi-val" id="esm-kpi-total">$48.2M</div>
+                        <div class="kpi-label">Peak Throughput</div>
+                        <div class="kpi-val" id="chart-kpi-total">48.2k rps</div>
                       </div>
                       <div class="kpi-box">
-                        <div class="kpi-label">YoY Growth</div>
+                        <div class="kpi-label">Period Delta</div>
                         <div
                           class="kpi-val"
-                          id="esm-kpi-yoy"
-                          style="color: var(--danger)"
+                          id="chart-kpi-delta"
+                          style="color: var(--success)"
                         >
                           +14.8%
                         </div>
                       </div>
                       <div class="kpi-box">
-                        <div class="kpi-label">SI (Build) Share</div>
-                        <div class="kpi-val" id="esm-kpi-si">62%</div>
+                        <div class="kpi-label">Cache Hit Ratio</div>
+                        <div class="kpi-val" id="chart-kpi-hit">62%</div>
                       </div>
                       <div class="kpi-box">
-                        <div class="kpi-label">SM (Run) Share</div>
-                        <div class="kpi-val" id="esm-kpi-sm">38%</div>
+                        <div class="kpi-label">Origin Pass</div>
+                        <div class="kpi-val" id="chart-kpi-miss">38%</div>
                       </div>
                     </div>
                   </div>
 
                   <div class="drawer-card">
                     <div class="drawer-card-title">
-                      <span>5-Year SI / SM Stacked Trend</span>
-                      <span>FY22–FY26</span>
+                      <span>5-Period Stacked Distribution</span>
+                      <span>P1–P5</span>
                     </div>
-                    <div id="esm-bars"></div>
+                    <div id="chart-bars"></div>
                   </div>
 
                   <div class="drawer-card">
                     <div class="drawer-card-title">
-                      <span>Sub-Domain Allocation Breakdown</span>
+                      <span>Region Distribution Breakdown</span>
                       <span>Top 6</span>
                     </div>
-                    <div id="esm-subdomains"></div>
+                    <div id="chart-subregions"></div>
                   </div>
 
                   <div class="drawer-card">
                     <div class="drawer-card-title">
-                      <span>Quarterly Accrual Velocity</span>
+                      <span>Quarterly Load Profile</span>
                       <span>Q1–Q4</span>
                     </div>
                     <div class="bar-row">
                       <span>Q1</span>
                       <div class="bar-track">
-                        <div class="bar-si" style="width: 48%"></div>
-                        <div class="bar-sm" style="width: 24%"></div>
+                        <div class="bar-primary" style="width: 48%"></div>
+                        <div class="bar-secondary" style="width: 24%"></div>
                       </div>
-                      <span>$10.4M</span>
+                      <span>10.4k</span>
                     </div>
                     <div class="bar-row">
                       <span>Q2</span>
                       <div class="bar-track">
-                        <div class="bar-si" style="width: 54%"></div>
-                        <div class="bar-sm" style="width: 26%"></div>
+                        <div class="bar-primary" style="width: 54%"></div>
+                        <div class="bar-secondary" style="width: 26%"></div>
                       </div>
-                      <span>$11.8M</span>
+                      <span>11.8k</span>
                     </div>
                     <div class="bar-row">
                       <span>Q3</span>
                       <div class="bar-track">
-                        <div class="bar-si" style="width: 60%"></div>
-                        <div class="bar-sm" style="width: 28%"></div>
+                        <div class="bar-primary" style="width: 60%"></div>
+                        <div class="bar-secondary" style="width: 28%"></div>
                       </div>
-                      <span>$12.6M</span>
+                      <span>12.6k</span>
                     </div>
                     <div class="bar-row">
                       <span>Q4</span>
                       <div class="bar-track">
-                        <div class="bar-si" style="width: 66%"></div>
-                        <div class="bar-sm" style="width: 30%"></div>
+                        <div class="bar-primary" style="width: 66%"></div>
+                        <div class="bar-secondary" style="width: 30%"></div>
                       </div>
-                      <span>$13.4M</span>
+                      <span>13.4k</span>
                     </div>
                   </div>
 
                   <div class="drawer-card">
                     <div class="drawer-card-title">
-                      <span>Governance & Audit Summary</span>
-                      <span>Verified</span>
+                      <span>Latency Percentiles</span>
+                      <span>p50 / p99</span>
+                    </div>
+                    <div class="bar-row">
+                      <span>p50</span>
+                      <div class="bar-track">
+                        <div class="bar-primary" style="width: 32%"></div>
+                      </div>
+                      <span>14ms</span>
+                    </div>
+                    <div class="bar-row">
+                      <span>p99</span>
+                      <div class="bar-track">
+                        <div class="bar-secondary" style="width: 68%"></div>
+                      </div>
+                      <span>82ms</span>
+                    </div>
+                  </div>
+
+                  <div class="drawer-card">
+                    <div class="drawer-card-title">
+                      <span>Summary & Bottom Boundary Card</span>
+                      <span style="color: var(--success)">Bottom Locked</span>
                     </div>
                     <p style="margin: 0 0 10px; font-size: 12px; color: var(--text-secondary)">
-                      Scroll up and down the left table: notice how this 1,280px side drawer smoothly glides to reveal bottom cards on downward scroll and immediately returns top KPI cards on upward scroll.
+                      This is the final card at the bottom of the chart drawer. Notice how it stays cleanly locked above the bottom viewport edge as you keep scrolling down the table!
                     </p>
                     <div class="skeleton-line" style="width: 90%"></div>
-                    <div class="skeleton-line" style="width: 75%"></div>
-                    <div class="skeleton-line" style="width: 60%"></div>
+                    <div class="skeleton-line" style="width: 70%"></div>
                   </div>
                 </aside>
               </div>
@@ -1336,7 +1373,7 @@
       })
 
       /* =====================================================================
-       * ROW 1 SETUP: 4:2:2:2 Comparison
+       * ROW 1 SETUP: 4:2:2:2 Comparison (24 items -> ~1,260px natural height)
        * ===================================================================== */
       const CMP_GROUPS = [
         {
@@ -1346,28 +1383,41 @@
             '02. Native Sticky Clipping',
             '03. Nested Scrollbar Traps',
             '04. Bi-Directional Delta',
-            '05. Instant Re-Anchoring'
+            '05. Instant Re-Anchoring',
+            '06. Scroll Debt Prevention'
           ]
         },
         {
           group: 'Viewport Guard',
           items: [
-            '06. Active Item Guard',
-            '07. Top Clamping Bound',
-            '08. Bottom Clamping Bound',
-            '09. Zero Scroll Debt',
-            '10. Mutation Sync'
+            '07. Active Item Guard',
+            '08. Top Clamping Bound',
+            '09. Bottom Clamping Bound',
+            '10. Boundary Synchronization',
+            '11. MutationObserver Sync',
+            '12. Focus Visibility Lock'
           ]
         },
         {
-          group: 'Integration',
+          group: 'Configuration',
           items: [
-            '11. Custom Containers',
-            '12. CSS Custom Properties',
-            '13. ResizeObserver Hook',
-            '14. React useTether API',
-            '15. SSR Safe Hydration',
-            '16. Final Summary'
+            '13. Custom Containers',
+            '14. CSS Custom Properties',
+            '15. Dynamic Top Padding',
+            '16. Dynamic Bottom Padding',
+            '17. Initial Offset Top',
+            '18. ResizeObserver Hook'
+          ]
+        },
+        {
+          group: 'Verification',
+          items: [
+            '19. React useTether Hook',
+            '20. StickyTether Component',
+            '21. SSR Safe Hydration',
+            '22. Short Menu Auto-Bypass',
+            '23. Passive Scroll Perf',
+            '24. Bottom Boundary Locked'
           ]
         }
       ]
@@ -1402,11 +1452,10 @@
           const sec = document.createElement('section')
           sec.className = 'min-sec'
           sec.id = id
-          if (cmpIdx === 6) sec.dataset.long = 'true'
           sec.innerHTML = `
             <div class="min-sec-kicker">${g.group}</div>
             <h3>${title}</h3>
-            <p>Minimal section block for comparing <strong>Unapplied</strong>, <strong>Inner Scroll</strong>, and <strong>Sticky Tether</strong> side-by-side.</p>
+            <p>Scroll down to see <strong>Apply C (Sticky Tether)</strong> lock its bottom item (<code>24. Bottom Boundary Locked</code>) cleanly inside the viewport, and scroll up slightly to see it glide back down immediately.</p>
             <div class="skeleton-line" style="width: 88%"></div>
             <div class="skeleton-line" style="width: 64%"></div>
           `
@@ -1432,7 +1481,7 @@
       }
 
       const cmpState = {
-        activeGuard: true,
+        activeGuard: false,
         topPadding: 16,
         bottomPadding: 20,
         lastScrollTop: 0,
@@ -1441,23 +1490,7 @@
 
       let cmpTether = null
 
-      function mountCmpTether() {
-        if (cmpTether) cmpTether.destroy()
-        cmpTether = createStickyTether(cmpSidebarC, {
-          container: vpCmp,
-          headerHeight: 40,
-          topPadding: cmpState.topPadding,
-          bottomPadding: cmpState.bottomPadding,
-          activeSelector: cmpState.activeGuard ? '[aria-current="location"]' : false
-        })
-      }
-
-      function syncCmpScroll() {
-        const st = vpCmp.scrollTop
-        if (st > cmpState.lastScrollTop) cmpState.dir = 'down'
-        else if (st < cmpState.lastScrollTop) cmpState.dir = 'up'
-        cmpState.lastScrollTop = st
-
+      function updateCmpActiveLinks() {
         const vpRect = vpCmp.getBoundingClientRect()
         const triggerY = vpRect.top + 40 + 48
         let active = cmpSections[0]
@@ -1482,6 +1515,15 @@
         }
 
         document.getElementById('cmp-status-content').textContent = active.title
+      }
+
+      function updateCmpTelemetry() {
+        const st = vpCmp.scrollTop
+        if (st > cmpState.lastScrollTop) cmpState.dir = 'down'
+        else if (st < cmpState.lastScrollTop) cmpState.dir = 'up'
+        cmpState.lastScrollTop = st
+
+        const vpRect = vpCmp.getBoundingClientRect()
 
         // Apply A telemetry
         const rectA = cmpSidebarA.getBoundingClientRect()
@@ -1515,16 +1557,39 @@
           ? Number.parseFloat(cmpSidebarC.style.top)
           : baseTop
         const delta = Math.round(baseTop - curTop)
-        const arrow = cmpState.dir === 'down' ? '↓' : '↑'
-        document.getElementById('cmp-status-c').textContent =
-          `${arrow} 1:1 · Δ ${delta}px`
+        const maxDelta = Math.max(
+          0,
+          cmpSidebarC.offsetHeight -
+            (vpCmp.offsetHeight - baseTop - cmpState.bottomPadding)
+        )
+        const statusC = document.getElementById('cmp-status-c')
+        if (Math.abs(delta - maxDelta) <= 2 && delta > 0) {
+          statusC.textContent = `Bottom Locked · Δ ${delta}px`
+        } else if (delta <= 1 && st > 0) {
+          statusC.textContent = `Top Locked · Δ 0px`
+        } else {
+          const arrow = cmpState.dir === 'down' ? '↓' : '↑'
+          statusC.textContent = `${arrow} 1:1 · Δ ${delta}px`
+        }
+      }
+
+      function mountCmpTether() {
+        if (cmpTether) cmpTether.destroy()
+        cmpTether = createStickyTether(cmpSidebarC, {
+          container: vpCmp,
+          headerHeight: 40,
+          topPadding: cmpState.topPadding,
+          bottomPadding: cmpState.bottomPadding,
+          activeSelector: cmpState.activeGuard ? '[aria-current="location"]' : false
+        })
+        updateCmpTelemetry()
       }
 
       vpCmp.addEventListener(
         'scroll',
         () => {
-          syncCmpScroll()
-          cmpTether?.update()
+          updateCmpActiveLinks()
+          requestAnimationFrame(updateCmpTelemetry)
         },
         { passive: true }
       )
@@ -1535,21 +1600,20 @@
             b.setAttribute('aria-pressed', String(b === btn))
           })
           const p = btn.dataset.cmpPreset
-          if (p === 'default') {
-            cmpState.activeGuard = true
-            cmpState.topPadding = 16
-            cmpState.bottomPadding = 20
-          } else if (p === 'no-guard') {
+          if (p === 'bi-directional') {
             cmpState.activeGuard = false
             cmpState.topPadding = 16
             cmpState.bottomPadding = 20
-          } else if (p === 'wide') {
+          } else if (p === 'active-guard') {
             cmpState.activeGuard = true
-            cmpState.topPadding = 56
-            cmpState.bottomPadding = 56
+            cmpState.topPadding = 16
+            cmpState.bottomPadding = 20
+          } else if (p === 'wide') {
+            cmpState.activeGuard = false
+            cmpState.topPadding = 48
+            cmpState.bottomPadding = 48
           }
           mountCmpTether()
-          syncCmpScroll()
         })
       })
 
@@ -1560,35 +1624,49 @@
         sec6.dataset.long = String(next)
         btnCmpLong.setAttribute('aria-pressed', String(next))
         if (next) {
+          cmpState.activeGuard = true
+          document.querySelectorAll('[data-cmp-preset]').forEach((b) => {
+            b.setAttribute(
+              'aria-pressed',
+              String(b.dataset.cmpPreset === 'active-guard')
+            )
+          })
+          mountCmpTether()
           vpCmp.scrollTo({ top: sec6.offsetTop - 48, behavior: 'smooth' })
         }
       })
 
+      updateCmpActiveLinks()
       mountCmpTether()
-      syncCmpScroll()
 
       /* =====================================================================
-       * ROW 2 SETUP: Case 1 — Blog Article TOC (firejune.io style)
+       * ROW 2 SETUP: Case 1 — Blog (24 items)
        * ===================================================================== */
       const BLOG_ITEMS = [
         { title: '1. Why Sticky Sidebars Break', indent: 0 },
         { title: '1.1 Viewport Overflow on Laptops', indent: 1 },
         { title: '1.2 Double Scrollbar Anti-Pattern', indent: 1 },
+        { title: '1.3 Position Relative Layout Jumps', indent: 1 },
         { title: '2. Bi-Directional Delta Model', indent: 0 },
         { title: '2.1 Tracking Scroll Direction', indent: 1 },
         { title: '2.2 Re-Anchoring on Reversal', indent: 1 },
         { title: '2.3 Eliminating Scroll Debt', indent: 1 },
+        { title: '2.4 Pure Sticky Top Modulation', indent: 1 },
         { title: '3. Active Item Viewport Guard', indent: 0, long: true },
         { title: '3.1 Top Boundary Clamping', indent: 1 },
         { title: '3.2 Bottom Boundary Clamping', indent: 1 },
         { title: '3.3 MutationObserver Integration', indent: 1 },
         { title: '4. Smooth Clip-Path Indicator', indent: 0 },
         { title: '4.1 Exponential Damping Loop', indent: 1 },
-        { title: '4.2 Reduced Motion Support', indent: 1 },
+        { title: '4.2 Sub-Pixel Inset Calculation', indent: 1 },
+        { title: '4.3 Reduced Motion Support', indent: 1 },
         { title: '5. React & Vanilla Ergonomics', indent: 0 },
         { title: '5.1 Zero-Dependency Footprint', indent: 1 },
         { title: '5.2 Custom Container Support', indent: 1 },
-        { title: '6. Production Takeaways', indent: 0 }
+        { title: '5.3 CSS Variable Auto-Resolution', indent: 1 },
+        { title: '6. Production Verification', indent: 0 },
+        { title: '6.1 High-Refresh Scroll Benchmarks', indent: 1 },
+        { title: '6.2 Bottom Boundary Lock Summary', indent: 1 }
       ]
 
       const vpBlog = document.getElementById('vp-blog')
@@ -1611,7 +1689,7 @@
             ${
               item.long
                 ? 'This is an intentionally tall article section (1,150px). Scroll down through this section and watch the right-hand TOC clamp the active heading at the top boundary so it never escapes your view.'
-                : 'Minimal blog prose demonstrating firejune.io’s right-hand Table of Contents with an animated vertical indicator.'
+                : 'Minimal blog prose demonstrating a right-hand Table of Contents with an animated vertical indicator and clean bottom boundary lock.'
             }
           </p>
           <div class="skeleton-line" style="width: 92%"></div>
@@ -1639,17 +1717,6 @@
       let blogGuardOn = true
       let blogTether = null
 
-      function mountBlogTether() {
-        if (blogTether) blogTether.destroy()
-        blogTether = createStickyTether(blogAside, {
-          container: vpBlog,
-          headerHeight: 48,
-          topPadding: 24,
-          bottomPadding: 24,
-          activeSelector: blogGuardOn ? '[aria-current="location"]' : false
-        })
-      }
-
       function syncBlogScroll() {
         const vpRect = vpBlog.getBoundingClientRect()
         const triggerY = vpRect.top + 48 + 52
@@ -1669,7 +1736,6 @@
           }
         }
 
-        // Update firejune.io clip-path indicator
         const listRect = blogTocList.getBoundingClientRect()
         const linkRect = active.link.getBoundingClientRect()
         const topInset = Math.max(0, linkRect.top - listRect.top)
@@ -1679,20 +1745,28 @@
         )
         blogIndicator.style.clipPath = `inset(${topInset}px 0 ${bottomInset}px 0)`
 
-        const curTop = blogAside.style.top ? Number.parseFloat(blogAside.style.top) : 72
-        const delta = Math.round(72 - curTop)
-        document.getElementById('blog-telemetry').textContent =
-          `top: ${Math.round(curTop)}px · Δ ${delta}px`
+        requestAnimationFrame(() => {
+          const curTop = blogAside.style.top
+            ? Number.parseFloat(blogAside.style.top)
+            : 72
+          const delta = Math.round(72 - curTop)
+          document.getElementById('blog-telemetry').textContent =
+            `top: ${Math.round(curTop)}px · Δ ${delta}px`
+        })
       }
 
-      vpBlog.addEventListener(
-        'scroll',
-        () => {
-          syncBlogScroll()
-          blogTether?.update()
-        },
-        { passive: true }
-      )
+      function mountBlogTether() {
+        if (blogTether) blogTether.destroy()
+        blogTether = createStickyTether(blogAside, {
+          container: vpBlog,
+          headerHeight: 48,
+          topPadding: 24,
+          bottomPadding: 24,
+          activeSelector: blogGuardOn ? '[aria-current="location"]' : false
+        })
+      }
+
+      vpBlog.addEventListener('scroll', syncBlogScroll, { passive: true })
 
       const btnBlogGuard = document.getElementById('btn-blog-guard')
       btnBlogGuard.addEventListener('click', () => {
@@ -1703,11 +1777,11 @@
         syncBlogScroll()
       })
 
-      mountBlogTether()
       syncBlogScroll()
+      mountBlogTether()
 
       /* =====================================================================
-       * ROW 3 SETUP: Case 2 — Documentation Left Sidebar LNB (oris style)
+       * ROW 3 SETUP: Case 2 — Docs (Left Accordion Sidebar)
        * ===================================================================== */
       const DOCS_MENU = [
         {
@@ -1715,7 +1789,8 @@
           items: [
             { title: 'Architecture Overview', method: 'DOC' },
             { title: 'Environment & Sandbox', method: 'DOC' },
-            { title: 'Idempotency Keys', method: 'DOC' }
+            { title: 'Idempotency Keys', method: 'DOC' },
+            { title: 'Pagination & Cursors', method: 'DOC' }
           ]
         },
         {
@@ -1723,25 +1798,26 @@
           items: [
             { title: 'Issue Access Token', method: 'POST' },
             { title: 'Rotate Signing Key', method: 'PUT' },
-            { title: 'Verify Session Claims', method: 'GET' }
+            { title: 'Verify Session Claims', method: 'GET' },
+            { title: 'Revoke Client Grant', method: 'DEL' }
           ]
         },
         {
-          category: 'Accounts & Ledgers',
+          category: 'Workspaces & Projects',
           items: [
-            { title: 'List Core Accounts', method: 'GET' },
-            { title: 'Create Sub-Ledger', method: 'POST' },
-            { title: 'Real-Time Balance', method: 'GET' },
-            { title: 'Freeze Account State', method: 'PATCH' }
+            { title: 'List Workspaces', method: 'GET' },
+            { title: 'Create Project Node', method: 'POST' },
+            { title: 'Read Usage Quota', method: 'GET' },
+            { title: 'Archive Workspace', method: 'PATCH' }
           ]
         },
         {
-          category: 'Transaction Pipeline',
+          category: 'Deployment Pipeline',
           items: [
-            { title: 'Submit Wire Transfer', method: 'POST' },
-            { title: 'Batch Settlement Run', method: 'POST' },
-            { title: 'Reverse Transaction', method: 'POST' },
-            { title: 'Query Settlement Log', method: 'GET' }
+            { title: 'Trigger Build Job', method: 'POST' },
+            { title: 'Promote Release Tag', method: 'POST' },
+            { title: 'Rollback Deployment', method: 'POST' },
+            { title: 'Stream Runtime Logs', method: 'GET' }
           ]
         },
         {
@@ -1749,7 +1825,8 @@
           items: [
             { title: 'Register Endpoint', method: 'POST' },
             { title: 'Replay Failed Event', method: 'POST' },
-            { title: 'Verify HMAC Signature', method: 'DOC' }
+            { title: 'Verify HMAC Signature', method: 'DOC' },
+            { title: 'List Delivery Attempts', method: 'GET' }
           ]
         },
         {
@@ -1757,7 +1834,7 @@
           items: [
             { title: 'Rate Limit Headers', method: 'DOC' },
             { title: 'Standard Error Schema', method: 'DOC' },
-            { title: 'Audit Trail Export', method: 'GET' }
+            { title: 'Audit Log Export', method: 'GET' }
           ]
         }
       ]
@@ -1779,7 +1856,7 @@
         btn.innerHTML = `<span>${group.category}</span><span class="lnb-chevron">▼</span>`
         btn.addEventListener('click', () => {
           secWrap.dataset.open = secWrap.dataset.open === 'true' ? 'false' : 'true'
-          docsTether?.update()
+          docsTether.update()
           syncDocsScroll()
         })
 
@@ -1812,7 +1889,7 @@
           artSec.innerHTML = `
             <div class="min-sec-kicker">${group.category} · ${item.method}</div>
             <h3>${item.title}</h3>
-            <p>Endpoint specification and request/response schema for <strong>${item.title}</strong>. Expand or collapse left sidebar categories to see automatic height recalculation.</p>
+            <p>Endpoint specification for <strong>${item.title}</strong>. Notice how the left sidebar locks its bottom item (<code>Audit Log Export</code>) cleanly inside the viewport when scrolling down.</p>
             <div class="skeleton-line" style="width: 85%"></div>
             <div class="skeleton-line" style="width: 65%"></div>
           `
@@ -1824,13 +1901,6 @@
         secWrap.appendChild(ul)
         docsLnb.appendChild(secWrap)
       }
-
-      const docsTether = createStickyTether(docsLnb, {
-        container: vpDocs,
-        headerHeight: 48,
-        topPadding: 20,
-        bottomPadding: 24
-      })
 
       function syncDocsScroll() {
         const vpRect = vpDocs.getBoundingClientRect()
@@ -1851,20 +1921,23 @@
           }
         }
 
-        const curTop = docsLnb.style.top ? Number.parseFloat(docsLnb.style.top) : 68
-        const delta = Math.round(68 - curTop)
-        document.getElementById('docs-telemetry').textContent =
-          `LNB: ${docsLnb.offsetHeight}px · Δ ${delta}px`
+        requestAnimationFrame(() => {
+          const curTop = docsLnb.style.top ? Number.parseFloat(docsLnb.style.top) : 68
+          const delta = Math.round(68 - curTop)
+          document.getElementById('docs-telemetry').textContent =
+            `Sidebar: ${docsLnb.offsetHeight}px · Δ ${delta}px`
+        })
       }
 
-      vpDocs.addEventListener(
-        'scroll',
-        () => {
-          syncDocsScroll()
-          docsTether.update()
-        },
-        { passive: true }
-      )
+      vpDocs.addEventListener('scroll', syncDocsScroll, { passive: true })
+
+      const docsTether = createStickyTether(docsLnb, {
+        container: vpDocs,
+        headerHeight: 48,
+        topPadding: 20,
+        bottomPadding: 24,
+        activeSelector: false
+      })
 
       document.getElementById('btn-docs-expand-all').addEventListener('click', () => {
         const allSecs = docsLnb.querySelectorAll('.lnb-section')
@@ -1879,150 +1952,169 @@
       syncDocsScroll()
 
       /* =====================================================================
-       * ROW 4 SETUP: Case 3 — Report Analytics Drawer (hmg-esm style)
+       * ROW 4 SETUP: Case 3 — Chart (Table + Right Chart Drawer)
        * ===================================================================== */
-      const ESM_DOMAINS = [
+      const CHART_CLUSTERS = [
         {
-          name: '01. Cloud Infrastructure & Kubernetes',
-          y24: 36.4,
-          y25: 42.0,
-          y26: 48.2,
-          yoy: '+14.8%',
-          si: 62,
-          sm: 38
+          name: '01. Edge Gateway US-East',
+          q2: 36.4,
+          q3: 42.0,
+          q4: 48.2,
+          delta: '+14.8%',
+          hit: 62,
+          miss: 38
         },
         {
-          name: '02. AI & Enterprise Data Platform',
-          y24: 28.1,
-          y25: 35.5,
-          y26: 44.6,
-          yoy: '+25.6%',
-          si: 74,
-          sm: 26
+          name: '02. Edge Gateway EU-Central',
+          q2: 28.1,
+          q3: 35.5,
+          q4: 44.6,
+          delta: '+25.6%',
+          hit: 74,
+          miss: 26
         },
         {
-          name: '03. Connected Vehicle Telemetry',
-          y24: 31.0,
-          y25: 33.8,
-          y26: 37.9,
-          yoy: '+12.1%',
-          si: 55,
-          sm: 45
+          name: '03. Media CDN AP-Northeast',
+          q2: 31.0,
+          q3: 33.8,
+          q4: 37.9,
+          delta: '+12.1%',
+          hit: 55,
+          miss: 45
         },
         {
-          name: '04. Global ERP & Core Finance',
-          y24: 40.2,
-          y25: 39.1,
-          y26: 36.8,
-          yoy: '-5.9%',
-          si: 34,
-          sm: 66
+          name: '04. Core Auth & Session Mesh',
+          q2: 40.2,
+          q3: 39.1,
+          q4: 36.8,
+          delta: '-5.9%',
+          hit: 34,
+          miss: 66
         },
         {
-          name: '05. Smart Factory & MES Pipeline',
-          y24: 22.4,
-          y25: 26.9,
-          y26: 31.2,
-          yoy: '+16.0%',
-          si: 68,
-          sm: 32
+          name: '05. Realtime WebSocket Broker',
+          q2: 22.4,
+          q3: 26.9,
+          q4: 31.2,
+          delta: '+16.0%',
+          hit: 68,
+          miss: 32
         },
         {
-          name: '06. Zero-Trust Security & IAM',
-          y24: 18.5,
-          y25: 21.2,
-          y26: 24.7,
-          yoy: '+16.5%',
-          si: 58,
-          sm: 42
+          name: '06. Search Indexer Worker Pool',
+          q2: 18.5,
+          q3: 21.2,
+          q4: 24.7,
+          delta: '+16.5%',
+          hit: 58,
+          miss: 42
         },
         {
-          name: '07. Digital Showroom & Commerce',
-          y24: 19.8,
-          y25: 20.4,
-          y26: 22.1,
-          yoy: '+8.3%',
-          si: 51,
-          sm: 49
+          name: '07. Checkout & Ledger API',
+          q2: 19.8,
+          q3: 20.4,
+          q4: 22.1,
+          delta: '+8.3%',
+          hit: 51,
+          miss: 49
         },
         {
-          name: '08. Supply Chain & Logistics Control',
-          y24: 24.0,
-          y25: 23.2,
-          y26: 21.9,
-          yoy: '-5.6%',
-          si: 40,
-          sm: 60
+          name: '08. Object Storage Replicator',
+          q2: 24.0,
+          q3: 23.2,
+          q4: 21.9,
+          delta: '-5.6%',
+          hit: 40,
+          miss: 60
         },
         {
-          name: '09. Autonomous Driving Sim Cluster',
-          y24: 15.2,
-          y25: 19.0,
-          y26: 23.8,
-          yoy: '+25.3%',
-          si: 79,
-          sm: 21
+          name: '09. Inference Router Cluster',
+          q2: 15.2,
+          q3: 19.0,
+          q4: 23.8,
+          delta: '+25.3%',
+          hit: 79,
+          miss: 21
         },
         {
-          name: '10. Customer Data & CRM Suite',
-          y24: 14.6,
-          y25: 15.8,
-          y26: 17.2,
-          yoy: '+8.9%',
-          si: 46,
-          sm: 54
+          name: '10. Webhook Dispatch Queue',
+          q2: 14.6,
+          q3: 15.8,
+          q4: 17.2,
+          delta: '+8.9%',
+          hit: 46,
+          miss: 54
+        },
+        {
+          name: '11. Image Transform Edge Worker',
+          q2: 12.1,
+          q3: 13.4,
+          q4: 14.9,
+          delta: '+11.2%',
+          hit: 52,
+          miss: 48
+        },
+        {
+          name: '12. Telemetry Ingestion Stream',
+          q2: 11.0,
+          q3: 14.2,
+          q4: 18.1,
+          delta: '+27.5%',
+          hit: 71,
+          miss: 29
         }
       ]
 
-      const vpEsm = document.getElementById('vp-esm')
-      const esmTbody = document.getElementById('esm-tbody')
-      const esmDrawer = document.getElementById('esm-drawer')
+      const vpChart = document.getElementById('vp-chart')
+      const chartTbody = document.getElementById('chart-tbody')
+      const chartDrawer = document.getElementById('chart-drawer')
 
-      function renderEsmDrawer(domain) {
-        document.getElementById('esm-selected-name').textContent = domain.name
-        document.getElementById('esm-kpi-total').textContent = `$${domain.y26.toFixed(1)}M`
-        const yoyEl = document.getElementById('esm-kpi-yoy')
-        yoyEl.textContent = domain.yoy
-        yoyEl.style.color = domain.yoy.startsWith('+')
-          ? 'var(--danger)'
-          : 'var(--accent)'
-        document.getElementById('esm-kpi-si').textContent = `${domain.si}%`
-        document.getElementById('esm-kpi-sm').textContent = `${domain.sm}%`
+      function renderChartDrawer(cluster) {
+        document.getElementById('chart-selected-name').textContent = cluster.name
+        document.getElementById('chart-kpi-total').textContent =
+          `${cluster.q4.toFixed(1)}k rps`
+        const deltaEl = document.getElementById('chart-kpi-delta')
+        deltaEl.textContent = cluster.delta
+        deltaEl.style.color = cluster.delta.startsWith('+')
+          ? 'var(--success)'
+          : 'var(--warning)'
+        document.getElementById('chart-kpi-hit').textContent = `${cluster.hit}%`
+        document.getElementById('chart-kpi-miss').textContent = `${cluster.miss}%`
 
-        const barsEl = document.getElementById('esm-bars')
-        const years = [
-          { y: 'FY22', val: +(domain.y24 * 0.78).toFixed(1) },
-          { y: 'FY23', val: +(domain.y24 * 0.89).toFixed(1) },
-          { y: 'FY24', val: domain.y24 },
-          { y: 'FY25', val: domain.y25 },
-          { y: 'FY26', val: domain.y26 }
+        const barsEl = document.getElementById('chart-bars')
+        const periods = [
+          { p: 'P1', val: +(cluster.q2 * 0.78).toFixed(1) },
+          { p: 'P2', val: +(cluster.q2 * 0.89).toFixed(1) },
+          { p: 'P3', val: cluster.q2 },
+          { p: 'P4', val: cluster.q3 },
+          { p: 'P5', val: cluster.q4 }
         ]
-        barsEl.innerHTML = years
+        barsEl.innerHTML = periods
           .map((item) => {
             const totalW = Math.min(100, Math.round((item.val / 52) * 100))
-            const siW = Math.round((totalW * domain.si) / 100)
-            const smW = totalW - siW
+            const hitW = Math.round((totalW * cluster.hit) / 100)
+            const missW = totalW - hitW
             return `
               <div class="bar-row">
-                <span>${item.y}</span>
+                <span>${item.p}</span>
                 <div class="bar-track">
-                  <div class="bar-si" style="width: ${siW}%"></div>
-                  <div class="bar-sm" style="width: ${smW}%"></div>
+                  <div class="bar-primary" style="width: ${hitW}%"></div>
+                  <div class="bar-secondary" style="width: ${missW}%"></div>
                 </div>
-                <span>$${item.val}M</span>
+                <span>${item.val}k</span>
               </div>
             `
           })
           .join('')
 
-        const subEl = document.getElementById('esm-subdomains')
+        const subEl = document.getElementById('chart-subregions')
         const subs = [
-          { label: 'Core Cluster Compute', share: 34 },
-          { label: 'Managed Storage & Backup', share: 22 },
-          { label: 'Network Ingress / Egress', share: 16 },
-          { label: 'Observability & Tracing', share: 12 },
-          { label: 'DR Multi-Region Standby', share: 10 },
-          { label: 'Other Shared Services', share: 6 }
+          { label: 'North America East', share: 34 },
+          { label: 'Europe Central', share: 22 },
+          { label: 'Asia Pacific Tokyo', share: 16 },
+          { label: 'North America West', share: 12 },
+          { label: 'Asia Pacific Seoul', share: 10 },
+          { label: 'South America East', share: 6 }
         ]
         subEl.innerHTML = subs
           .map(
@@ -2030,7 +2122,7 @@
             <div class="bar-row" style="grid-template-columns: 1fr 80px 42px">
               <span style="color: var(--text-secondary)">${s.label}</span>
               <div class="bar-track">
-                <div class="bar-si" style="width: ${s.share * 2.2}%"></div>
+                <div class="bar-primary" style="width: ${s.share * 2.2}%"></div>
               </div>
               <span>${s.share}%</span>
             </div>
@@ -2039,62 +2131,70 @@
           .join('')
       }
 
-      ESM_DOMAINS.forEach((d, idx) => {
-        const categories = [
-          { cat: 'SI (System Integration)', mult: d.si / 100 },
-          { cat: 'SM (System Maintenance)', mult: d.sm / 100 },
-          { cat: 'TOTAL', mult: 1 }
+      CHART_CLUSTERS.forEach((c, idx) => {
+        const tiers = [
+          { tier: 'Cache Hit', mult: c.hit / 100 },
+          { tier: 'Origin Pass', mult: c.miss / 100 },
+          { tier: 'TOTAL', mult: 1 }
         ]
 
-        categories.forEach((c, cIdx) => {
+        tiers.forEach((t, tIdx) => {
           const tr = document.createElement('tr')
-          tr.className = 'esm-row'
-          tr.dataset.domainIdx = String(idx)
+          tr.className = 'chart-row'
+          tr.dataset.clusterIdx = String(idx)
           if (idx === 0) tr.dataset.selected = 'true'
 
-          const v24 = (d.y24 * c.mult).toFixed(1)
-          const v25 = (d.y25 * c.mult).toFixed(1)
-          const v26 = (d.y26 * c.mult).toFixed(1)
+          const v2 = (c.q2 * t.mult).toFixed(1)
+          const v3 = (c.q3 * t.mult).toFixed(1)
+          const v4 = (c.q4 * t.mult).toFixed(1)
 
           tr.innerHTML = `
-            <td>${cIdx === 0 ? `<span class="esm-domain-name">${d.name}</span>` : ''}</td>
-            <td style="${c.cat === 'TOTAL' ? 'font-weight: 700; color: var(--text)' : ''}">${c.cat}</td>
-            <td>$${v24}M</td>
-            <td>$${v25}M</td>
-            <td style="font-weight: 600; color: var(--text)">$${v26}M</td>
-            <td style="color: ${d.yoy.startsWith('+') ? 'var(--danger)' : 'var(--accent)'}">${cIdx === 2 ? d.yoy : ''}</td>
+            <td>${tIdx === 0 ? `<span class="chart-group-name">${c.name}</span>` : ''}</td>
+            <td style="${t.tier === 'TOTAL' ? 'font-weight: 700; color: var(--text)' : ''}">${t.tier}</td>
+            <td>${v2}k</td>
+            <td>${v3}k</td>
+            <td style="font-weight: 600; color: var(--text)">${v4}k</td>
+            <td style="color: ${c.delta.startsWith('+') ? 'var(--success)' : 'var(--warning)'}">${tIdx === 2 ? c.delta : ''}</td>
           `
           tr.addEventListener('click', () => {
-            esmTbody.querySelectorAll('.esm-row').forEach((r) => {
-              r.dataset.selected = String(r.dataset.domainIdx === String(idx))
+            chartTbody.querySelectorAll('.chart-row').forEach((r) => {
+              r.dataset.selected = String(r.dataset.clusterIdx === String(idx))
             })
-            renderEsmDrawer(d)
+            renderChartDrawer(c)
           })
-          esmTbody.appendChild(tr)
+          chartTbody.appendChild(tr)
         })
       })
 
-      renderEsmDrawer(ESM_DOMAINS[0])
+      renderChartDrawer(CHART_CLUSTERS[0])
 
-      // Report Drawer uses pure bi-directional scroll tethering (activeSelector: false)
-      const esmTether = createStickyTether(esmDrawer, {
-        container: vpEsm,
+      const chartTether = createStickyTether(chartDrawer, {
+        container: vpChart,
         headerHeight: 48,
         topPadding: 20,
         bottomPadding: 24,
         activeSelector: false
       })
 
-      vpEsm.addEventListener(
+      vpChart.addEventListener(
         'scroll',
         () => {
-          esmTether.update()
-          const curTop = esmDrawer.style.top
-            ? Number.parseFloat(esmDrawer.style.top)
-            : 68
-          const delta = Math.round(68 - curTop)
-          document.getElementById('esm-telemetry').textContent =
-            `Drawer: 1:1 · Δ ${delta}px`
+          requestAnimationFrame(() => {
+            const curTop = chartDrawer.style.top
+              ? Number.parseFloat(chartDrawer.style.top)
+              : 68
+            const delta = Math.round(68 - curTop)
+            const maxDelta = Math.max(
+              0,
+              chartDrawer.offsetHeight - (vpChart.offsetHeight - 68 - 24)
+            )
+            const el = document.getElementById('chart-telemetry')
+            if (Math.abs(delta - maxDelta) <= 2 && delta > 0) {
+              el.textContent = `Bottom Locked · Δ ${delta}px`
+            } else {
+              el.textContent = `Drawer: 1:1 · Δ ${delta}px`
+            }
+          })
         },
         { passive: true }
       )
