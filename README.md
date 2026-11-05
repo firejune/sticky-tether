@@ -151,6 +151,7 @@ Automatically detects the focused element inside the sticky container (`[aria-cu
 | `offsetTop` | `number` | `0` | Initial offset (in `px`) before sticky tethering engages. |
 | `container` | `HTMLElement \| Window \| string \| null` | `window` | Scroll container element, `window`, or a CSS selector string (e.g. `'#app-container'`). |
 | `activeSelector` | `string \| false` | `'[aria-current="location"], [aria-current="page"], [data-active="true"], .active'` | CSS selector for the active/focused item inside the sticky element to guard within the viewport. Set to `false` to disable active-item clamping. |
+| `onChange` | `(state: StickyTetherState) => void` | `undefined` | Callback invoked whenever the tether state (`top`, `baseTop`, `delta`, `maxDelta`, `direction`, `status`, `hasRunway`) changes. |
 
 ## Development & Verification
 

@@ -8,7 +8,7 @@ import { createStickyTether, type StickyTetherOptions } from './core'
  * @example
  * ```tsx
  * const asideRef = useStickyTether({ topPadding: 30, bottomPadding: 24, defaultHeaderHeight: 54 })
- * return <aside ref={asideRef} style={{ position: 'sticky' }}>...</aside>
+ * return <aside ref={asideRef}>...</aside>
  * ```
  */
 export function useStickyTether<T extends HTMLElement = HTMLElement>(
@@ -24,10 +24,13 @@ export function useStickyTether<T extends HTMLElement = HTMLElement>(
     headerHeight,
     defaultHeaderHeight,
     container,
-    activeSelector
+    activeSelector,
+    onChange
   } = normalizedOptions
 
   const ref = useRef<T | null>(null)
+  const onChangeRef = useRef(onChange)
+  onChangeRef.current = onChange
 
   useEffect(() => {
     if (!ref.current) return
@@ -39,7 +42,8 @@ export function useStickyTether<T extends HTMLElement = HTMLElement>(
       headerHeight,
       defaultHeaderHeight,
       container,
-      activeSelector
+      activeSelector,
+      onChange: (state) => onChangeRef.current?.(state)
     })
 
     return () => {
@@ -63,7 +67,7 @@ export const useTether = useStickyTether
 
 export interface StickyTetherProps
   extends StickyTetherOptions,
-    Omit<React.HTMLAttributes<HTMLElement>, 'children'> {
+    Omit<React.HTMLAttributes<HTMLElement>, 'children' | 'onChange'> {
   /**
    * HTML tag to render.
    * @default 'aside'
@@ -86,6 +90,7 @@ export const StickyTether = React.forwardRef<HTMLElement, StickyTetherProps>(
       defaultHeaderHeight,
       container,
       activeSelector,
+      onChange,
       style,
       children,
       ...rest
@@ -99,7 +104,8 @@ export const StickyTether = React.forwardRef<HTMLElement, StickyTetherProps>(
       headerHeight,
       defaultHeaderHeight,
       container,
-      activeSelector
+      activeSelector,
+      onChange
     })
 
     const mergedRef = (node: HTMLElement | null) => {
